@@ -131,7 +131,38 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
 .tools-inner{max-width:1100px;margin:0 auto}
 .tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}
 .tool-c{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s;cursor:default}
-.tool-c:hover{transform:translateY(-6px);box-shadow:0 16px 44px rgba(201,168,76,.14)}
+.tool-c:hover{
+  transform:translateY(-6px);
+
+  border-color:#C9A84C;
+
+  box-shadow:
+    0 0 20px rgba(201,168,76,.35),
+    0 0 40px rgba(201,168,76,.18),
+    0 16px 44px rgba(201,168,76,.14);
+}
+  .tool-c{
+  position:relative;
+  overflow:hidden;
+}
+  .tool-c::before{
+  content:'';
+  position:absolute;
+  inset:0;
+
+  background:radial-gradient(
+    circle at center,
+    rgba(201,168,76,.12),
+    transparent 70%
+  );
+
+  opacity:0;
+  transition:.3s;
+}
+
+.tool-c:hover::before{
+  opacity:1;
+}
 .tool-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
 .tool-icon{width:50px;height:50px;background:#fdf6e3;border:1px solid rgba(201,168,76,.35);border-radius:13px;display:flex;align-items:center;justify-content:center}
 .tool-tag{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#9A7010;background:#fdf6e3;border:1px solid #e0cc88;border-radius:999px;padding:3px 9px}
