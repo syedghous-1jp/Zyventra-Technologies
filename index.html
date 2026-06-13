@@ -22,43 +22,6 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
 .nav-links{display:flex;gap:28px}
 .nav-links a{color:#2a2a3e;text-decoration:none;font-size:13.5px;font-weight:500;letter-spacing:.01em;transition:color .2s}
 .nav-links a:hover{color:var(--gold1)}
- .nav-item{
-  position:relative;
-}
-
-.dropdown{
-  position:absolute;
-  top:100%;
-  left:0;
-  width:220px;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-  box-shadow:0 10px 30px rgba(0,0,0,.1);
-
-  opacity:0;
-  visibility:hidden;
-  transition:.2s;
-  z-index:9999;
-}
-
-.nav-item:hover .dropdown{
-  opacity:1;
-  visibility:visible;
-}
-
-.dropdown a{
-  display:block;
-  padding:8px 10px;
-  text-decoration:none;
-  color:#2a2a3e;
-  border-radius:8px;
-}
-
-.dropdown a:hover{
-  background:#f9f6f0;
-}
 .pill-btn{border:none;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.02em;transition:transform .18s,box-shadow .18s}
 .pill-btn-gold{background:linear-gradient(135deg,#C9A84C,#F5E199,#C9A84C);color:#3a2800;box-shadow:0 2px 14px rgba(201,168,76,.35)}
 .pill-btn-gold:hover{transform:scale(1.05);box-shadow:0 4px 24px rgba(201,168,76,.55)}
