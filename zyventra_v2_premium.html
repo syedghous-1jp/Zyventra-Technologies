@@ -1,0 +1,366 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+:root{
+--cream:#F9F6F0;
+--navy:#0D1B2A;
+--navy2:#132236;
+--gold1:#C9A84C;
+--gold2:#E8C96A;
+--gold3:#F5E199;
+--charcoal:#1C1C2E;
+--text:#1a1a2e;
+--muted:#6b7280;
+--border:#e8dfc8;
+}
+.page{background:var(--cream);width:100%}
+
+/* NAV */
+.nav{background:rgba(249,246,240,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 40px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:28px}
+.nav-links a{color:#2a2a3e;text-decoration:none;font-size:13.5px;font-weight:500;letter-spacing:.01em;transition:color .2s}
+.nav-links a:hover{color:var(--gold1)}
+.pill-btn{border:none;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.02em;transition:transform .18s,box-shadow .18s}
+.pill-btn-gold{background:linear-gradient(135deg,#C9A84C,#F5E199,#C9A84C);color:#3a2800;box-shadow:0 2px 14px rgba(201,168,76,.35)}
+.pill-btn-gold:hover{transform:scale(1.05);box-shadow:0 4px 24px rgba(201,168,76,.55)}
+.pill-btn-outline{background:transparent;border:1.5px solid var(--gold1);color:var(--gold1)}
+.pill-btn-outline:hover{background:rgba(201,168,76,.08)}
+
+/* HERO */
+.hero{background:var(--cream);padding:56px 40px 48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1100px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px 14px;margin-bottom:22px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold1)}
+.eyebrow-text{font-size:11px;font-weight:700;color:var(--gold1);letter-spacing:.08em;text-transform:uppercase}
+.hero h1{font-size:3rem;font-weight:900;line-height:1.05;color:var(--text);letter-spacing:-.04em;margin-bottom:6px}
+.hero h1 .accent{display:block;background:linear-gradient(135deg,#9A7010,#D4AF37,#F5E199,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:14.5px;color:#52526a;line-height:1.75;max-width:400px;margin:14px 0 28px}
+.hero-ctas{display:flex;align-items:center;gap:14px;margin-bottom:36px}
+.play-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:#3a3a55;font-weight:600;cursor:pointer;border:none;background:none}
+.play-wrap:hover{color:var(--gold1)}
+.play-circle{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(201,168,76,.45);display:flex;align-items:center;justify-content:center}
+.hero-trust{display:flex;gap:20px;padding-top:22px;border-top:1px solid #e4d9c0}
+.trust-item{display:flex;flex-direction:column}
+.trust-val{font-size:19px;font-weight:900;color:var(--text);letter-spacing:-.02em}
+.trust-lbl{font-size:11px;color:var(--muted);margin-top:1px;font-weight:500}
+
+/* SECURITY WIDGET */
+.sec-widget{background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:0 8px 48px rgba(201,168,76,.1),0 2px 12px rgba(0,0,0,.05);padding:22px;position:relative;overflow:hidden}
+.sec-widget::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(201,168,76,.15),transparent 70%);pointer-events:none}
+.sw-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.sw-title{font-size:15px;font-weight:800;color:var(--text)}
+.sw-sub{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:2px}
+.live-pill{display:flex;align-items:center;gap:4px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:999px;padding:4px 10px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.live-txt{font-size:10px;font-weight:700;color:#15803d}
+.spark-box{background:#faf8f4;border:1px solid #f0e8d4;border-radius:12px;padding:12px;margin-bottom:14px}
+.spark-lbl{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.bars-wrap{display:flex;align-items:flex-end;gap:3px;height:44px}
+.bar{flex:1;border-radius:3px 3px 0 0}
+.threat-row{margin-bottom:10px}
+.tr-head{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;font-weight:600;color:#3a3a4a}
+.track{height:5px;background:#f0e8d4;border-radius:999px;overflow:hidden}
+.fill{height:100%;border-radius:999px;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mini-c{background:#faf8f4;border:1px solid #eee6d4;border-radius:10px;padding:10px;text-align:center}
+.mini-v{font-size:14px;font-weight:900;color:var(--text)}
+.mini-l{font-size:9px;color:var(--muted);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+
+/* DARK FEATURES */
+.features{background:var(--charcoal);padding:54px 40px}
+.feat-inner{max-width:1100px;margin:0 auto}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);display:block;text-align:center;margin-bottom:10px}
+.section-h{font-size:1.9rem;font-weight:800;text-align:center;line-height:1.18}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:36px}
+.feat-c{background:#21223a;border:1px solid #2d2f4a;border-radius:18px;padding:22px;transition:transform .22s,border-color .22s,box-shadow .22s;cursor:default}
+.feat-c:hover{transform:translateY(-5px);border-color:rgba(201,168,76,.4);box-shadow:0 12px 32px rgba(201,168,76,.12)}
+.feat-icon{width:46px;height:46px;background:#2a2b40;border:1px solid rgba(201,168,76,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat-t{color:#f0f0ff;font-size:13.5px;font-weight:800;margin-bottom:7px}
+.feat-d{color:#888aaa;font-size:12px;line-height:1.6}
+
+/* TOOLS */
+.tools-sect{background:var(--cream);padding:54px 40px}
+.tools-inner{max-width:1100px;margin:0 auto}
+.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}
+.tool-c{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s;cursor:default}
+.tool-c:hover{transform:translateY(-6px);box-shadow:0 16px 44px rgba(201,168,76,.14)}
+.tool-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.tool-icon{width:50px;height:50px;background:#fdf6e3;border:1px solid rgba(201,168,76,.35);border-radius:13px;display:flex;align-items:center;justify-content:center}
+.tool-tag{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#9A7010;background:#fdf6e3;border:1px solid #e0cc88;border-radius:999px;padding:3px 9px}
+.tool-n{color:var(--text);font-size:14px;font-weight:800;margin-bottom:7px}
+.tool-d{color:var(--muted);font-size:12px;line-height:1.6;flex:1}
+.tool-link{display:flex;align-items:center;gap:6px;margin-top:14px;color:var(--gold1);font-size:12px;font-weight:700;cursor:pointer;border:none;background:none;transition:gap .18s}
+.tool-link:hover{gap:10px}
+
+/* STATS */
+.stats-sect{background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:44px 40px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:900px;margin:0 auto;text-align:center}
+.stat-num{font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#9A7010,#D4AF37,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-lbl{color:var(--muted);font-size:12px;font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
+.stat-divider{width:1px;background:var(--border);margin:auto}
+
+/* CTA DARK */
+.cta-sect{background:var(--cream);padding:54px 40px}
+.cta-box{max-width:700px;margin:0 auto;background:var(--charcoal);border-radius:26px;padding:52px 44px;text-align:center;position:relative;overflow:hidden}
+.cta-glow-top{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:380px;height:80px;background:rgba(201,168,76,.12);border-radius:50%;filter:blur(30px);pointer-events:none}
+.cta-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);border:1px solid rgba(201,168,76,.3);border-radius:999px;padding:5px 14px;display:inline-block;margin-bottom:16px}
+.cta-h{color:#fff;font-size:1.8rem;font-weight:800;margin-bottom:12px;line-height:1.2}
+.cta-p{color:#9090b0;font-size:13.5px;line-height:1.7;max-width:380px;margin:0 auto 26px}
+.cta-note{color:#55556a;font-size:11px;margin-top:12px}
+
+/* FOOTER */
+.footer{background:#0e0f1c;padding:26px 40px;display:flex;align-items:center;justify-content:space-between}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:#55556a;font-size:11px;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--gold2)}
+</style>
+
+<h2 class="sr-only">Zyventra Technologies premium cybersecurity landing page — rebuilt with Nexora-inspired layout</h2>
+
+<div class="page">
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <svg width="38" height="32" viewBox="0 0 38 32" fill="none">
+      <defs>
+        <linearGradient id="zg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#9A7010"/>
+          <stop offset="35%" stop-color="#D4AF37"/>
+          <stop offset="65%" stop-color="#F5E199"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+      </defs>
+      <polygon points="2,2 36,2 30,10 10,10" fill="url(#zg)"/>
+      <polygon points="10,10 26,10 12,22 4,22" fill="url(#zg)" opacity=".75"/>
+      <polygon points="8,22 28,22 36,30 2,30" fill="url(#zg)"/>
+      <polygon points="22,10 30,10 16,22 8,22" fill="#0e0f1c" opacity=".55"/>
+    </svg>
+    <div>
+      <span style="font-size:17px;font-weight:900;letter-spacing:-.02em;background:linear-gradient(135deg,#9A7010,#D4AF37,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Zyventra</span>
+      <span style="font-size:10px;display:block;color:#888;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-top:-2px">Technologies</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#">Products</a>
+    <a href="#">Solutions</a>
+    <a href="#">Innovation</a>
+    <a href="#">Support</a>
+  </div>
+  <button class="pill-btn pill-btn-gold">Request a Demo &nbsp;↗</button>
+</nav>
+
+<!-- HERO -->
+<div style="max-width:1100px;margin:0 auto;padding:52px 40px 44px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center">
+  <div>
+    <div class="eyebrow"><span class="eyebrow-dot"></span><span class="eyebrow-text">⚡ Enterprise Cybersecurity Platform</span></div>
+    <h1 style="font-size:2.8rem;font-weight:900;line-height:1.06;color:var(--text);letter-spacing:-.04em">
+      ADVANCED<br>
+      <span style="background:linear-gradient(135deg,#9A7010,#D4AF37,#F5E199,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">CYBERSECURITY</span><br>
+      EVERY DAY.
+    </h1>
+    <p style="font-size:14px;color:#52526a;line-height:1.75;max-width:390px;margin:14px 0 26px">Smart. Relentless. Secure. Proactive threat defense designed to protect your digital assets before, during, and after every attack.</p>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:34px">
+      <button class="pill-btn pill-btn-gold" style="padding:12px 28px;font-size:14px">Explore Tools</button>
+      <button class="play-wrap">
+        <span class="play-circle">
+          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="2,1 11,6 2,11" fill="#C9A84C"/></svg>
+        </span>
+        Watch Demo
+      </button>
+    </div>
+    <div style="display:flex;gap:24px;padding-top:20px;border-top:1px solid #e4d9c0">
+      <div class="trust-item"><span class="trust-val">500+</span><span class="trust-lbl">Security Experts</span></div>
+      <div class="trust-item"><span class="trust-val">10M+</span><span class="trust-lbl">Threats Blocked</span></div>
+      <div class="trust-item"><span class="trust-val">99.9%</span><span class="trust-lbl">Uptime SLA</span></div>
+    </div>
+  </div>
+
+  <!-- Dashboard widget -->
+  <div class="sec-widget">
+    <div class="sw-header">
+      <div><div class="sw-sub">Threat Monitor</div><div class="sw-title">Security Overview</div></div>
+      <div class="live-pill"><span class="live-dot"></span><span class="live-txt">Live</span></div>
+    </div>
+    <div class="spark-box">
+      <div class="spark-lbl">Threat Activity — Last 12h</div>
+      <div class="bars-wrap" id="bars"></div>
+    </div>
+    <div class="threat-row">
+      <div class="tr-head"><span>Phishing Attempts</span><span style="color:#C9A84C">82% blocked</span></div>
+      <div class="track"><div class="fill" id="f1" style="background:linear-gradient(90deg,#C9A84C,#F5E199);width:0%"></div></div>
+    </div>
+    <div class="threat-row">
+      <div class="tr-head"><span>Ransomware</span><span style="color:#B8941E">56% blocked</span></div>
+      <div class="track"><div class="fill" id="f2" style="background:#B8941E;width:0%"></div></div>
+    </div>
+    <div class="threat-row" style="margin-bottom:14px">
+      <div class="tr-head"><span>DDoS</span><span style="color:#9A7010">34% blocked</span></div>
+      <div class="track"><div class="fill" id="f3" style="background:#9A7010;width:0%"></div></div>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-c"><div class="mini-v">2,841</div><div class="mini-l">Blocked</div></div>
+      <div class="mini-c"><div class="mini-v">0</div><div class="mini-l">Breaches</div></div>
+      <div class="mini-c"><div class="mini-v">&lt;1ms</div><div class="mini-l">Response</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES DARK -->
+<div class="features">
+  <div class="feat-inner">
+    <span class="section-eyebrow">Built for the future</span>
+    <div class="section-h" style="color:#f0f0ff">Why enterprises choose <span style="background:linear-gradient(135deg,#C9A84C,#F5E199);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Zyventra.</span></div>
+    <div class="feat-grid">
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#D4AF37" stroke-width="1.5"/><path d="M7 11l3 3 5-5" stroke="#D4AF37" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feat-t">Innovative Detection</div>
+        <div class="feat-d">AI engines detect zero-day threats and anomalous behaviour before they escalate.</div>
+      </div>
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2.5" stroke="#D4AF37" stroke-width="1.5"/><path d="M2 10h18" stroke="#D4AF37" stroke-width="1.5"/><circle cx="5" cy="7.5" r=".7" fill="#D4AF37"/><circle cx="8" cy="7.5" r=".7" fill="#D4AF37"/></svg>
+        </div>
+        <div class="feat-t">Powerful Threat Analysis</div>
+        <div class="feat-d">Deep forensic visibility across your entire attack surface with real-time telemetry.</div>
+      </div>
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 16L11 4l7 12" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 12h7" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-t">Seamless Response</div>
+        <div class="feat-d">Automated playbooks cut mean time to respond from hours to milliseconds.</div>
+      </div>
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2.5L19 6v7c0 4-3 6-8 7-5-1-8-3-8-7V6l8-3.5z" stroke="#D4AF37" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 11l2 2 4-4" stroke="#D4AF37" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feat-t">Secure by Default</div>
+        <div class="feat-d">Zero-trust architecture, encrypted-at-rest data, and compliance-ready from day one.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS / SERVICES -->
+<div class="tools-sect">
+  <div class="tools-inner">
+    <span class="section-eyebrow" style="color:var(--gold1)">Explore our tools</span>
+    <div class="section-h" style="color:var(--text)">Core Tools & Services</div>
+    <p style="text-align:center;color:var(--muted);font-size:13.5px;max-width:460px;margin:10px auto 0;line-height:1.7">Each product is precision-built for a different layer of your security stack.</p>
+    <div class="tools-grid">
+      <div class="tool-c">
+        <div class="tool-top">
+          <div class="tool-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 2.5L22 7v7c0 5-3.5 8-9 9C7.5 22 4 19 4 14V7l9-4.5z" stroke="#C9A84C" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 13l3 3 6-6" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="tool-tag">Flagship</span>
+        </div>
+        <div class="tool-n">Zyventra Shield Pro</div>
+        <div class="tool-d">Enterprise endpoint protection with behavioural AI that stops APTs before execution.</div>
+        <button class="tool-link">Explore Tool <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="tool-c">
+        <div class="tool-top">
+          <div class="tool-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="9" stroke="#C9A84C" stroke-width="1.6"/><circle cx="13" cy="13" r="4" stroke="#C9A84C" stroke-width="1.6"/><path d="M13 4v2.5M13 19.5v2.5M4 13h2.5M19.5 13h2.5" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <span class="tool-tag">Network</span>
+        </div>
+        <div class="tool-n">Network Watch</div>
+        <div class="tool-d">Full-spectrum traffic analysis with ML-driven anomaly detection and threat hunting.</div>
+        <button class="tool-link">Explore Tool <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="tool-c">
+        <div class="tool-top">
+          <div class="tool-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 8c0-2.5 2-4.5 4.5-4.5h9C20 3.5 22 5.5 22 8v3.5C22 17 18 21 13 23 8 21 4 17 4 11.5V8z" stroke="#C9A84C" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 13l2.5 2.5L17 10" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="tool-tag">Cloud</span>
+        </div>
+        <div class="tool-n">Cloud Guard</div>
+        <div class="tool-d">Continuous posture management across AWS, Azure, and Google Cloud workloads.</div>
+        <button class="tool-link">Explore Tool <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="tool-c">
+        <div class="tool-top">
+          <div class="tool-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><rect x="2.5" y="4.5" width="21" height="17" rx="3" stroke="#C9A84C" stroke-width="1.6"/><path d="M7 12h12M7 17h7" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round"/><circle cx="20" cy="8.5" r="3.5" fill="#fdf6e3" stroke="#C9A84C" stroke-width="1.4"/><path d="M18.8 8.5l.9.9 1.6-1.6" stroke="#C9A84C" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="tool-tag">Audit</span>
+        </div>
+        <div class="tool-n">Security Assessment</div>
+        <div class="tool-d">Automated vulnerability scanning, pentest simulation, and actionable remediation.</div>
+        <button class="tool-link">Explore Tool <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-sect">
+  <div class="stats-grid">
+    <div style="text-align:center"><div class="stat-num">150+</div><div class="stat-lbl">Enterprise Clients</div></div>
+    <div style="text-align:center"><div class="stat-num">10M+</div><div class="stat-lbl">Threats Neutralized</div></div>
+    <div style="text-align:center"><div class="stat-num">99.9%</div><div class="stat-lbl">Uptime</div></div>
+    <div style="text-align:center"><div class="stat-num">24/7</div><div class="stat-lbl">Expert Support</div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-sect">
+  <div class="cta-box">
+    <div class="cta-glow-top"></div>
+    <span class="cta-eyebrow">Get Started Today</span>
+    <div class="cta-h">Ready to upgrade your security?</div>
+    <p class="cta-p">Join 150+ enterprises that trust Zyventra to protect their most critical assets. Our experts are standing by.</p>
+    <button class="pill-btn pill-btn-gold" style="padding:13px 32px;font-size:14px">Connect with Experts &nbsp;↗</button>
+    <p class="cta-note">No commitment required · Response within 2 hours</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg width="28" height="24" viewBox="0 0 38 32" fill="none">
+      <defs><linearGradient id="zg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#9A7010"/><stop offset="50%" stop-color="#D4AF37"/><stop offset="100%" stop-color="#C9A84C"/></linearGradient></defs>
+      <polygon points="2,2 36,2 30,10 10,10" fill="url(#zg2)"/>
+      <polygon points="10,10 26,10 12,22 4,22" fill="url(#zg2)" opacity=".7"/>
+      <polygon points="8,22 28,22 36,30 2,30" fill="url(#zg2)"/>
+    </svg>
+    <span style="color:#44445a;font-size:12px;font-weight:600">Zyventra Technologies © 2025</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a><a href="#">Contact</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+const hts=[38,55,44,70,52,80,63,48,72,58,85,66];
+const bw=document.getElementById('bars');
+hts.forEach((h,i)=>{
+  const d=document.createElement('div');
+  d.className='bar';
+  d.style.cssText=`flex:1;border-radius:3px 3px 0 0;background:${i===5?'#C9A84C':'rgba(201,168,76,.22)'};height:0;transition:height .5s ease`;
+  bw.appendChild(d);
+  setTimeout(()=>{d.style.height=h+'%'},80+i*60);
+});
+let a=5;
+setInterval(()=>{
+  const bs=bw.querySelectorAll('.bar');
+  bs[a].style.background='rgba(201,168,76,.22)';
+  a=(a+1)%bs.length;
+  bs[a].style.background='#C9A84C';
+},1500);
+setTimeout(()=>{
+  document.getElementById('f1').style.width='82%';
+  document.getElementById('f2').style.width='56%';
+  document.getElementById('f3').style.width='34%';
+},400);
+</script>
