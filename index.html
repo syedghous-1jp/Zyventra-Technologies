@@ -14,11 +14,12 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
 --muted:#6b7280;
 --border:#e8dfc8;
 }
-  body{
+ /* hide normal cursor */
+body{
   cursor:none;
 }
 
-/* main dot */
+/* dot */
 .cursor-dot{
   width:8px;
   height:8px;
@@ -29,24 +30,22 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
   left:0;
   transform:translate(-50%,-50%);
   pointer-events:none;
-  z-index:9999;
+  z-index:99999;
   box-shadow:0 0 10px #C9A84C, 0 0 20px #F5E199;
 }
 
-/* orbit glow */
+/* orbit */
 .cursor-orbit{
   width:35px;
   height:35px;
-  border:1px solid rgba(201,168,76,.5);
+  border:1px solid rgba(201,168,76,.6);
   border-radius:50%;
   position:fixed;
   top:0;
   left:0;
   transform:translate(-50%,-50%);
   pointer-events:none;
-  z-index:9998;
-  transition:transform .08s ease-out;
-  box-shadow:0 0 15px rgba(201,168,76,.3);
+  z-index:99998;
 }
   html{
   scroll-behavior:smooth;
@@ -747,30 +746,38 @@ links.forEach(link => {
     }
   });
 });
-  <script>
-const dot = document.querySelector(".cursor-dot");
-const orbit = document.querySelector(".cursor-orbit");
+document.addEventListener("DOMContentLoaded", () => {
 
-let mouseX = 0, mouseY = 0;
-let orbX = 0, orbY = 0;
+  const dot = document.querySelector(".cursor-dot");
+  const orbit = document.querySelector(".cursor-orbit");
 
-document.addEventListener("mousemove", (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+  // ❗ check agar elements mil rahe hain ya nahi
+  if(!dot || !orbit){
+    console.log("Cursor elements missing!");
+    return;
+  }
 
-  dot.style.left = mouseX + "px";
-  dot.style.top = mouseY + "px";
+  let mouseX = 0, mouseY = 0;
+  let orbX = 0, orbY = 0;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function animate(){
+    dot.style.left = mouseX + "px";
+    dot.style.top = mouseY + "px";
+
+    orbX += (mouseX - orbX) * 0.12;
+    orbY += (mouseY - orbY) * 0.12;
+
+    orbit.style.left = orbX + "px";
+    orbit.style.top = orbY + "px";
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
 });
-
-function animateOrbit(){
-  orbX += (mouseX - orbX) * 0.12;
-  orbY += (mouseY - orbY) * 0.12;
-
-  orbit.style.left = orbX + "px";
-  orbit.style.top = orbY + "px";
-
-  requestAnimationFrame(animateOrbit);
-}
-
-animateOrbit();
 </script>
