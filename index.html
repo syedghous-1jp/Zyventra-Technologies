@@ -457,6 +457,38 @@ body{
 .cta-h{color:#fff;font-size:1.8rem;font-weight:800;margin-bottom:12px;line-height:1.2}
 .cta-p{color:#9090b0;font-size:13.5px;line-height:1.7;max-width:380px;margin:0 auto 26px}
 .cta-note{color:#55556a;font-size:11px;margin-top:12px}
+ .tool-link{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  margin-top:14px;
+  color:#C9A84C;
+  font-size:12px;
+  font-weight:700;
+
+  background:transparent;
+  border:none;
+
+  cursor:pointer;
+  position:relative;
+  z-index:10;
+
+  transition:all .2s ease;
+}
+
+/* hover effect */
+.tool-link:hover{
+  color:#F5E199;
+  transform:translateX(4px);
+}
+ .tool-c{
+  position:relative;
+}
+
+.tool-link{
+  pointer-events:auto;
+}
 
 /* FOOTER */
 .footer{background:#0e0f1c;padding:26px 40px;display:flex;align-items:center;justify-content:space-between}
@@ -650,11 +682,10 @@ body{
         <div class="tool-n">Security Assessment</div>
         <div class="tool-d">Automated vulnerability scanning, pentest simulation, and actionable remediation.</div>
        <button class="tool-link" onclick="window.open('scanner.md','_blank')">
-  Explore Tool
+  Explore Tool</button>
   <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
     <path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5"/>
   </svg>
-</button>
     </div>
   </div>
 </div>
