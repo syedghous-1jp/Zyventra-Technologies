@@ -698,4 +698,17 @@ setTimeout(()=>{
   document.getElementById('f2').style.width='56%';
   document.getElementById('f3').style.width='34%';
 },400);
+const links = document.querySelectorAll(".nav-links a");
+
+links.forEach(link => {
+  link.addEventListener("mouseenter", () => {
+    const targetId = link.getAttribute("href");
+    if(targetId.startsWith("#")) {
+      const section = document.querySelector(targetId);
+      if(section){
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  });
+});
 </script>
