@@ -141,6 +141,43 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
     0 0 40px rgba(201,168,76,.18),
     0 16px 44px rgba(201,168,76,.14);
 }
+  .tool-c,
+.feat-c,
+.cta-box{
+  position:relative;
+  overflow:hidden;
+}
+
+.tool-c::after,
+.feat-c::after,
+.cta-box::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-150%;
+
+  width:60%;
+  height:100%;
+
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(245,225,153,.15),
+    rgba(201,168,76,.45),
+    rgba(245,225,153,.15),
+    transparent
+  );
+
+  transform:skewX(-25deg);
+  transition:left .7s ease;
+  pointer-events:none;
+}
+
+.tool-c:hover::after,
+.feat-c:hover::after,
+.cta-box:hover::after{
+  left:150%;
+}
   .tool-c{
   position:relative;
   overflow:hidden;
@@ -199,6 +236,43 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
     0 0 25px rgba(201,168,76,.35),
     0 0 50px rgba(201,168,76,.18),
     0 20px 60px rgba(0,0,0,.25);
+}
+  .tool-c,
+.feat-c,
+.cta-box{
+  position:relative;
+  overflow:hidden;
+}
+
+.tool-c::after,
+.feat-c::after,
+.cta-box::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-150%;
+
+  width:60%;
+  height:100%;
+
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(245,225,153,.15),
+    rgba(201,168,76,.45),
+    rgba(245,225,153,.15),
+    transparent
+  );
+
+  transform:skewX(-25deg);
+  transition:left .7s ease;
+  pointer-events:none;
+}
+
+.tool-c:hover::after,
+.feat-c:hover::after,
+.cta-box:hover::after{
+  left:150%;
 }
 .cta-box{
   position:relative;
