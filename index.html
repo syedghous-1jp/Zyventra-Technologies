@@ -224,6 +224,40 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
 .cta-box:hover::before{
   opacity:1;
 }
+  .cta-contact{
+  margin-top:20px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.contact-pill{
+  text-decoration:none;
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+
+  padding:10px 16px;
+  border-radius:999px;
+
+  border:1px solid rgba(201,168,76,.35);
+  background:rgba(255,255,255,.03);
+
+  transition:all .3s ease;
+}
+
+.contact-pill:hover{
+  transform:translateY(-3px);
+
+  border-color:#C9A84C;
+
+  box-shadow:
+    0 0 15px rgba(201,168,76,.35),
+    0 0 30px rgba(201,168,76,.15);
+
+  color:#F5E199;
+}
 .cta-glow-top{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:380px;height:80px;background:rgba(201,168,76,.12);border-radius:50%;filter:blur(30px);pointer-events:none}
 .cta-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);border:1px solid rgba(201,168,76,.3);border-radius:999px;padding:5px 14px;display:inline-block;margin-bottom:16px}
 .cta-h{color:#fff;font-size:1.8rem;font-weight:800;margin-bottom:12px;line-height:1.2}
@@ -444,7 +478,13 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
     <div class="cta-h">Ready to upgrade your security?</div>
     <p class="cta-p">Join 150+ enterprises that trust Zyventra to protect their most critical assets. Our experts are standing by.</p>
     <button class="pill-btn pill-btn-gold" style="padding:13px 32px;font-size:14px">Connect with Experts &nbsp;↗</button>
-    <p class="cta-note">No commitment required · Response within 2 hours</p>
+    <p class="cta-note">No commitment required · Response within 24 hours</p>
+    <div class="cta-contact">
+  <a href="#" class="contact-pill">📧 Gmail</a>
+  <a href="#" class="contact-pill">📷 Instagram</a>
+  <a href="#" class="contact-pill">𝕏 Twitter</a>
+  <a href="#" class="contact-pill">👽 Reddit</a>
+</div>
   </div>
 </div>
 
