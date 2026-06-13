@@ -22,6 +22,58 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
 .nav-links{display:flex;gap:28px}
 .nav-links a{color:#2a2a3e;text-decoration:none;font-size:13.5px;font-weight:500;letter-spacing:.01em;transition:color .2s}
 .nav-links a:hover{color:var(--gold1)}
+  .nav-item{
+  position:relative;
+}
+
+.nav-item > a{
+  display:block;
+  padding:22px 0;
+}
+
+.dropdown{
+  position:absolute;
+  top:100%;
+  left:50%;
+  transform:translateX(-50%) translateY(10px);
+
+  min-width:260px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+
+  padding:16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.12);
+
+  opacity:0;
+  visibility:hidden;
+  transition:.25s ease;
+  z-index:9999;
+}
+
+.nav-item:hover .dropdown{
+  opacity:1;
+  visibility:visible;
+  transform:translateX(-50%) translateY(0);
+}
+
+.dropdown h4{
+  color:var(--gold1);
+  margin-bottom:10px;
+  font-size:13px;
+}
+  
+.dropdown a{
+  display:block;
+  padding:10px 12px;
+  border-radius:10px;
+  text-decoration:none;
+  color:#2a2a3e;
+}
+.dropdown a:hover{
+  background:#f9f6f0;
+  color:var(--gold1);
+}
 .pill-btn{border:none;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.02em;transition:transform .18s,box-shadow .18s}
 .pill-btn-gold{background:linear-gradient(135deg,#C9A84C,#F5E199,#C9A84C);color:#3a2800;box-shadow:0 2px 14px rgba(201,168,76,.35)}
 .pill-btn-gold:hover{transform:scale(1.05);box-shadow:0 4px 24px rgba(201,168,76,.55)}
@@ -143,14 +195,50 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
       <span style="font-size:10px;display:block;color:#888;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-top:-2px">Technologies</span>
     </div>
   </div>
-  <div class="nav-links">
+ <div class="nav-links">
+
+  <div class="nav-item">
     <a href="#">Products</a>
-    <a href="#">Solutions</a>
-    <a href="#">Innovation</a>
-    <a href="#">Support</a>
+    <div class="dropdown">
+      <h4>Products</h4>
+      <a href="#">Shield Pro</a>
+      <a href="#">Network Watch</a>
+      <a href="#">Cloud Guard</a>
+    </div>
   </div>
-  <button class="pill-btn pill-btn-gold">Request a Demo &nbsp;↗</button>
-</nav>
+
+  <div class="nav-item">
+    <a href="#">Solutions</a>
+    <div class="dropdown">
+      <h4>Solutions</h4>
+      <a href="#">Enterprise Security</a>
+      <a href="#">Threat Monitoring</a>
+      <a href="#">Managed Services</a>
+    </div>
+  </div>
+
+  <div class="nav-item">
+    <a href="#">Innovation</a>
+    <div class="dropdown">
+      <h4>Innovation</h4>
+      <a href="#">AI Security</a>
+      <a href="#">Research Lab</a>
+      <a href="#">Future Tech</a>
+    </div>
+  </div>
+
+  <div class="nav-item">
+    <a href="#">Support</a>
+    <div class="dropdown">
+      <h4>Contact</h4>
+      <a href="#">📧 Gmail (Coming Soon)</a>
+      <a href="#">📷 Instagram (Coming Soon)</a>
+      <a href="#">𝕏 Twitter (Coming Soon)</a>
+      <a href="#"> redit (coming soon)</a>
+    </div>
+  </div>
+
+</div>
 
 <!-- HERO -->
 <div style="max-width:1100px;margin:0 auto;padding:52px 40px 44px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center">
