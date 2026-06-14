@@ -844,6 +844,30 @@ body{
   background:#C9A84C;
   color:#1a1a2e;
 }
+ /* PCB STYLE NETWORK LINES */
+.pcb-line{
+  fill:none;
+  stroke:#5b6cff;              /* indigo vibe */
+  stroke-width:2;
+  stroke-dasharray:6 6;
+  animation:flow 3s linear infinite;
+  opacity:0.9;
+}
+
+@keyframes flow{
+  from{
+    stroke-dashoffset:0;
+  }
+  to{
+    stroke-dashoffset:-40;
+  }
+}
+
+/* junction nodes */
+.pcb-node{
+  fill:#5b6cff;
+  filter:drop-shadow(0 0 6px rgba(91,108,255,.6));
+}
 </style>
 
 
@@ -1018,20 +1042,38 @@ body{
 
   <!-- CONNECTING SVG LINE -->
   <div class="services-network">
+<svg class="service-svg" viewBox="0 0 1200 200">
 
-    <svg class="service-svg" viewBox="0 0 1200 200">
+  <!-- TOP ROOT NODE -->
+  <circle class="pcb-node" cx="600" cy="20" r="6"/>
 
-      <circle cx="600" cy="20" r="7" fill="#C9A84C"/>
+  <!-- MAIN TRUNK (vertical) -->
+  <path class="pcb-line" d="M600 20 V70"/>
 
-      <path d="M600 20 L600 60" class="gold-line"/>
-      <path d="M200 60 L1000 60" class="gold-line"/>
+  <!-- HORIZONTAL BUS LINE -->
+  <path class="pcb-line" d="M120 70 H1080"/>
 
-      <path d="M120 60 L120 120" class="gold-line"/>
-      <path d="M360 60 L360 120" class="gold-line"/>
-      <path d="M600 60 L600 120" class="gold-line"/>
-      <path d="M840 60 L840 120" class="gold-line"/>
-      <path d="M1080 60 L1080 120" class="gold-line"/>
-    </svg>
+  <!-- LEFT BRANCH -->
+  <path class="pcb-line" d="M120 70 V120"/>
+  <circle class="pcb-node" cx="120" cy="120" r="5"/>
+
+  <!-- NODE 2 -->
+  <path class="pcb-line" d="M360 70 V120"/>
+  <circle class="pcb-node" cx="360" cy="120" r="5"/>
+
+  <!-- CENTER -->
+  <path class="pcb-line" d="M600 70 V120"/>
+  <circle class="pcb-node" cx="600" cy="120" r="5"/>
+
+  <!-- NODE 4 -->
+  <path class="pcb-line" d="M840 70 V120"/>
+  <circle class="pcb-node" cx="840" cy="120" r="5"/>
+
+  <!-- RIGHT -->
+  <path class="pcb-line" d="M1080 70 V120"/>
+  <circle class="pcb-node" cx="1080" cy="120" r="5"/>
+
+</svg>
 
     <!-- CARDS -->
     <div class="services-cards">
