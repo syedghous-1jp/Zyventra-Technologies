@@ -26,33 +26,27 @@ body{
   cursor:none;
 }
 
-/* dot */
 .cursor-dot{
   width:8px;
   height:8px;
   background:#C9A84C;
   border-radius:50%;
   position:fixed;
-  top:0;
-  left:0;
-  transform:translate(-50%,-50%);
   pointer-events:none;
   z-index:99999;
+  transform:translate(-50%,-50%);
   box-shadow:0 0 10px #C9A84C, 0 0 20px #F5E199;
 }
 
-/* orbit */
 .cursor-orbit{
   width:35px;
   height:35px;
   border:1px solid rgba(201,168,76,.6);
   border-radius:50%;
   position:fixed;
-  top:0;
-  left:0;
-  transform:translate(-50%,-50%);
   pointer-events:none;
   z-index:99998;
+  transform:translate(-50%,-50%);
 }
   html{
   scroll-behavior:smooth;
@@ -1452,6 +1446,37 @@ setInterval(() => {
   .classList.add("active");
 
 }, 5000);
+ // GOLDEN CURSOR SYSTEM
+const dot = document.querySelector(".cursor-dot");
+const orbit = document.querySelector(".cursor-orbit");
+
+let mouseX = 0, mouseY = 0;
+let orbX = 0, orbY = 0;
+
+// mouse move track
+document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+// animation loop
+function animateCursor(){
+
+  // small golden dot (exact follow)
+  dot.style.left = mouseX + "px";
+  dot.style.top = mouseY + "px";
+
+  // orbit smooth follow
+  orbX += (mouseX - orbX) * 0.12;
+  orbY += (mouseY - orbY) * 0.12;
+
+  orbit.style.left = orbX + "px";
+  orbit.style.top = orbY + "px";
+
+  requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
 
 
 </script>
