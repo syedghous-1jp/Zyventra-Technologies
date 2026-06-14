@@ -1390,11 +1390,7 @@ function animateCounter(el){
 
   function update(now){
 
-    const progress = Math.min(
-      (now - startTime) / duration,
-      1
-    );
-
+    const progress = Math.min((now - startTime) / duration, 1);
     const value = target * progress;
 
     if(target % 1 !== 0){
@@ -1413,26 +1409,28 @@ function animateCounter(el){
 
 const counters = document.querySelectorAll(".counter");
 
-const observer = new IntersectionObserver(entries => {
+const observer = new IntersectionObserver((entries) => {
 
   entries.forEach(entry => {
 
     if(entry.isIntersecting){
 
-      counters.forEach(counter => {
+      animateCounter(entry.target);
 
-        // reset
-        counter.textContent = "0";
-
-        // start again
-        animateCounter(counter);
-
-      });
+      observer.unobserve(entry.target); // run only once
 
     }
 
   });
 
+}, {
+  threshold: 0.5
+});
+
+counters.forEach(counter => {
+  counter.textContent = "0";
+  observer.observe(counter);
+});
 },{
   threshold:0.5
 });
