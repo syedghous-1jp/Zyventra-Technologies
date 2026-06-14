@@ -334,6 +334,9 @@ body{
 .stat-num{font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#9A7010,#D4AF37,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
 .stat-lbl{color:var(--muted);font-size:12px;font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
 .stat-divider{width:1px;background:var(--border);margin:auto}
+.counter{
+  transition:all .3s ease;
+}
 
 /* CTA DARK */
 .cta-sect{background:var(--cream);padding:54px 40px}
@@ -693,10 +696,27 @@ body{
 <!-- STATS -->
 <div class="stats-sect">
   <div class="stats-grid">
-    <div style="text-align:center"><div class="stat-num">150+</div><div class="stat-lbl">Enterprise Clients</div></div>
-    <div style="text-align:center"><div class="stat-num">10M+</div><div class="stat-lbl">Threats Neutralized</div></div>
-    <div style="text-align:center"><div class="stat-num">99.9%</div><div class="stat-lbl">Uptime</div></div>
-    <div style="text-align:center"><div class="stat-num">24/7</div><div class="stat-lbl">Expert Support</div></div>
+
+    <div style="text-align:center">
+      <div class="stat-num counter" data-target="150" data-suffix="+">0</div>
+      <div class="stat-lbl">Enterprise Clients</div>
+    </div>
+
+    <div style="text-align:center">
+      <div class="stat-num counter" data-target="10" data-suffix="M+">0</div>
+      <div class="stat-lbl">Threats Neutralized</div>
+    </div>
+
+    <div style="text-align:center">
+      <div class="stat-num counter" data-target="99.9" data-suffix="%">0</div>
+      <div class="stat-lbl">Uptime</div>
+    </div>
+
+    <div style="text-align:center">
+      <div class="stat-num">24/7</div>
+      <div class="stat-lbl">Expert Support</div>
+    </div>
+
   </div>
 </div>
 
@@ -881,4 +901,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
   animate();
 });
+ function animateCounter(el){
+
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || "";
+
+  const duration = 1200;
+  const startTime = performance.now();
+
+  function update(now){
+
+    const progress = Math.min(
+      (now - startTime) / duration,
+      1
+    );
+
+    const value = target * progress;
+
+    if(target % 1 !== 0){
+      el.textContent =
+        value.toFixed(1) + suffix;
+    }else{
+      el.textContent =
+        Math.floor(value) + suffix;
+    }
+
+    if(progress < 1){
+      requestAnimationFrame(update);
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+const statsObserver =
+new IntersectionObserver(entries=>{
+
+  entries.forEach(entry=>{
+
+    if(entry.isIntersecting){
+
+      document
+        .querySelectorAll(".counter")
+        .forEach(counter=>{
+          animateCounter(counter);
+        });
+
+      statsObserver.disconnect();
+    }
+
+  });
+
+},{
+  threshold:0.4
+});
+
+statsObserver.observe(
+  document.querySelector(".stats-sect")
+);
 </script>
