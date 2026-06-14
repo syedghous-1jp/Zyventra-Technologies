@@ -591,6 +591,66 @@ body{
     min-height:auto;
   }
 }
+ .legal-box{
+  position:relative;
+  overflow:hidden;
+}
+
+/* GOLD SWEEP EFFECT */
+.legal-box::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-150%;
+  width:60%;
+  height:100%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(245,225,153,.15),
+    rgba(201,168,76,.5),
+    rgba(245,225,153,.15),
+    transparent
+  );
+  transform:skewX(-25deg);
+  transition:left .7s ease;
+  pointer-events:none;
+}
+
+/* on hover sweep */
+.legal-box:hover::after{
+  left:150%;
+}
+
+/* INNER GLOW */
+.legal-box::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(
+    circle at center,
+    rgba(201,168,76,.12),
+    transparent 70%
+  );
+  opacity:0;
+  transition:.3s;
+  pointer-events:none;
+}
+
+/* show glow on hover */
+.legal-box:hover::before{
+  opacity:1;
+}
+
+/* BORDER GLOW */
+.legal-box:hover{
+  border-color:#C9A84C;
+  box-shadow:
+    0 0 20px rgba(201,168,76,.35),
+    0 0 40px rgba(201,168,76,.2),
+    0 20px 60px rgba(0,0,0,.2);
+  transform:translateY(-6px);
+}
 </style>
 
 
