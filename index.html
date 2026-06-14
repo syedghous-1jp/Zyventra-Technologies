@@ -852,7 +852,35 @@ body{
 }
 
 }
+ .services-network{
+  max-width:1100px;
+  margin:auto;
+  height:180px;
+}
 
+.service-svg{
+  width:100%;
+  height:100%;
+}
+
+.gold-line{
+  fill:none;
+  stroke:#C9A84C;
+  stroke-width:2;
+}
+
+.svg-dot{
+  fill:#C9A84C;
+}
+.services-cards{
+  max-width:1100px;
+  margin:auto;
+
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+
+  gap:20px;
+}
 </style>
 
 
@@ -1017,43 +1045,47 @@ body{
 </div>
 
 <!-- TOOLS / SERVICES -->
-<div class="tools-sect" id="products">
+<div class="services-section">
 
-<div style="text-align:center;margin-bottom:60px">
-  <span class="section-eyebrow" style="color:#C9A84C">
-    OUR SERVICES
-  </span>
+  <div class="services-heading">
+    <span class="services-small">WHAT WE DO</span>
 
-  <div class="section-h" style="color:#1a1a2e">
-    Advanced Security Solutions
+    <h2>Our Services</h2>
+
+    <p>
+      We provide end-to-end solutions that help businesses
+      grow securely and efficiently.
+    </p>
   </div>
 </div>
+ <div class="services-network">
 
-<div class="services-timeline">
+<svg class="service-svg" viewBox="0 0 1200 220">
 
-  <div class="service-card left">
-    <span class="gold-dot"></span>
-    <h3>Zyventra Shield Pro</h3>
-    <p>Enterprise endpoint protection powered by AI.</p>
-  </div>
+  <!-- center node -->
+  <circle cx="600" cy="30" r="8" class="svg-dot"/>
 
-  <div class="service-card right">
-    <span class="gold-dot"></span>
-    <h3>Network Watch</h3>
-    <p>Real-time network monitoring and threat detection.</p>
-  </div>
+  <!-- main line -->
+  <path d="M600 30 L600 70" class="gold-line"/>
 
-  <div class="service-card left">
-    <span class="gold-dot"></span>
-    <h3>Cloud Guard</h3>
-    <p>Multi-cloud security and posture management.</p>
-  </div>
+  <!-- horizontal branch -->
+  <path d="M250 70 L950 70" class="gold-line"/>
 
-  <div class="service-card right">
-    <span class="gold-dot"></span>
-    <h3>Security Assessment</h3>
-    <p>Automated scanning and penetration testing.</p>
-  </div>
+  <!-- card connectors -->
+  <path d="M150 70 L150 150" class="gold-line"/>
+  <path d="M375 70 L375 150" class="gold-line"/>
+  <path d="M600 70 L600 150" class="gold-line"/>
+  <path d="M825 70 L825 150" class="gold-line"/>
+  <path d="M1050 70 L1050 150" class="gold-line"/>
+
+</svg>
+  <div class="services-cards">
+
+  <div class="service-card">...</div>
+  <div class="service-card">...</div>
+  <div class="service-card">...</div>
+  <div class="service-card">...</div>
+  <div class="service-card">...</div>
 
 </div>
 
