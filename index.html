@@ -901,7 +901,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   animate();
 });
- function animateCounter(el){
+function animateCounter(el){
 
   const target = parseFloat(el.dataset.target);
   const suffix = el.dataset.suffix || "";
@@ -919,11 +919,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const value = target * progress;
 
     if(target % 1 !== 0){
-      el.textContent =
-        value.toFixed(1) + suffix;
+      el.textContent = value.toFixed(1) + suffix;
     }else{
-      el.textContent =
-        Math.floor(value) + suffix;
+      el.textContent = Math.floor(value) + suffix;
     }
 
     if(progress < 1){
@@ -934,29 +932,31 @@ document.addEventListener("DOMContentLoaded", () => {
   requestAnimationFrame(update);
 }
 
-const statsObserver =
-new IntersectionObserver(entries=>{
+const counters = document.querySelectorAll(".counter");
 
-  entries.forEach(entry=>{
+const observer = new IntersectionObserver(entries => {
+
+  entries.forEach(entry => {
 
     if(entry.isIntersecting){
 
-      document
-        .querySelectorAll(".counter")
-        .forEach(counter=>{
-          animateCounter(counter);
-        });
+      counters.forEach(counter => {
 
-      statsObserver.disconnect();
+        // reset
+        counter.textContent = "0";
+
+        // start again
+        animateCounter(counter);
+
+      });
+
     }
 
   });
 
 },{
-  threshold:0.4
+  threshold:0.5
 });
 
-statsObserver.observe(
-  document.querySelector(".stats-sect")
-);
+observer.observe(document.querySelector(".stats-sect"));
 </script>
