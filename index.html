@@ -1041,37 +1041,55 @@ body{
   </div>
 
   <!-- CONNECTING SVG LINE -->
-  <div class="services-network">
-<svg class="service-svg" viewBox="0 0 1200 200">
+ <svg class="service-svg" viewBox="0 0 1200 200">
 
-  <!-- TOP ROOT NODE -->
-  <circle class="pcb-node" cx="600" cy="20" r="6"/>
+  <!-- CENTER ROOT -->
+  <circle cx="600" cy="20" r="6" fill="#C9A84C"></circle>
 
-  <!-- MAIN TRUNK (vertical) -->
-  <path class="pcb-line" d="M600 20 V70"/>
+  <!-- LEFT BRANCH CURVES -->
+  <path d="M600 20 C520 40, 380 55, 120 110"
+        fill="none"
+        stroke="#C9A84C"
+        stroke-width="2"
+        stroke-dasharray="6 6">
+  </path>
 
-  <!-- HORIZONTAL BUS LINE -->
-  <path class="pcb-line" d="M120 70 H1080"/>
+  <path d="M600 20 C540 45, 420 60, 360 110"
+        fill="none"
+        stroke="#C9A84C"
+        stroke-width="2"
+        stroke-dasharray="6 6">
+  </path>
 
-  <!-- LEFT BRANCH -->
-  <path class="pcb-line" d="M120 70 V120"/>
-  <circle class="pcb-node" cx="120" cy="120" r="5"/>
+  <!-- CENTER DOWN -->
+  <path d="M600 20 C600 50, 600 70, 600 110"
+        fill="none"
+        stroke="#C9A84C"
+        stroke-width="2"
+        stroke-dasharray="6 6">
+  </path>
 
-  <!-- NODE 2 -->
-  <path class="pcb-line" d="M360 70 V120"/>
-  <circle class="pcb-node" cx="360" cy="120" r="5"/>
+  <!-- RIGHT BRANCH CURVES -->
+  <path d="M600 20 C680 45, 760 60, 840 110"
+        fill="none"
+        stroke="#C9A84C"
+        stroke-width="2"
+        stroke-dasharray="6 6">
+  </path>
 
-  <!-- CENTER -->
-  <path class="pcb-line" d="M600 70 V120"/>
-  <circle class="pcb-node" cx="600" cy="120" r="5"/>
+  <path d="M600 20 C720 45, 900 60, 1080 110"
+        fill="none"
+        stroke="#C9A84C"
+        stroke-width="2"
+        stroke-dasharray="6 6">
+  </path>
 
-  <!-- NODE 4 -->
-  <path class="pcb-line" d="M840 70 V120"/>
-  <circle class="pcb-node" cx="840" cy="120" r="5"/>
-
-  <!-- RIGHT -->
-  <path class="pcb-line" d="M1080 70 V120"/>
-  <circle class="pcb-node" cx="1080" cy="120" r="5"/>
+  <!-- CONNECTION DOTS -->
+  <circle cx="120" cy="110" r="5" fill="#C9A84C"></circle>
+  <circle cx="360" cy="110" r="5" fill="#C9A84C"></circle>
+  <circle cx="600" cy="110" r="5" fill="#C9A84C"></circle>
+  <circle cx="840" cy="110" r="5" fill="#C9A84C"></circle>
+  <circle cx="1080" cy="110" r="5" fill="#C9A84C"></circle>
 
 </svg>
 
