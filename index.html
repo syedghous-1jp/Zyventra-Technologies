@@ -686,6 +686,60 @@ body{
     0 0 15px rgba(201,168,76,.35),
     0 0 30px rgba(201,168,76,.15);
 }
+ .news-slider{
+  max-width:1100px;
+  height:420px;
+  margin:30px auto 50px;
+  background:#F9F6F0;
+  border:1px solid rgba(201,168,76,.25);
+  border-radius:30px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.news-slide{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  transition:opacity .8s ease;
+}
+
+.news-slide.active{
+  opacity:1;
+}
+
+.news-slide img{
+  width:100%;
+  max-width:420px;
+  object-fit:contain;
+  filter:drop-shadow(0 25px 40px rgba(201,168,76,.15));
+}
+
+.news-dots{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+}
+
+.news-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#d4d4d8;
+}
+
+.news-dot.active{
+  background:#C9A84C;
+}
 </style>
 
 
@@ -784,7 +838,29 @@ body{
     </div>
   </div>
 </div>
+<!-- NEWS SLIDER -->
 
+<div class="news-slider">
+
+  <div class="news-slide active">
+    <img src="https://cdn-icons-png.flaticon.com/512/2092/2092663.png">
+  </div>
+
+  <div class="news-slide">
+    <img src="https://cdn-icons-png.flaticon.com/512/3050/3050525.png">
+  </div>
+
+  <div class="news-slide">
+    <img src="https://cdn-icons-png.flaticon.com/512/4149/4149688.png">
+  </div>
+
+  <div class="news-dots">
+    <span class="news-dot active"></span>
+    <span class="news-dot"></span>
+    <span class="news-dot"></span>
+  </div>
+
+</div>
 <!-- FEATURES DARK -->
 <div class="features" id="solutions">
   <div class="feat-inner">
@@ -1202,4 +1278,20 @@ const observer = new IntersectionObserver(entries => {
 });
 
 observer.observe(document.querySelector(".stats-sect"));
+ const slides = document.querySelectorAll(".news-slide");
+const dots = document.querySelectorAll(".news-dot");
+
+let current = 0;
+
+setInterval(() => {
+
+  slides[current].classList.remove("active");
+  dots[current].classList.remove("active");
+
+  current = (current + 1) % slides.length;
+
+  slides[current].classList.add("active");
+  dots[current].classList.add("active");
+
+}, 4000);
 </script>
