@@ -740,6 +740,119 @@ body{
   color:#6b7280;
   font-size:14px;
 }
+ .services-timeline{
+  position:relative;
+  max-width:1000px;
+  margin:auto;
+  padding:40px 0;
+}
+
+/* center golden line */
+.services-timeline::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:0;
+  bottom:0;
+  width:2px;
+
+  background:linear-gradient(
+    #C9A84C,
+    #F5E199,
+    #C9A84C
+  );
+
+  transform:translateX(-50%);
+}
+
+.service-card{
+  position:relative;
+
+  width:42%;
+
+  background:#fff;
+
+  padding:24px;
+
+  border-radius:24px;
+
+  border:1px solid rgba(201,168,76,.2);
+
+  margin-bottom:50px;
+
+  transition:.3s;
+}
+
+.service-card:hover{
+  transform:translateY(-6px);
+
+  border-color:#C9A84C;
+
+  box-shadow:
+  0 15px 40px rgba(201,168,76,.18);
+}
+
+.service-card.left{
+  margin-right:auto;
+}
+
+.service-card.right{
+  margin-left:auto;
+}
+
+.gold-dot{
+  position:absolute;
+
+  width:16px;
+  height:16px;
+
+  border-radius:50%;
+
+  background:#C9A84C;
+
+  top:30px;
+
+  box-shadow:
+  0 0 20px rgba(201,168,76,.8);
+}
+
+.service-card.left .gold-dot{
+  right:-48px;
+}
+
+.service-card.right .gold-dot{
+  left:-48px;
+}
+
+.service-card h3{
+  color:#1a1a2e;
+  margin-bottom:10px;
+  font-size:18px;
+}
+
+.service-card p{
+  color:#666;
+  line-height:1.7;
+}
+ @media(max-width:768px){
+
+.services-timeline::before{
+  left:20px;
+}
+
+.service-card{
+  width:calc(100% - 50px);
+  margin-left:50px !important;
+}
+
+.service-card.left .gold-dot,
+.service-card.right .gold-dot{
+  left:-38px;
+  right:auto;
+}
+
+}
+
 </style>
 
 
@@ -905,70 +1018,46 @@ body{
 
 <!-- TOOLS / SERVICES -->
 <div class="tools-sect" id="products">
-  <div class="tools-inner">
-    <span class="section-eyebrow" style="color:var(--gold1)">Explore our tools</span>
-    <div class="section-h" style="color:var(--text)">Core Tools & Services</div>
-    <p style="text-align:center;color:var(--muted);font-size:13.5px;max-width:460px;margin:10px auto 0;line-height:1.7">Each product is precision-built for a different layer of your security stack.</p>
-    <div class="tools-grid">
-      <div class="tool-c">
-        <div class="tool-top">
-          <div class="tool-icon">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 2.5L22 7v7c0 5-3.5 8-9 9C7.5 22 4 19 4 14V7l9-4.5z" stroke="#C9A84C" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 13l3 3 6-6" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="tool-tag">Flagship</span>
-        </div>
-        <div class="tool-n">Zyventra Shield Pro</div>
-        <div class="tool-d">Enterprise endpoint protection with behavioural AI that stops APTs before execution.</div>
-        <button class="tool-link">Explore Tool <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </div>
-      <div class="tool-c">
-        <div class="tool-top">
-          <div class="tool-icon">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="9" stroke="#C9A84C" stroke-width="1.6"/><circle cx="13" cy="13" r="4" stroke="#C9A84C" stroke-width="1.6"/><path d="M13 4v2.5M13 19.5v2.5M4 13h2.5M19.5 13h2.5" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </div>
-          <span class="tool-tag">Network</span>
-        </div>
-        <div class="tool-n">Network Watch</div>
-        <div class="tool-d">Full-spectrum traffic analysis with ML-driven anomaly detection and threat hunting.</div>
-        <button class="tool-link">Explore Tool <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </div>
-      <div class="tool-c">
-        <div class="tool-top">
-          <div class="tool-icon">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 8c0-2.5 2-4.5 4.5-4.5h9C20 3.5 22 5.5 22 8v3.5C22 17 18 21 13 23 8 21 4 17 4 11.5V8z" stroke="#C9A84C" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 13l2.5 2.5L17 10" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="tool-tag">Cloud</span>
-        </div>
-        <div class="tool-n">Cloud Guard</div>
-        <div class="tool-d">Continuous posture management across AWS, Azure, and Google Cloud workloads.</div>
-        <button class="tool-link">Explore Tool <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3.5l3 3-3 3" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </div>
-      <div class="tool-c">
-        <div class="tool-top">
-          <div class="tool-icon">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><rect x="2.5" y="4.5" width="21" height="17" rx="3" stroke="#C9A84C" stroke-width="1.6"/><path d="M7 12h12M7 17h7" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round"/><circle cx="20" cy="8.5" r="3.5" fill="#fdf6e3" stroke="#C9A84C" stroke-width="1.4"/><path d="M18.8 8.5l.9.9 1.6-1.6" stroke="#C9A84C" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="tool-tag">Audit</span>
-        </div>
-        <div class="tool-n">Security Assessment</div>
-        <div class="tool-d">Automated vulnerability scanning, pentest simulation, and actionable remediation.</div>
-   <button class="tool-link" onclick="window.open('scanner.md','_blank')">
-  Explore Tool
 
-  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-    <path
-      d="M2 6.5h9M7 3.5l3 3-3 3"
-      stroke="#C9A84C"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-</button>
-    </div>
+<div style="text-align:center;margin-bottom:60px">
+  <span class="section-eyebrow" style="color:#C9A84C">
+    OUR SERVICES
+  </span>
+
+  <div class="section-h" style="color:#1a1a2e">
+    Advanced Security Solutions
   </div>
 </div>
 
+<div class="services-timeline">
+
+  <div class="service-card left">
+    <span class="gold-dot"></span>
+    <h3>Zyventra Shield Pro</h3>
+    <p>Enterprise endpoint protection powered by AI.</p>
+  </div>
+
+  <div class="service-card right">
+    <span class="gold-dot"></span>
+    <h3>Network Watch</h3>
+    <p>Real-time network monitoring and threat detection.</p>
+  </div>
+
+  <div class="service-card left">
+    <span class="gold-dot"></span>
+    <h3>Cloud Guard</h3>
+    <p>Multi-cloud security and posture management.</p>
+  </div>
+
+  <div class="service-card right">
+    <span class="gold-dot"></span>
+    <h3>Security Assessment</h3>
+    <p>Automated scanning and penetration testing.</p>
+  </div>
+
+</div>
+
+</div>
 <!-- STATS -->
 <div class="stats-sect">
   <div class="stats-grid">
