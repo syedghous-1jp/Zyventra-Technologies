@@ -740,146 +740,109 @@ body{
   color:#6b7280;
   font-size:14px;
 }
- .services-timeline{
-  position:relative;
-  max-width:1000px;
-  margin:auto;
-  padding:40px 0;
+/* SERVICES SECTION WRAPPER */
+.services-section{
+  background:var(--cream);
+  padding:60px 40px 20px;
+  text-align:center;
 }
 
-/* center golden line */
-.services-timeline::before{
-  content:'';
-  position:absolute;
-  left:50%;
-  top:0;
-  bottom:0;
-  width:2px;
-
-  background:linear-gradient(
-    #C9A84C,
-    #F5E199,
-    #C9A84C
-  );
-
-  transform:translateX(-50%);
+.services-heading h2{
+  font-size:2rem;
+  font-weight:900;
+  color:var(--text);
+  margin-top:8px;
 }
 
-.service-card{
-  position:relative;
-
-  width:42%;
-
-  background:#fff;
-
-  padding:24px;
-
-  border-radius:24px;
-
-  border:1px solid rgba(201,168,76,.2);
-
-  margin-bottom:50px;
-
-  transition:.3s;
+.services-heading p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:10px;
 }
 
-.service-card:hover{
-  transform:translateY(-6px);
-
-  border-color:#C9A84C;
-
-  box-shadow:
-  0 15px 40px rgba(201,168,76,.18);
-}
-
-.service-card.left{
-  margin-right:auto;
-}
-
-.service-card.right{
-  margin-left:auto;
-}
-
-.gold-dot{
-  position:absolute;
-
-  width:16px;
-  height:16px;
-
-  border-radius:50%;
-
-  background:#C9A84C;
-
-  top:30px;
-
-  box-shadow:
-  0 0 20px rgba(201,168,76,.8);
-}
-
-.service-card.left .gold-dot{
-  right:-48px;
-}
-
-.service-card.right .gold-dot{
-  left:-48px;
-}
-
-.service-card h3{
-  color:#1a1a2e;
-  margin-bottom:10px;
-  font-size:18px;
-}
-
-.service-card p{
-  color:#666;
-  line-height:1.7;
-}
- @media(max-width:768px){
-
-.services-timeline::before{
-  left:20px;
-}
-
-.service-card{
-  width:calc(100% - 50px);
-  margin-left:50px !important;
-}
-
-.service-card.left .gold-dot,
-.service-card.right .gold-dot{
-  left:-38px;
-  right:auto;
-}
-
-}
- .services-network{
+/* NETWORK LINE */
+.services-network{
   max-width:1100px;
-  margin:auto;
-  height:180px;
+  margin:40px auto 0;
+  position:relative;
 }
 
-.service-svg{
-  width:100%;
-  height:100%;
-}
-
+/* GOLD LINE */
 .gold-line{
   fill:none;
   stroke:#C9A84C;
   stroke-width:2;
 }
 
-.svg-dot{
-  fill:#C9A84C;
-}
+/* CARDS GRID */
 .services-cards{
-  max-width:1100px;
-  margin:auto;
-
   display:grid;
   grid-template-columns:repeat(5,1fr);
+  gap:18px;
+  margin-top:40px;
+}
 
-  gap:20px;
+/* SERVICE CARD */
+.service-card{
+  background:var(--cream);
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:22px;
+  padding:22px;
+  position:relative;
+  transition:.3s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,.04);
+}
+
+.service-card:hover{
+  transform:translateY(-6px);
+  border-color:#C9A84C;
+  box-shadow:0 18px 45px rgba(201,168,76,.18);
+}
+
+/* DOT CONNECTOR */
+.gold-dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#C9A84C;
+  position:absolute;
+  top:-8px;
+  left:50%;
+  transform:translateX(-50%);
+  box-shadow:0 0 15px rgba(201,168,76,.6);
+}
+
+/* TEXT */
+.service-card h3{
+  font-size:16px;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:8px;
+}
+
+.service-card p{
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* BUTTON */
+.service-btn{
+  margin-top:14px;
+  padding:9px 14px;
+  font-size:11px;
+  font-weight:700;
+  border-radius:999px;
+  border:1px solid #C9A84C;
+  background:transparent;
+  color:#C9A84C;
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+.service-btn:hover{
+  background:#C9A84C;
+  color:#1a1a2e;
 }
 </style>
 
@@ -1045,50 +1008,71 @@ body{
 </div>
 
 <!-- TOOLS / SERVICES -->
-<div class="services-section">
+<div class="services-section" id="services">
 
   <div class="services-heading">
     <span class="services-small">WHAT WE DO</span>
-
     <h2>Our Services</h2>
-
-    <p>
-      We provide end-to-end solutions that help businesses
-      grow securely and efficiently.
-    </p>
+    <p>We provide end-to-end solutions that help businesses grow securely and efficiently.</p>
   </div>
-</div>
- <div class="services-network">
 
-<svg class="service-svg" viewBox="0 0 1200 220">
+  <!-- CONNECTING SVG LINE -->
+  <div class="services-network">
 
-  <!-- center node -->
-  <circle cx="600" cy="30" r="8" class="svg-dot"/>
+    <svg class="service-svg" viewBox="0 0 1200 200">
 
-  <!-- main line -->
-  <path d="M600 30 L600 70" class="gold-line"/>
+      <circle cx="600" cy="20" r="7" fill="#C9A84C"/>
 
-  <!-- horizontal branch -->
-  <path d="M250 70 L950 70" class="gold-line"/>
+      <path d="M600 20 L600 60" class="gold-line"/>
+      <path d="M200 60 L1000 60" class="gold-line"/>
 
-  <!-- card connectors -->
-  <path d="M150 70 L150 150" class="gold-line"/>
-  <path d="M375 70 L375 150" class="gold-line"/>
-  <path d="M600 70 L600 150" class="gold-line"/>
-  <path d="M825 70 L825 150" class="gold-line"/>
-  <path d="M1050 70 L1050 150" class="gold-line"/>
+      <path d="M120 60 L120 120" class="gold-line"/>
+      <path d="M360 60 L360 120" class="gold-line"/>
+      <path d="M600 60 L600 120" class="gold-line"/>
+      <path d="M840 60 L840 120" class="gold-line"/>
+      <path d="M1080 60 L1080 120" class="gold-line"/>
+    </svg>
 
-</svg>
-  <div class="services-cards">
+    <!-- CARDS -->
+    <div class="services-cards">
 
-  <div class="service-card">...</div>
-  <div class="service-card">...</div>
-  <div class="service-card">...</div>
-  <div class="service-card">...</div>
-  <div class="service-card">...</div>
+      <div class="service-card">
+        <div class="gold-dot"></div>
+        <h3>Cyber Security</h3>
+        <p>Protecting systems and data from digital threats with advanced security solutions.</p>
+        <button class="service-btn">Explore Tool</button>
+      </div>
 
-</div>
+      <div class="service-card">
+        <div class="gold-dot"></div>
+        <h3>Networking</h3>
+        <p>Designing and managing secure & reliable network infrastructures for businesses.</p>
+        <button class="service-btn">Explore Tool</button>
+      </div>
 
+      <div class="service-card">
+        <div class="gold-dot"></div>
+        <h3>Web Solutions</h3>
+        <p>Building fast, responsive and secure websites & web applications.</p>
+        <button class="service-btn">Explore Tool</button>
+      </div>
+
+      <div class="service-card">
+        <div class="gold-dot"></div>
+        <h3>Digital Marketing</h3>
+        <p>Boosting brand visibility with smart strategies, campaigns and content.</p>
+        <button class="service-btn">Explore Tool</button>
+      </div>
+
+      <div class="service-card">
+        <div class="gold-dot"></div>
+        <h3>Creative Media</h3>
+        <p>Creating stunning visuals, animations and engaging digital experiences.</p>
+        <button class="service-btn">Explore Tool</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 <!-- STATS -->
 <div class="stats-sect">
