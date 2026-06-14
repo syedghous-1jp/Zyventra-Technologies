@@ -498,6 +498,70 @@ body{
 .footer-links{display:flex;gap:20px}
 .footer-links a{color:#55556a;font-size:11px;text-decoration:none;transition:color .2s}
 .footer-links a:hover{color:var(--gold2)}
+ .legal-wrapper{
+  max-width:1000px;
+  margin:0 auto;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  gap:40px;
+  padding:20px;
+  flex-wrap:wrap;
+}
+
+.legal-box{
+  flex:1;
+  min-width:280px;
+  background:var(--charcoal);
+  border:1px solid rgba(201,168,76,.2);
+  border-radius:20px;
+  padding:40px 30px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.legal-box .cta-h{
+  color:#fff;
+}
+
+.legal-box .cta-p{
+  color:#a9a9c2;
+}
+
+.legal-divider{
+  width:2px;
+  background:linear-gradient(
+    to bottom,
+    transparent,
+    #C9A84C,
+    #F5E199,
+    #C9A84C,
+    transparent
+  );
+  border-radius:999px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .legal-wrapper{
+    flex-direction:column;
+  }
+
+  .legal-divider{
+    width:80%;
+    height:2px;
+    margin:10px auto;
+    background:linear-gradient(
+      to right,
+      transparent,
+      #C9A84C,
+      #F5E199,
+      #C9A84C,
+      transparent
+    );
+  }
+}
 </style>
 
 
@@ -856,15 +920,43 @@ body{
     </svg>
     <span style="color:#44445a;font-size:12px;font-weight:600">Zyventra Technologies © 2025</span>
   </div>
- <div class="footer-links">
-  <a href="#privacy">Privacy</a>
-  <a href="#terms">Terms</a>
-  <a href="#solutions">Security</a>
-  <a href="#support">Contact</a>
-</div>
-</div>
 
 </div>
+ <!-- LEGAL SECTION -->
+<div class="cta-sect" id="legal">
+
+  <div class="legal-wrapper">
+
+    <!-- PRIVACY -->
+    <div class="legal-box">
+      <span class="cta-eyebrow">Legal</span>
+      <div class="cta-h">Privacy Policy</div>
+
+      <p class="cta-p">
+        We value your privacy. Zyventra collects only necessary data to
+        improve security, performance, and user experience.
+      </p>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="legal-divider"></div>
+
+    <!-- TERMS -->
+    <div class="legal-box">
+      <span class="cta-eyebrow">Legal</span>
+      <div class="cta-h">Terms & Conditions</div>
+
+      <p class="cta-p">
+        By using Zyventra services, you agree to follow our policies
+        and acceptable usage guidelines.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+
 <div class="cursor-dot"></div>
 <div class="cursor-orbit"></div>
 
