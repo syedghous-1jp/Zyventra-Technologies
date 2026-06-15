@@ -1291,24 +1291,29 @@ z-index:9999999;
   object-fit:cover;
   display:block;
 }
- .team-subtitle{
-  margin:15px 0 25px;
+ .team-title{
   text-align:center;
 }
 
-.team-divider{
-  width:300px;
-  height:1px;
-  background:#1a1a2e;
-  margin:0 auto 12px;
-}
-
-.team-subtitle p{
-  color:#1a1a2e;
+/* sub text block */
+.team-subtext{
+  display:block;
+  margin-top:12px;
   font-size:12px;
   font-weight:600;
   letter-spacing:.08em;
   text-transform:uppercase;
+  color:#1a1a2e;
+}
+
+/* black line */
+.team-line{
+  display:block;
+  width:300px;
+  height:1px;
+  background:#1a1a2e;
+  margin:0 auto 10px;
+  opacity:0.8;
 }
 </style>
 
@@ -1620,14 +1625,14 @@ z-index:9999999;
 
 <section class="team-org">
 
-  <h2 class="team-title">Meet Our Team</h2>
-<div class="team-subtitle">
-  <div class="team-divider"></div>
+  <h2 class="team-title">
+  Meet Our Team
 
-  <p>
-    One team, one mission — delivering innovation, trust, and excellence in cybersecurity.
-  </p>
-</div>
+  <span class="team-subtext">
+    <span class="team-line"></span>
+    One team, one mission — innovation, trust & cybersecurity excellence.
+  </span>
+</h2>
   <div class="org-wrapper">
 
     <!-- TOP LEADER -->
