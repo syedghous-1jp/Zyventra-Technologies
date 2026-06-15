@@ -1337,40 +1337,7 @@ links.forEach(link => {
     }
   });
 });
-document.addEventListener("DOMContentLoaded", () => {
 
-  const dot = document.querySelector(".cursor-dot");
-  const orbit = document.querySelector(".cursor-orbit");
-
-  // ❗ check agar elements mil rahe hain ya nahi
-  if(!dot || !orbit){
-    console.log("Cursor elements missing!");
-    return;
-  }
-
-  let mouseX = 0, mouseY = 0;
-  let orbX = 0, orbY = 0;
-
-  document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-
-  function animate(){
-    dot.style.left = mouseX + "px";
-    dot.style.top = mouseY + "px";
-
-    orbX += (mouseX - orbX) * 0.12;
-    orbY += (mouseY - orbY) * 0.12;
-
-    orbit.style.left = orbX + "px";
-    orbit.style.top = orbY + "px";
-
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-});
 function animateCounter(el){
 
   const target = parseFloat(el.dataset.target);
@@ -1414,9 +1381,6 @@ const observer = new IntersectionObserver((entries) => {
 
   });
 
-}, {
-  threshold: 0.5
-});
 
 counters.forEach(counter => {
   counter.textContent = "0";
@@ -1451,8 +1415,8 @@ window.addEventListener("load", () => {
   if(!dot || !orbit) return;
 
   let mouseX = 0, mouseY = 0;
-  let dotX = 0, dotY = 0;
-  let orbitX = 0, orbitY = 0;
+  let dx = 0, dy = 0;
+  let ox = 0, oy = 0;
 
   window.addEventListener("mousemove", (e) => {
     mouseX = e.clientX;
@@ -1461,19 +1425,17 @@ window.addEventListener("load", () => {
 
   function animate(){
 
-    // smooth dot (fast)
-    dotX += (mouseX - dotX) * 0.35;
-    dotY += (mouseY - dotY) * 0.35;
+    dx += (mouseX - dx) * 0.35;
+    dy += (mouseY - dy) * 0.35;
 
-    // slow orbit (lag effect)
-    orbitX += (mouseX - orbitX) * 0.12;
-    orbitY += (mouseY - orbitY) * 0.12;
+    ox += (mouseX - ox) * 0.12;
+    oy += (mouseY - oy) * 0.12;
 
-    dot.style.left = dotX + "px";
-    dot.style.top = dotY + "px";
+    dot.style.left = dx + "px";
+    dot.style.top = dy + "px";
 
-    orbit.style.left = orbitX + "px";
-    orbit.style.top = orbitY + "px";
+    orbit.style.left = ox + "px";
+    orbit.style.top = oy + "px";
 
     requestAnimationFrame(animate);
   }
