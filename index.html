@@ -16,8 +16,12 @@ body,div,span,p,h1,h2,h3,a,button{font-family:-apple-system,BlinkMacSystemFont,'
 }
 
  /* hide normal cursor */
-body{
-  cursor:none;
+.cursor-dot,
+.cursor-orbit{
+  position:fixed;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:999999;
 }
 
 .cursor-dot{
@@ -25,22 +29,14 @@ body{
   height:8px;
   background:#C9A84C;
   border-radius:50%;
-  position:fixed;
-  pointer-events:none;
-  z-index:99999;
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 10px #C9A84C, 0 0 20px #F5E199;
+  box-shadow:0 0 10px #C9A84C;
 }
 
 .cursor-orbit{
-  width:35px;
-  height:35px;
+  width:40px;
+  height:40px;
   border:1px solid rgba(201,168,76,.6);
   border-radius:50%;
-  position:fixed;
-  pointer-events:none;
-  z-index:99998;
-  transform:translate(-50%,-50%);
 }
   html{
   scroll-behavior:smooth;
@@ -1440,40 +1436,39 @@ setInterval(() => {
   .classList.add("active");
 
 }, 5000);
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
 
   const dot = document.querySelector(".cursor-dot");
   const orbit = document.querySelector(".cursor-orbit");
 
   if(!dot || !orbit){
-    console.log("Cursor elements missing in HTML");
+    console.log("Cursor missing in HTML");
     return;
   }
 
-  let mouseX = 0, mouseY = 0;
-  let orbX = 0, orbY = 0;
+  let x = 0, y = 0;
+  let ox = 0, oy = 0;
 
-  document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+  window.addEventListener("mousemove", (e) => {
+    x = e.clientX;
+    y = e.clientY;
   });
 
   function animate(){
 
-    dot.style.left = mouseX + "px";
-    dot.style.top = mouseY + "px";
+    dot.style.left = x + "px";
+    dot.style.top = y + "px";
 
-    orbX += (mouseX - orbX) * 0.15;
-    orbY += (mouseY - orbY) * 0.15;
+    ox += (x - ox) * 0.15;
+    oy += (y - oy) * 0.15;
 
-    orbit.style.left = orbX + "px";
-    orbit.style.top = orbY + "px";
+    orbit.style.left = ox + "px";
+    orbit.style.top = oy + "px";
 
     requestAnimationFrame(animate);
   }
 
   animate();
 });
-
 
 </script>
