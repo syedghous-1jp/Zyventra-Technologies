@@ -982,6 +982,66 @@ a, button, input, textarea, select {
   color:#C9A84C;
   transform:translateX(5px);
 }
+ /* SIGN IN DROPDOWN */
+
+.signin-dropdown{
+  position:relative;
+  display:inline-block;
+}
+
+.signin-menu{
+  position:absolute;
+  top:120%;
+  right:0;
+
+  width:220px;
+
+  background:#fff;
+  border:1px solid rgba(201,168,76,.35);
+
+  border-radius:16px;
+  padding:8px;
+
+  opacity:0;
+  visibility:hidden;
+
+  transform:translateY(10px);
+
+  transition:.3s ease;
+
+  z-index:99999;
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.12),
+    0 0 25px rgba(201,168,76,.15);
+}
+
+.signin-dropdown:hover .signin-menu{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+.signin-menu a{
+  display:block;
+
+  text-decoration:none;
+  color:#1a1a2e;
+
+  font-size:13px;
+  font-weight:600;
+
+  padding:12px 14px;
+  border-radius:10px;
+
+  transition:.25s;
+}
+
+.signin-menu a:hover{
+  background:#fdf6e3;
+  color:#C9A84C;
+  transform:translateX(4px);
+}
 </style>
 
 
@@ -1019,10 +1079,38 @@ a, button, input, textarea, select {
 </div>
 
 <div style="display:flex;gap:10px">
-  <button class="pill-btn pill-btn-outline">Login</button>
-  <button class="pill-btn pill-btn-gold">Get Started</button>
+
+  <!-- Existing Login Button -->
+  <button class="pill-btn pill-btn-outline">
+    Login
+  </button>
+
+  <!-- New Sign In Dropdown -->
+  <div class="signin-dropdown">
+
+    <button class="pill-btn pill-btn-gold">
+      Sign In ▾
+    </button>
+
+    <div class="signin-menu">
+
+      <a href="#">
+        🔵 Microsoft
+      </a>
+
+      <a href="#">
+        🔴 Google
+      </a>
+
+      <a href="#">
+        ⚫ GitHub
+      </a>
+
+    </div>
+
+  </div>
+
 </div>
-</nav>
 
 
 <!-- HERO -->
