@@ -924,6 +924,64 @@ a, button, input, textarea, select {
   color:#777;
   margin-top:4px;
 }
+ /* CYBER TOOLS DROPDOWN */
+
+.service-dropdown{
+  position:relative;
+  display:inline-block;
+}
+
+.dropdown-menu{
+  position:absolute;
+  top:120%;
+  left:50%;
+  transform:translateX(-50%);
+
+  width:220px;
+
+  background:#fff;
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:16px;
+
+  padding:8px;
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:.3s ease;
+
+  z-index:9999;
+
+  box-shadow:
+  0 15px 35px rgba(0,0,0,.12),
+  0 0 20px rgba(201,168,76,.15);
+}
+
+.service-dropdown:hover .dropdown-menu{
+  opacity:1;
+  visibility:visible;
+}
+
+.dropdown-menu a{
+  display:block;
+  padding:10px 14px;
+
+  text-decoration:none;
+
+  color:#1a1a2e;
+  font-size:12px;
+  font-weight:600;
+
+  border-radius:10px;
+
+  transition:.25s;
+}
+
+.dropdown-menu a:hover{
+  background:#fdf6e3;
+  color:#C9A84C;
+  transform:translateX(5px);
+}
 </style>
 
 
@@ -1147,7 +1205,26 @@ a, button, input, textarea, select {
         <div class="gold-dot"></div>
         <h3>Cyber Security</h3>
         <p>Protecting systems and data from digital threats with advanced security solutions.</p>
-        <button class="service-btn">Explore Tool</button>
+       <div class="service-dropdown">
+
+  <button class="service-btn">
+    Explore Tools ▾
+  </button>
+
+  <div class="dropdown-menu">
+
+    <a href="#">Vulnerability Scanner</a>
+    <a href="#">Port Scanner</a>
+    <a href="#">Subdomain Finder</a>
+    <a href="#">WHOIS Lookup</a>
+    <a href="#">DNS Lookup</a>
+    <a href="#">IP Intelligence</a>
+    <a href="#">Password Analyzer</a>
+    <a href="#">Malware Scanner</a>
+
+  </div>
+
+</div>
       </div>
 
       <div class="service-card">
