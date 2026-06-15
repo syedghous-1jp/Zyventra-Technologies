@@ -1128,11 +1128,11 @@ z-index:9999999;
 /* thicker + green lines */
 .org-lines line,
 .org-lines path{
-  stroke:#22c55e;   /* GREEN */
-  stroke-width:3.5;
+  stroke:#C9A84C;   /* GOLD */
+  stroke-width:4;   /* thicker */
   fill:none;
   stroke-linecap:round;
-  opacity:0.9;
+  opacity:0.95;
 }
 
 /* MEMBERS */
@@ -1481,17 +1481,32 @@ z-index:9999999;
     </div>
 
     <!-- CONNECTOR LINES -->
-    <svg class="org-lines" viewBox="0 0 800 220">
-      <line x1="400" y1="0" x2="400" y2="60" />
-      <line x1="200" y1="60" x2="600" y2="60" />
+   <svg class="service-svg" viewBox="0 0 1200 240">
 
-      <!-- 5 branches -->
-      <line x1="200" y1="60" x2="200" y2="120" />
-      <line x1="300" y1="60" x2="300" y2="120" />
-      <line x1="400" y1="60" x2="400" y2="120" />
-      <line x1="500" y1="60" x2="500" y2="120" />
-      <line x1="600" y1="60" x2="600" y2="120" />
-    </svg>
+  <!-- ROOT -->
+  <circle cx="600" cy="20" r="6" fill="#C9A84C"></circle>
+
+  <!-- MAIN GOLD STEM -->
+  <path d="M600 20 L600 90" stroke="#C9A84C" stroke-width="4" fill="none"/>
+
+  <!-- BRANCH BASE LINE (longer) -->
+  <path d="M200 90 L1000 90" stroke="#C9A84C" stroke-width="4" fill="none"/>
+
+  <!-- CURVED BRANCHES (same org style) -->
+  <path d="M600 90 C600 90, 400 120, 200 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M600 90 C600 90, 500 120, 400 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M600 90 C600 90, 600 120, 600 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M600 90 C600 90, 700 120, 800 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M600 90 C600 90, 800 120, 1000 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
+
+  <!-- END NODES -->
+  <circle cx="200" cy="160" r="5" fill="#C9A84C"/>
+  <circle cx="400" cy="160" r="5" fill="#C9A84C"/>
+  <circle cx="600" cy="160" r="5" fill="#C9A84C"/>
+  <circle cx="800" cy="160" r="5" fill="#C9A84C"/>
+  <circle cx="1000" cy="160" r="5" fill="#C9A84C"/>
+
+</svg>
 
     <!-- 5 MEMBERS ONLY -->
     <div class="team-grid-org">
