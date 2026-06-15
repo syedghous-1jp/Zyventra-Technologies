@@ -1019,6 +1019,52 @@ z-index:9999999;
   color:#C9A84C;
   transform:translateX(5px);
 }
+ .dropdown-menu{
+  position:absolute;
+  top:calc(100% + 10px);
+  left:0;
+
+  width:240px;
+  background:#fff;
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:16px;
+
+  padding:8px;
+
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(10px);
+
+  transition:.25s ease;
+  z-index:999999;
+
+  pointer-events:none;
+}
+
+.service-card:hover .dropdown-menu{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+
+.dropdown-menu a{
+  display:block;
+  text-decoration:none;
+  color:#1a1a2e;
+  font-size:13px;
+  font-weight:600;
+
+  padding:10px 12px;
+  border-radius:10px;
+
+  transition:.25s;
+}
+
+.dropdown-menu a:hover{
+  background:#fdf6e3;
+  color:#C9A84C;
+}
  /* SIGN IN DROPDOWN */
 .signin-dropdown{
   position:relative;
