@@ -984,21 +984,27 @@ z-index:9999999;
   visibility:visible;
 }
 
-.dropdown-menu a{
-  display:block;
-  padding:10px 14px;
+.dropdown-menu{
+  position: absolute;
+  top: 100%;
+  left: 0;
 
-  text-decoration:none;
+  width: 220px;
 
-  color:#1a1a2e;
-  font-size:12px;
-  font-weight:600;
+  background: #fff;
+  border: 1px solid rgba(201,168,76,.35);
+  border-radius: 16px;
 
-  border-radius:10px;
+  padding: 8px;
 
-  transition:.25s;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+
+  transition: all 0.25s ease;
+
+  z-index: 99999;
 }
-
 .dropdown-menu a:hover{
   background:#fdf6e3;
   color:#C9A84C;
