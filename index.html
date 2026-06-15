@@ -1249,6 +1249,26 @@ z-index:9999999;
   font-size:11px;
   color:#444;
 }
+ .flow-line{
+  stroke-linecap:round;
+  stroke-linejoin:round;
+
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+
+  opacity:1;
+}
+
+.flow-line.animate{
+  animation:drawLine 2s ease forwards;
+  filter:drop-shadow(0 0 8px rgba(201,168,76,.7));
+}
+
+@keyframes drawLine{
+  to{
+    stroke-dashoffset:0;
+  }
+}
 </style>
 
 
@@ -1448,17 +1468,18 @@ z-index:9999999;
     Enterprise Solutions & Services
   </p>
 </div>
-<svg viewBox="0 0 1200 220" width="100%" height="220">
+
+ <svg class="services-svg" viewBox="0 0 1200 220" width="100%" height="220">
 
   <!-- ROOT -->
   <circle cx="600" cy="20" r="7" fill="#C9A84C"/>
 
   <!-- DIRECT LINES FROM ROOT (NO MIDDLE BUS LINE) -->
-  <path d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line" d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line" d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line" d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line" d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
 
   <!-- END NODES -->
   <circle cx="150" cy="150" r="6" fill="#C9A84C"/>
@@ -1572,17 +1593,17 @@ z-index:9999999;
     </div>
 
     <!-- CONNECTOR LINES -->
-  <svg viewBox="0 0 1200 220" width="100%" height="220">
+ <svg class="team-svg" viewBox="0 0 1200 220" width="100%" height="220">
 
   <!-- ROOT (Ghulam Ghous) -->
   <circle cx="600" cy="20" r="8" fill="#C9A84C"/>
 
   <!-- DIRECT CONNECTIONS (NO EXTRA MIDDLE LINE) -->
- <path d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
-<path d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+ <path class="flow-line" d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line" d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line" d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line"d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+<path class="flow-line"d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
    
   <!-- END NODES -->
   <circle cx="150" cy="150" r="6" fill="#C9A84C"/>
@@ -1928,5 +1949,44 @@ window.addEventListener("load", () => {
 
   animate();
 });
+ function animateSvgLines(svgClass){
+
+  const svg = document.querySelector("." + svgClass);
+
+  if(!svg) return;
+
+  const lines = svg.querySelectorAll(".flow-line");
+
+  const observer = new IntersectionObserver((entries)=>{
+
+    entries.forEach(entry=>{
+
+      if(entry.isIntersecting){
+
+        lines.forEach((line,index)=>{
+
+          setTimeout(()=>{
+
+            line.classList.add("animate");
+
+          }, index * 180);
+
+        });
+
+        observer.unobserve(entry.target);
+
+      }
+
+    });
+
+  }, {
+    threshold:0.35
+  });
+
+  observer.observe(svg);
+}
+
+animateSvgLines("services-svg");
+animateSvgLines("team-svg");
 
 </script>
