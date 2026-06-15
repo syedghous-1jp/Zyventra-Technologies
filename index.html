@@ -1077,6 +1077,98 @@ z-index:9999999;
   background:#fdf6e3;
   color:#C9A84C;
 }
+ .team-org{
+  background:#fff;
+  padding:80px 20px;
+  text-align:center;
+}
+
+.team-title{
+  font-size:32px;
+  font-weight:900;
+  color:#1a1a2e;
+  margin-bottom:40px;
+}
+
+/* TOP */
+.top-node{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.top-node .avatar{
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid #C9A84C;
+}
+
+.top-node h3{
+  font-size:16px;
+  font-weight:900;
+  color:#000;
+  margin-top:10px;
+}
+
+.top-node p{
+  font-size:12px;
+  color:#444;
+}
+
+/* LINES */
+.org-lines{
+  width:100%;
+  height:120px;
+  margin-bottom:20px;
+}
+
+.org-lines line{
+  stroke:#C9A84C;
+  stroke-width:2;
+}
+
+/* MEMBERS */
+.team-grid-org{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:18px;
+  max-width:900px;
+  margin:0 auto;
+}
+
+.member{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:.3s;
+}
+
+.member:hover{
+  transform:translateY(-6px);
+}
+
+.member .avatar{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  overflow:hidden;
+  border:2px solid #C9A84C;
+}
+
+.member h3{
+  font-size:13px;
+  font-weight:800;
+  color:#000;
+  margin-top:6px;
+}
+
+.member p{
+  font-size:11px;
+  color:#444;
+}
 </style>
 
 
@@ -1395,80 +1487,67 @@ z-index:9999999;
 </div>
 
 
-<section class="team">
+<section class="team-org">
 
-  <div class="team-header">
-    <span class="label">OUR TEAM</span>
-    <h2>Meet Our Team</h2>
-  </div>
+  <h2 class="team-title">Meet Our Team</h2>
 
-  <div class="team-grid">
+  <div class="org-wrapper">
 
-    <!-- 1 -->
-    <div class="member">
-      <div class="photo">
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="48" fill="#1a1a2e"/>
-          <circle cx="50" cy="38" r="12" fill="#6C63FF"/>
-          <rect x="32" y="55" width="36" height="20" rx="10" fill="#6C63FF"/>
-        </svg>
+    <!-- TOP LEADER -->
+    <div class="top-node">
+      <div class="avatar">
+        <img src="YOUR_IMAGE_LINK" alt="Ghulam Ghous">
       </div>
-      <h3>Ghulam Ghous</h3>
+      <h3>SYED GHOUS</h3>
       <p>Cyber Security Lead</p>
     </div>
 
-    <!-- 2 -->
-    <div class="member">
-      <div class="photo">
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="48" fill="#1a1a2e"/>
-          <rect x="30" y="40" width="40" height="25" rx="6" fill="#6C63FF"/>
-          <circle cx="50" cy="35" r="10" fill="#6C63FF"/>
-        </svg>
-      </div>
-      <h3>Muhammad Ali</h3>
-      <p>Research & Analysis</p>
-    </div>
+    <!-- CONNECTOR LINES -->
+    <svg class="org-lines" viewBox="0 0 800 220">
+      <line x1="400" y1="0" x2="400" y2="60" />
+      <line x1="200" y1="60" x2="600" y2="60" />
 
-    <!-- 3 -->
-    <div class="member">
-      <div class="photo">
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="48" fill="#1a1a2e"/>
-          <circle cx="40" cy="45" r="3" fill="#6C63FF"/>
-          <circle cx="60" cy="45" r="3" fill="#6C63FF"/>
-          <path d="M35 65 L65 65" stroke="#6C63FF" stroke-width="3"/>
-        </svg>
-      </div>
-      <h3>Network Specialist</h3>
-      <p>Network Engineer</p>
-    </div>
+      <!-- 5 branches -->
+      <line x1="200" y1="60" x2="200" y2="120" />
+      <line x1="300" y1="60" x2="300" y2="120" />
+      <line x1="400" y1="60" x2="400" y2="120" />
+      <line x1="500" y1="60" x2="500" y2="120" />
+      <line x1="600" y1="60" x2="600" y2="120" />
+    </svg>
 
-    <!-- 4 -->
-    <div class="member">
-      <div class="photo">
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="48" fill="#1a1a2e"/>
-          <path d="M30 70 L70 30" stroke="#6C63FF" stroke-width="4"/>
-          <circle cx="55" cy="40" r="5" fill="#6C63FF"/>
-        </svg>
-      </div>
-      <h3>Moiz</h3>
-      <p>Creative Designer</p>
-    </div>
+    <!-- 5 MEMBERS ONLY -->
+    <div class="team-grid-org">
 
-    <!-- 5 -->
-    <div class="member">
-      <div class="photo">
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="48" fill="#1a1a2e"/>
-          <circle cx="45" cy="45" r="4" fill="#6C63FF"/>
-          <circle cx="55" cy="45" r="4" fill="#6C63FF"/>
-          <path d="M35 60 Q50 75 65 60" stroke="#6C63FF" stroke-width="3" fill="none"/>
-        </svg>
+      <div class="member">
+        <div class="avatar"><img src="IMG1" /></div>
+        <h3>Anonymous</h3>
+        <p>Developer</p>
       </div>
-      <h3>Marketing Lead</h3>
-      <p>Marketing & Sales</p>
+
+      <div class="member">
+        <div class="avatar"><img src="IMG2" /></div>
+        <h3>Ali</h3>
+        <p>Co Founder</p>
+      </div>
+
+   <div class="member">
+    <div class="avatar"><img src="IMG3" /></div>
+   <h3>AHMAD</h3>
+    <p>MARKETER</p>
+   </div>
+     
+      <div class="member">
+        <div class="avatar"><img src="IMG4" /></div>
+        <h3>Muhammad Ali</h3>
+        <p>Researcher / Adviser</p>
+      </div>
+
+      <div class="member">
+        <div class="avatar"><img src="IMG5" /></div>
+        <h3>Moiz</h3>
+        <p>Designer</p>
+      </div>
+
     </div>
 
   </div>
