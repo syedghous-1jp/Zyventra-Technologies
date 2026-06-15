@@ -814,6 +814,13 @@ z-index:9999999;
   transform:translateX(-50%);
   box-shadow:0 0 15px rgba(201,168,76,.6);
 }
+ .service-svg,
+.team-svg{
+  width:100%;
+  height:auto;
+  display:block;
+  margin-bottom:20px;
+}
 
 /* TEXT */
 .service-card h3{
@@ -1361,20 +1368,43 @@ z-index:9999999;
   </div>
 
   <!-- CONNECTING SVG LINE -->
-<svg class="org-lines" viewBox="0 0 800 220">
+<svg class="service-svg" viewBox="0 0 1200 220">
 
-  <!-- MAIN VERTICAL LINE (from top node) -->
-  <line x1="400" y1="0" x2="400" y2="70" />
+  <!-- ROOT -->
+  <circle cx="600" cy="20" r="6" fill="#C9A84C"></circle>
 
-  <!-- CENTER BRANCH NODE -->
-  <line x1="200" y1="70" x2="600" y2="70" />
+  <!-- MAIN STEM -->
+  <path d="M600 20 L600 70"
+        stroke="#C9A84C"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"/>
 
-  <!-- CURVED STYLE CONNECTIONS (clean branching) -->
-  <path d="M400 70 C400 70, 320 95, 200 120" />
-  <path d="M400 70 C400 70, 360 95, 300 120" />
-  <path d="M400 70 C400 70, 400 95, 400 120" />
-  <path d="M400 70 C400 70, 440 95, 500 120" />
-  <path d="M400 70 C400 70, 480 95, 600 120" />
+  <!-- HORIZONTAL MAIN LINE (aligned to cards) -->
+  <path d="M120 70 L1080 70"
+        stroke="#C9A84C"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- CONNECTORS (clean + direct to cards) -->
+  <path d="M120 70 L120 150"
+        stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M360 70 L360 150"
+        stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M600 70 L600 150"
+        stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M840 70 L840 150"
+        stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path d="M1080 70 L1080 150"
+        stroke="#C9A84C" stroke-width="4" fill="none"/>
+
+  <!-- END DOTS (exact card position) -->
+  <circle cx="120" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="360" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="600" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="840" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="1080" cy="150" r="6" fill="#C9A84C"/>
 
 </svg>
     <!-- CARDS -->
@@ -1481,33 +1511,38 @@ z-index:9999999;
     </div>
 
     <!-- CONNECTOR LINES -->
-   <svg class="service-svg" viewBox="0 0 1200 240">
+   <svg class="team-svg" viewBox="0 0 1200 220">
 
-  <!-- ROOT -->
-  <circle cx="600" cy="20" r="6" fill="#C9A84C"></circle>
+  <!-- TOP ROOT (Ghulam Ghous) -->
+  <circle cx="600" cy="20" r="7" fill="#C9A84C"></circle>
 
-  <!-- MAIN GOLD STEM -->
-  <path d="M600 20 L600 90" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <!-- MAIN DOWN LINE -->
+  <path d="M600 20 L600 70"
+        stroke="#C9A84C"
+        stroke-width="4"
+        fill="none"/>
 
-  <!-- BRANCH BASE LINE (longer) -->
-  <path d="M200 90 L1000 90" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <!-- BRANCH LINE -->
+  <path d="M200 70 L1000 70"
+        stroke="#C9A84C"
+        stroke-width="4"
+        fill="none"/>
 
-  <!-- CURVED BRANCHES (same org style) -->
-  <path d="M600 90 C600 90, 400 120, 200 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
-  <path d="M600 90 C600 90, 500 120, 400 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
-  <path d="M600 90 C600 90, 600 120, 600 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
-  <path d="M600 90 C600 90, 700 120, 800 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
-  <path d="M600 90 C600 90, 800 120, 1000 160" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <!-- CONNECT TO MEMBERS (clean straight) -->
+  <path d="M200 70 L200 150" stroke="#C9A84C" stroke-width="4"/>
+  <path d="M400 70 L400 150" stroke="#C9A84C" stroke-width="4"/>
+  <path d="M600 70 L600 150" stroke="#C9A84C" stroke-width="4"/>
+  <path d="M800 70 L800 150" stroke="#C9A84C" stroke-width="4"/>
+  <path d="M1000 70 L1000 150" stroke="#C9A84C" stroke-width="4"/>
 
-  <!-- END NODES -->
-  <circle cx="200" cy="160" r="5" fill="#C9A84C"/>
-  <circle cx="400" cy="160" r="5" fill="#C9A84C"/>
-  <circle cx="600" cy="160" r="5" fill="#C9A84C"/>
-  <circle cx="800" cy="160" r="5" fill="#C9A84C"/>
-  <circle cx="1000" cy="160" r="5" fill="#C9A84C"/>
+  <!-- END DOTS -->
+  <circle cx="200" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="400" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="600" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="800" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="1000" cy="150" r="6" fill="#C9A84C"/>
 
 </svg>
-
     <!-- 5 MEMBERS ONLY -->
     <div class="team-grid-org">
 
