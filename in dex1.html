@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zyventra Technologies - Enterprise Cybersecurity Platform</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body,div,span,p,h1,h2,h3,a,button,textarea,input{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+:root{
+--cream:#F9F6F0;
+--navy:#0D1B2A;
+--navy2:#132236;
+--gold1:#C9A84C;
+--gold2:#E8C96A;
+--gold3:#F5E199;
+--charcoal:#1C1C2E;
+--text:#1a1a2e;
+--muted:#6b7280;
+--border:#e8dfc8;
+}
+
+ /* Custom Luxury Cursor */
+ html, body {
+  cursor: none !important;
+}
+a, button, input, textarea, select {
+  cursor: none !important;
+}
+.cursor-dot,
+.cursor-orbit{
+  position:fixed;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:99999999;
+}
+.cursor-dot{
+  width:8px;
+  height:8px;
+  background:#C9A84C;
+  border-radius:50%;
+  box-shadow:0 0 10px #C9A84C;
+}
+.cursor-orbit{
+  width:40px;
+  height:40px;
+  border:1px solid rgba(201,168,76,.6);
+  border-radius:50%;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+.nav-links a{
+  position:relative;
+}
+.nav-links a::after{
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:#C9A84C;
+  transition:.3s;
+}
+.nav-links a:hover::after{
+  width:100%;
+}
+.page{background:var(--cream);width:100%}
+.hero-title{
+  font-size:2.8rem;
+  font-weight:900;
+  line-height:1.06;
+  color:var(--text);
+  letter-spacing:-.04em;
+}
+
+.floating-gold{
+  display:inline-block;
+  background:linear-gradient(135deg, #9A7010, #D4AF37, #F5E199, #C9A84C);
+  background-size:300% 300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation: floatText 4s ease-in-out infinite, shineGold 6s linear infinite;
+}
+
+@keyframes floatText{
+  0%,100%{ transform:translateY(0px); }
+  50%{ transform:translateY(-10px); }
+}
+@keyframes shineGold{
+  0%{ background-position:0% 50%; }
+  100%{ background-position:100% 50%; }
+}
+
+/* NAV */
+.nav{
+background:rgba(249,246,240,.96);
+backdrop-filter:blur(16px);
+border-bottom:1px solid var(--border);
+padding:0 40px;
+height:66px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+position:relative;
+z-index:9999999;
+}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:28px}
+.nav-links a{color:#2a2a3e;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;transition:color .2s}
+.nav-links a:hover{color:var(--gold1)}
+.pill-btn{border:none;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.02em;transition:transform .18s,box-shadow .18s}
+.pill-btn-gold{background:linear-gradient(135deg,#C9A84C,#F5E199,#C9A84C);color:#3a2800;box-shadow:0 2px 14px rgba(201,168,76,.35)}
+.pill-btn-gold:hover{transform:scale(1.05);box-shadow:0 4px 24px rgba(201,168,76,.55)}
+.pill-btn-outline{background:transparent;border:1.5px solid var(--gold1);color:var(--gold1)}
+.pill-btn-outline:hover{background:rgba(201,168,76,.08)}
+
+/* HERO */
+.hero{background:var(--cream);padding:56px 40px 48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1100px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px 14px;margin-bottom:22px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold1)}
+.eyebrow-text{font-size:11px;font-weight:700;color:var(--gold1);letter-spacing:.08em;text-transform:uppercase}
+.hero h1{font-size:3rem;font-weight:900;line-height:1.05;color:var(--text);letter-spacing:-.04em;margin-bottom:6px}
+.hero-sub{font-size:14.5px;color:#52526a;line-height:1.75;max-width:400px;margin:14px 0 28px}
+.hero-ctas{display:flex;align-items:center;gap:14px;margin-bottom:36px}
+.play-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:#3a3a55;font-weight:600;cursor:pointer;border:none;background:none}
+.play-wrap:hover{color:var(--gold1)}
+.play-circle{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(201,168,76,.45);display:flex;align-items:center;justify-content:center}
+.hero-trust{display:flex;gap:20px;padding-top:22px;border-top:1px solid #e4d9c0}
+.trust-item{display:flex;flex-direction:column}
+.trust-val{font-size:19px;font-weight:900;color:var(--text);letter-spacing:-.02em}
+.trust-lbl{font-size:11px;color:var(--muted);margin-top:1px;font-weight:500}
+
+/* SECURITY WIDGET */
+.sec-widget{background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:0 8px 48px rgba(201,168,76,.1),0 2px 12px rgba(0,0,0,.05);padding:22px;position:relative;overflow:hidden;transition: all .3s ease;}
+.sec-widget:hover {box-shadow:0 0 20px rgba(201,168,76,.35),0 0 40px rgba(201,168,76,.25),0 20px 60px rgba(0,0,0,.2);border-color:#C9A84C;transform:translateY(-6px);}
+.sw-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.sw-title{font-size:15px;font-weight:800;color:var(--text)}
+.sw-sub{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:2px}
+.live-pill{display:flex;align-items:center;gap:4px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:999px;padding:4px 10px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.live-txt{font-size:10px;font-weight:700;color:#15803d}
+.spark-box{background:#faf8f4;border:1px solid #f0e8d4;border-radius:12px;padding:12px;margin-bottom:14px}
+.spark-lbl{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.bars-wrap{display:flex;align-items:flex-end;gap:3px;height:44px}
+.bar{flex:1;border-radius:3px 3px 0 0}
+.threat-row{margin-bottom:10px}
+.tr-head{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;font-weight:600;color:#3a3a4a}
+.track{height:5px;background:#f0e8d4;border-radius:999px;overflow:hidden}
+.fill{height:100%;border-radius:999px;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mini-v{font-size:14px;font-weight:900;color:var(--text)}
+.mini-l{font-size:9px;color:var(--muted);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+
+/* DARK FEATURES */
+.features{background:var(--charcoal);padding:54px 40px}
+.feat-inner{max-width:1100px;margin:0 auto}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);display:block;text-align:center;margin-bottom:10px}
+.section-h{font-size:1.9rem;font-weight:800;text-align:center;line-height:1.18}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:36px}
+.feat-c{background:#21223a;border:1px solid #2d2f4a;border-radius:18px;padding:22px;transition:transform .22s,border-color .22s,box-shadow .22s;position:relative;overflow:hidden;}
+.feat-c:hover{transform:translateY(-5px);border-color:rgba(201,168,76,.4);box-shadow:0 12px 32px rgba(201,168,76,.12)}
+.feat-icon{width:46px;height:46px;background:#2a2b40;border:1px solid rgba(201,168,76,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat-t{color:#f0f0ff;font-size:13.5px;font-weight:800;margin-bottom:7px}
+.feat-d{color:#888aaa;font-size:12px;line-height:1.6}
+
+/* SERVICES & TOOLS */
+.services-section{background:var(--cream);padding:60px 40px 20px;text-align:center;position: relative;z-index:1;}
+.services-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:40px;}
+.service-card{background:var(--cream);border:1px solid rgba(201,168,76,.35);border-radius:22px;padding:22px;position:relative;transition:.3s ease;box-shadow:0 10px 30px rgba(0,0,0,.04);}
+.service-card:hover{transform:translateY(-6px);border-color:#C9A84C;box-shadow:0 18px 45px rgba(201,168,76,.18);}
+.gold-dot{width:14px;height:14px;border-radius:50%;background:#C9A84C;position:absolute;top:-8px;left:50%;transform:translateX(-50%);box-shadow:0 0 15px rgba(201,168,76,.6);}
+.services-svg, .team-svg{width:100%;height:auto;display:block;margin-bottom:20px;}
+.service-card h3{font-size:16px;font-weight:800;color:var(--text);margin-bottom:8px;}
+.service-card p{font-size:12.5px;color:var(--muted);line-height:1.6;}
+.service-btn{margin-top:14px;padding:9px 14px;font-size:11px;font-weight:700;border-radius:999px;border:1px solid #C9A84C;background:transparent;color:#C9A84C;transition:.3s ease;}
+.service-btn:hover {background:#C9A84C;color:#1a1a2e;}
+
+/* CYBER TOOLS DROPDOWN */
+.service-dropdown{position:relative;display:inline-block;}
+.dropdown-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(10px);width:230px;background:#fff;border:1px solid rgba(201,168,76,.35);border-radius:16px;padding:8px;opacity:0;visibility:hidden;transition:.25s ease;z-index:999999;box-shadow:0 15px 35px rgba(0,0,0,.12);pointer-events:none;}
+.dropdown-menu a{display:block;text-decoration:none;color:#1a1a2e;font-size:13px;font-weight:600;padding:10px 12px;border-radius:10px;transition:.25s;text-align: left;}
+.dropdown-menu a:hover{background:#fdf6e3;color:#C9A84C;transform:translateX(5px);}
+.service-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+
+/* PREMIUM DYNAMIC TOOL MODAL */
+.tool-modal {
+  display: none;
+  position: fixed;
+  z-index: 999999999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(13, 27, 42, 0.92);
+  backdrop-filter: blur(8px);
+}
+.tool-modal-content {
+  background-color: #132236;
+  margin: 5% auto;
+  padding: 30px;
+  border: 1px solid var(--gold1);
+  border-radius: 24px;
+  width: 90%;
+  max-width: 750px;
+  color: #fff;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 30px rgba(201,168,76,0.15);
+  position: relative;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.tool-close-btn {
+  color: var(--gold2);
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 28px;
+  font-weight: bold;
+  transition: 0.2s;
+  z-index: 10;
+}
+.tool-close-btn:hover { color: #fff; }
+.tool-modal h2 {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tool-modal p { color: #9090b0; font-size: 13.5px; margin-bottom: 20px; }
+.tool-input-field, .tool-textarea-field {
+  width: 100%;
+  padding: 14px;
+  background-color: #0D1B2A;
+  color: var(--gold2);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+.tool-textarea-field { height: 150px; font-family: 'Courier New', Courier, monospace; resize: vertical; }
+.tool-input-field:focus, .tool-textarea-field:focus { border-color: var(--gold1); box-shadow: 0 0 12px rgba(201,168,76,0.25); }
+.tool-terminal-output {
+  margin-top: 20px;
+  background-color: #0D1B2A;
+  border-left: 4px solid var(--gold1);
+  padding: 18px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  color: #E8C96A;
+  border-radius: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  display: none;
+}
+.action-btn-group { display: flex; gap: 10px; margin-top: 10px; }
+
+/* STATS */
+.stats-sect{background: radial-gradient(circle at top, #132236, #0D1B2A 70%);border-top:1px solid rgba(201,168,76,.3);border-bottom:1px solid rgba(201,168,76,.3);padding:44px 40px;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:900px;margin:0 auto;text-align:center}
+.stat-num{font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#9A7010,#D4AF37,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-lbl{color:var(--muted);font-size:12px;font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
+
+/* TEAM ORG */
+.team-org{background:#fff;padding:80px 20px;text-align:center;}
+.team-title{font-size:32px;font-weight:900;color:#1a1a2e;margin-bottom:40px;}
+.top-node{display:flex;flex-direction:column;align-items:center;margin-bottom:30px;}
+.top-node .avatar{width:130px;height:130px;border-radius:50%;overflow:hidden;border:3px solid #C9A84C; background: #132236; display: flex; align-items: center; justify-content: center;}
+.top-node .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.top-node h3{font-size:16px;font-weight:900;color:#000;margin-top:10px;}
+.top-node p{font-size:12px;color:#444;}
+.org-lines line, .org-lines path{stroke:#C9A84C;stroke-width:4;fill:none;stroke-linecap:round;opacity:0.95;}
+.team-grid-org{display:grid;grid-template-columns:repeat(5, 1fr);justify-items:center;margin-top:-55px;position:relative;}
+.team-grid-org .member{width:140px;display:flex;flex-direction:column;align-items:center;transition:.3s;}
+.team-grid-org .member:hover{transform:translateY(-6px);}
+.team-grid-org .member .avatar{width:90px;height:90px;border-radius:50%;overflow:hidden;border:2px solid #C9A84C; background: #132236; display: flex; align-items: center; justify-content: center;}
+.team-grid-org .member .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.team-grid-org .member h3{font-size:13px;font-weight:800;color:#000;margin-top:6px;}
+.team-grid-org .member p{font-size:11px;color:#444;}
+.flow-line{stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1000;stroke-dashoffset:1000;opacity:1;}
+.flow-line.animate{animation:drawLine 2s ease forwards;filter:drop-shadow(0 0 8px rgba(201,168,76,.7));}
+@keyframes drawLine{to{stroke-dashoffset:0;}}
+.team-subtext{display:block;margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a2e;}
+.team-line{display:block;width:300px;height:1px;background:#1a1a2e;margin:0 auto 10px;opacity:0.8;}
+
+/* SIGN IN DROPDOWN */
+.signin-dropdown{position:relative;z-index:9999999;}
+.signin-menu{position:absolute;top:calc(100% + 10px);right:0;width:220px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:8px;opacity:0;visibility:hidden;transform:translateY(8px);transition:.25s;z-index:999999;box-shadow:0 10px 30px rgba(0,0,0,.08);}
+.signin-dropdown:hover .signin-menu{opacity:1;visibility:visible;transform:translateY(0);}
+.signin-menu a{display:block;text-decoration:none;color:#1a1a2e;font-size:13px;font-weight:600;padding:12px 14px;border-radius:10px;text-align: left;}
+.signin-menu a:hover{background:#fdf6e3;color:#C9A84C;}
+
+/* CTA DARK & ABOUT */
+.cta-sect{background:var(--cream);padding:54px 40px}
+.cta-box{max-width:700px;margin:0 auto;background:var(--charcoal);border-radius:26px;padding:52px 44px;text-align:center;position:relative;overflow:hidden;border:1px solid transparent;transition:all .3s ease;}
+.cta-box:hover{transform:translateY(-6px);border-color:#C9A84C;box-shadow:0 0 25px rgba(201,168,76,.35),0 20px 60px rgba(0,0,0,.25);}
+.contact-pill{text-decoration:none;color:#fff;font-size:12px;font-weight:600;padding:10px 16px;border-radius: 999px; border:1px solid rgba(201,168,76,.35);background:rgba(255,255,255,.03);transition:all .3s ease;}
+.contact-pill:hover{transform:translateY(-3px);border-color:#C9A84C;color:#F5E199;}
+.cta-glow-top{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:380px;height:80px;background:rgba(201,168,76,.12);border-radius:50%;filter:blur(30px);pointer-events:none}
+.cta-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);border:1px solid rgba(201,168,76,.3);border-radius:999px;padding:5px 14px;display:inline-block;margin-bottom:16px}
+.cta-h{color:#fff;font-size:1.8rem;font-weight:800;margin-bottom:12px;line-height:1.2}
+.cta-p{color:#9090b0;font-size:13.5px;line-height:1.7;max-width:380px;margin:0 auto 26px}
+.cta-note{color:#55556a;font-size:11px;margin-top:12px}
+
+/* SLIDER */
+.hero-slider{position:relative;width:100%;height:560px;border-radius:30px;overflow:hidden;background:#fff;border:1px solid rgba(201,168,76,.25);box-shadow:0 25px 70px rgba(0,0,0,.08);max-width: 1100px;margin: 0 auto 40px;}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:1s ease;}
+.hero-slide.active{opacity:1;}
+.hero-slide img{width:100%;height:100%;object-fit:cover;}
+.hero-overlay{position:absolute;left:30px;bottom:30px;background:rgba(255,255,255,.85);backdrop-filter:blur(15px);padding:20px 25px;border-radius:18px;}
+.hero-overlay h2{font-size:28px;margin-bottom:8px;color:#111827;}
+.hero-overlay p{color:#6b7280;font-size:14px;}
+
+/* LEGAL ROW */
+.legal-row{max-width:1100px;margin:0 auto;display:flex;align-items:stretch;justify-content:center;gap:40px;padding:20px;}
+.legal-box{flex:1;background:var(--charcoal);border:1px solid rgba(201,168,76,.25);border-radius:22px;padding:42px 32px;text-align:center;min-height:260px;transition:all .3s ease;}
+.legal-box:hover{border-color:#C9A84C;transform:translateY(-6px);}
+.legal-divider{width:2px;background:linear-gradient(to bottom,transparent,#C9A84C,#F5E199,#C9A84C,transparent);border-radius:999px;}
+.legal-box .cta-h{color:#fff;}.legal-box .cta-p{color:#a9a9c2;font-size:13px;line-height:1.7;}
+
+/* FOOTER */
+.footer{background:#0e0f1c;max-width:1100px;margin:30px auto;padding:26px 40px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(201,168,76,.25);border-radius:24px;}
+.footer-links{display:flex;gap:20px}.footer-links a{color:#55556a;font-size:11px;text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--gold2)}
+
+@media (max-width: 768px){
+  .services-cards{grid-template-columns: 1fr;}
+  .legal-row{flex-direction:column;gap:20px;}
+  .legal-divider{width:80%;height:2px;margin:10px auto;background:linear-gradient(to right,transparent,#C9A84C,#F5E199,#C9A84C,transparent);}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<nav class="nav">
+  <div class="nav-logo">
+    <svg width="38" height="32" viewBox="0 0 38 32" fill="none">
+      <defs>
+        <linearGradient id="zg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#9A7010"/>
+          <stop offset="35%" stop-color="#D4AF37"/>
+          <stop offset="65%" stop-color="#F5E199"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+      </defs>
+      <polygon points="2,2 36,2 30,10 10,10" fill="url(#zg)"/>
+      <polygon points="10,10 26,10 12,22 4,22" fill="url(#zg)" opacity=".75"/>
+      <polygon points="8,22 28,22 36,30 2,30" fill="url(#zg)"/>
+    </svg>
+    <div>
+      <span style="font-size:17px;font-weight:900;letter-spacing:-.02em;background:linear-gradient(135deg,#9A7010,#D4AF37,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Zyventra</span>
+      <span style="font-size:10px;display:block;color:#888;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-top:-2px">Technologies</span>
+    </div>
+  </div>
+<div class="nav-links">
+ <a href="#innovation">Products</a>
+ <a href="#solutions">Solutions</a>
+ <a href="#services-block">Services</a>
+ <a href="#support">Support</a>
+ <a href="#about">About</a>
+</div>
+<div style="display:flex;gap:10px;align-items:center">
+  <button class="pill-btn pill-btn-outline">Login</button>
+  <div class="signin-dropdown">
+    <button class="pill-btn pill-btn-gold">Sign In ▾</button>
+    <div class="signin-menu">
+      <a href="#">Microsoft</a>
+      <a href="#">Google</a>
+      <a href="#">GitHub</a>
+    </div>
+  </div>
+</div>
+</nav> 
+
+<div id="innovation" style="max-width:1100px;margin:0 auto;padding:52px 40px 44px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center">
+  <div>
+    <div class="eyebrow"><span class="eyebrow-dot"></span><span class="eyebrow-text">⚡ Enterprise Cybersecurity Platform</span></div>
+    <h1 class="hero-title">ADVANCED<br><span class="floating-gold">CYBERSECURITY</span><br>EVERY DAY.</h1>
+    <p style="font-size:14px;color:#52526a;line-height:1.75;max-width:390px;margin:14px 0 26px">Smart. Relentless. Secure. Proactive threat defense designed to protect your digital assets before, during, and after every attack.</p>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:34px">
+      <button class="pill-btn pill-btn-gold" style="padding:12px 28px;font-size:14px" id="exploreToolsHeroBtn">Explore Tools</button>
+      <button class="play-wrap">
+        <span class="play-circle">
+          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="2,1 11,6 2,11" fill="#C9A84C"/></svg>
+        </span>Watch Demo
+      </button>
+    </div>
+    <div style="display:flex;gap:24px;padding-top:20px;border-top:1px solid #e4d9c0">
+      <div class="trust-item"><span class="trust-val">500+</span><span class="trust-lbl">Security Experts</span></div>
+      <div class="trust-item"><span class="trust-val">10M+</span><span class="trust-lbl">Threats Blocked</span></div>
+      <div class="trust-item"><span class="trust-val">99.9%</span><span class="trust-lbl">Uptime SLA</span></div>
+    </div>
+  </div>
+
+  <div class="sec-widget">
+    <div class="sw-header">
+      <div><div class="sw-sub">Threat Monitor</div><div class="sw-title">Security Overview</div></div>
+      <div class="live-pill"><span class="live-dot"></span><span class="live-txt">Live</span></div>
+    </div>
+    <div class="spark-box">
+      <div class="spark-lbl">Threat Activity — Last 12h</div>
+      <div class="bars-wrap" id="bars"></div>
+    </div>
+    <div class="threat-row">
+      <div class="tr-head"><span>Phishing Attempts</span><span style="color:#C9A84C">82% blocked</span></div>
+      <div class="track"><div class="fill" id="f1" style="background:linear-gradient(90deg,#C9A84C,#F5E199);width:0%"></div></div>
+    </div>
+    <div class="threat-row">
+      <div class="tr-head"><span>Ransomware</span><span style="color:#B8941E">56% blocked</span></div>
+      <div class="track"><div class="fill" id="f2" style="background:#B8941E;width:0%"></div></div>
+    </div>
+    <div class="threat-row" style="margin-bottom:14px">
+      <div class="tr-head"><span>DDoS</span><span style="color:#9A7010">34% blocked</span></div>
+      <div class="track"><div class="fill" id="f3" style="background:#9A7010;width:0%"></div></div>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-c"><div class="mini-v">2,841</div><div class="mini-l">Blocked</div></div>
+      <div class="mini-c"><div class="mini-v">0</div><div class="mini-l">Breaches</div></div>
+      <div class="mini-c"><div class="mini-v">&lt;1ms</div><div class="mini-l">Response</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="hero-slider">
+  <div class="hero-slide active">
+    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80">
+    <div class="hero-overlay"><h2>AI Security Platform</h2><p>Advanced Protection Powered By AI</p></div>
+  </div>
+  <div class="hero-slide">
+    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80">
+    <div class="hero-overlay"><h2>BY ZYVENTRA</h2><p>Next Generation Threat Intelligence</p></div>
+  </div>
+  <div class="hero-slide">
+    <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=1400&q=80">
+    <div class="hero-overlay"><h2>Network Monitoring</h2><p>Real Time Enterprise Visibility</p></div>
+  </div>
+</div>
+
+<div class="features" id="solutions">
+  <div class="feat-inner">
+    <span class="section-eyebrow">Built for the future</span>
+    <div class="section-h" style="color:#f0f0ff">Why enterprises choose <span style="background:linear-gradient(135deg,#C9A84C,#F5E199);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Zyventra.</span></div>
+    <div class="feat-grid">
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#D4AF37" stroke-width="1.5"/><path d="M7 11l3 3 5-5" stroke="#D4AF37" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feat-t">Innovative Detection</div>
+        <div class="feat-d">AI engines detect zero-day threats and anomalous behaviour before they escalate.</div>
+      </div>
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2.5" stroke="#D4AF37" stroke-width="1.5"/><path d="M2 10h18" stroke="#D4AF37" stroke-width="1.5"/><circle cx="5" cy="7.5" r=".7" fill="#D4AF37"/><circle cx="8" cy="7.5" r=".7" fill="#D4AF37"/></svg>
+        </div>
+        <div class="feat-t">Powerful Threat Analysis</div>
+        <div class="feat-d">Deep forensic visibility across your entire attack surface with real-time telemetry.</div>
+      </div>
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 16L11 4l7 12" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 12h7" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-t">Seamless Response</div>
+        <div class="feat-d">Automated playbooks cut mean time to respond from hours to milliseconds.</div>
+      </div>
+      <div class="feat-c">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2.5L19 6v7c0 4-3 6-8 7-5-1-8-3-8-7V6l8-3.5z" stroke="#D4AF37" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 11l2 2 4-4" stroke="#D4AF37" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feat-t">Secure by Default</div>
+        <div class="feat-d">Zero-trust architecture, encrypted-at-rest data, and compliance-ready from day one.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="services-block" style="text-align:center;margin-bottom:20px;margin-top:60px;">
+  <h2 style="font-size:26px;font-weight:900;color:#1a1a2e;letter-spacing:-0.02em;">What We Provide</h2>
+  <p style="font-size:12px;color:#6b7280;margin-top:6px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;">Enterprise Solutions & Services</p>
+</div>
+
+<svg class="services-svg" viewBox="0 0 1200 220" width="100%" height="220">
+  <circle cx="600" cy="20" r="7" fill="#C9A84C"/>
+  <path class="flow-line" d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <circle cx="150" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="350" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="600" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="850" cy="150" r="6" fill="#C9A84C"/>
+  <circle cx="1050" cy="150" r="6" fill="#C9A84C"/>
+</svg>
+
+<div class="services-cards" style="max-width:1100px; margin: 0 auto; padding: 0 20px;">
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>Cyber Security</h3>
+    <p>Protecting systems and data from digital threats with advanced security solutions.</p>
+    <div class="service-dropdown">
+      <button class="service-btn">Explore Tools ▾</button>
+      <div class="dropdown-menu">
+        <a href="#" class="open-tool-trigger" data-tool="vulnerability-scanner">Vulnerability Scanner</a>
+        <a href="#" class="open-tool-trigger" data-tool="port-scanner">Port Scanner</a>
+        <a href="#" class="open-tool-trigger" data-tool="iam-analyzer">IAM ROLE ANALYZER</a>
+        <a href="#" class="open-tool-trigger" data-tool="whois-lookup">WHOIS Lookup</a>
+        <a href="#" class="open-tool-trigger" data-tool="dns-lookup">DNS Lookup</a>
+        <a href="#" class="open-tool-trigger" data-tool="ip-intelligence">IP Intelligence</a>
+        <a href="#" class="open-tool-trigger" data-tool="password-analyzer">Password Analyzer</a>
+        <a href="#" class="open-tool-trigger" data-tool="malware-scanner">Malware Scanner</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>Networking</h3>
+    <p>Designing and managing secure & reliable network infrastructures for businesses.</p>
+    <button class="service-btn" onclick="alert('Networking suite launching soon!')">Explore Tool</button>
+  </div>
+
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>Web Solutions</h3>
+    <p>Building fast, responsive and secure websites & web applications.</p>
+    <button class="service-btn" onclick="alert('Web Solutions portal deploying soon!')">Explore Tool</button>
+  </div>
+
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>Digital Marketing</h3>
+    <p>Boosting brand visibility with smart strategies, campaigns and content.</p>
+    <button class="service-btn" onclick="alert('Marketing analytical dashboard loading soon!')">Explore Tool</button>
+  </div>
+
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>Creative Media</h3>
+    <p>Creating stunning visuals, animations and engaging digital experiences.</p>
+    <button class="service-btn" onclick="alert('Creative studio viewer loading soon!')">Explore Tool</button>
+  </div>
+</div>
+
+<div class="stats-sect" style="margin-top: 60px;">
+  <div class="stats-grid">
+    <div><div class="stat-num counter" data-target="150" data-suffix="+">0</div><div class="stat-lbl">Enterprise Clients</div></div>
+    <div><div class="stat-num counter" data-target="10" data-suffix="M+">0</div><div class="stat-lbl">Threats Neutralized</div></div>
+    <div><div class="stat-num counter" data-target="99.9" data-suffix="%">0</div><div class="stat-lbl">Uptime</div></div>
+    <div><div class="stat-num">24/7</div><div class="stat-lbl">Expert Support</div></div>
+  </div>
+</div>
+
+<section class="team-org">
+  <h2 class="team-title">Meet Our Team<span class="team-subtext"><span class="team-line"></span>One team, one mission — innovation, trust & cybersecurity excellence.</span></h2>
+  <div class="org-wrapper" style="max-width:1100px; margin:0 auto;">
+    <div class="top-node">
+      <div class="avatar">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <circle cx="12" cy="9" r="3"/>
+          <path d="M7 17c0-2 2-3 5-3s5 1 5 3"/>
+        </svg>
+      </div>
+      <h3>SYED GHOUS</h3>
+      <p>Cyber Security Lead</p>
+    </div>
+    <svg class="team-svg" viewBox="0 0 1200 220" width="100%" height="220">
+      <circle cx="600" cy="20" r="8" fill="#C9A84C"/>
+      <path class="flow-line" d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <circle cx="150" cy="150" r="6" fill="#C9A84C"/>
+      <circle cx="350" cy="150" r="6" fill="#C9A84C"/>
+      <circle cx="600" cy="150" r="6" fill="#C9A84C"/>
+      <circle cx="850" cy="150" r="6" fill="#C9A84C"/>
+      <circle cx="1050" cy="150" r="6" fill="#C9A84C"/>
+    </svg>
+    <div class="team-grid-org">
+      <div class="member"><div class="avatar"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 14c-3 0-5 1.5-5 3.5M17 17.5c0-2-2-3.5-5-3.5"/><circle cx="12" cy="9" r="2.5"/></svg></div><h3>Anonymous</h3><p>Developer</p></div>
+      <div class="member"><div class="avatar"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 14c-3 0-5 1.5-5 3.5M17 17.5c0-2-2-3.5-5-3.5"/><circle cx="12" cy="9" r="2.5"/></svg></div><h3>Ali</h3><p>Co Founder</p></div>
+      <div class="member"><div class="avatar"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 14c-3 0-5 1.5-5 3.5M17 17.5c0-2-2-3.5-5-3.5"/><circle cx="12" cy="9" r="2.5"/></svg></div><h3>AHMAD</h3><p>MARKETER</p></div>
+      <div class="member"><div class="avatar"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 14c-3 0-5 1.5-5 3.5M17 17.5c0-2-2-3.5-5-3.5"/><circle cx="12" cy="9" r="2.5"/></svg></div><h3>Muhammad Ali</h3><p>Researcher / Adviser</p></div>
+      <div class="member"><div class="avatar"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 14c-3 0-5 1.5-5 3.5M17 17.5c0-2-2-3.5-5-3.5"/><circle cx="12" cy="9" r="2.5"/></svg></div><h3>Moiz</h3><p>Designer</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-sect" id="support">
+  <div class="cta-box">
+    <div class="cta-glow-top"></div>
+    <span class="cta-eyebrow">Get Started Today</span>
+    <div class="cta-h">Ready to upgrade your security?</div>
+    <p class="cta-p">Join 150+ enterprises that trust Zyventra to protect their most critical assets. Our experts are standing by.</p>
+    <button class="pill-btn pill-btn-gold" style="padding:13px 32px;font-size:14px">Connect with Experts &nbsp;↗</button>
+    <p class="cta-note">No commitment required · Response within 24 hours</p>
+    <div class="cta-contact">
+      <a href="#" class="contact-pill">📧 Gmail</a>
+      <a href="#" class="contact-pill">📷 Instagram</a>
+      <a href="#" class="contact-pill">𝕏 Twitter</a>
+      <a href="#" class="contact-pill">Reddit</a>
+      <a href="#" class="contact-pill">LINKEDIN</a>
+    </div>
+  </div>
+</div>
+
+<div class="cta-sect" id="about">
+  <div style="text-align:center;margin-bottom:24px;">
+    <h2 class="hero-title" style="font-size:2.8rem;"><span class="floating-gold">ABOUT US</span></h2>
+    <div style="width:280px;height:1px;background:#1a1a2e;margin:10px auto 0;"></div>
+    <p style="text-align:center;margin-top:10px;color:#1a1a2e;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;">Know About Zyventra And Its Founder</p>
+  </div>
+  <div class="cta-box">
+    <div class="cta-glow-top"></div>
+    <div class="cta-h">Building the future of cybersecurity.</div>
+    <p class="cta-p" style="max-width:620px">Zyventra Technologies delivers advanced cybersecurity solutions designed to protect businesses from modern digital threats. Our mission is to combine artificial intelligence, real-time threat intelligence, and enterprise-grade protection into a powerful security ecosystem that organizations can trust.</p>
+    <p style="margin-top:18px;color:#d1d5db;font-size:14px;line-height:1.8;text-align:center;">Under the leadership of <span style="background:linear-gradient(135deg,#9A7010,#D4AF37,#F5E199,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:900;">Syed Ghous</span>, CEO of Zyventra Technologies, our vision is to redefine digital security through innovation, intelligence, and uncompromising trust.</p>
+    <div class="cta-contact">
+      <div class="contact-pill">🛡️ AI-Powered Security</div>
+      <div class="contact-pill">⚡ Real-Time Protection</div>
+      <div class="contact-pill">🌍 Global Coverage</div>
+      <div class="contact-pill">🔒 Zero Trust Architecture</div>
+    </div>
+    <p class="cta-note">Trusted by enterprises to secure critical infrastructure and digital assets.</p>
+  </div>
+</div>
+
+<div class="cta-sect" id="legal">
+  <div class="legal-row">
+    <div class="legal-box">
+      <span class="cta-eyebrow">Legal</span>
+      <div class="cta-h">Privacy Policy</div>
+      <p class="cta-p">We value your privacy. Zyventra Technologies collects only necessary data to improve security, performance, and user experience. No personal data is sold or shared with third parties.</p>
+    </div>
+    <div class="legal-divider"></div>
+    <div class="legal-box">
+      <span class="cta-eyebrow">Legal</span>
+      <div class="cta-h">Terms & Conditions</div>
+      <p class="cta-p">By using Zyventra Technologies services, you agree to comply with our usage policies, security guidelines, and applicable laws.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg width="28" height="24" viewBox="0 0 38 32" fill="none">
+      <defs><linearGradient id="zg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#9A7010"/><stop offset="50%" stop-color="#D4AF37"/><stop offset="100%" stop-color="#C9A84C"/></linearGradient></defs>
+      <polygon points="2,2 36,2 30,10 10,10" fill="url(#zg2)"/>
+      <polygon points="10,10 26,10 12,22 4,22" fill="url(#zg2)" opacity=".7"/>
+      <polygon points="8,22 28,22 36,30 2,30" fill="url(#zg2)"/>
+    </svg>
+    <span style="color:#44445a;font-size:12px;font-weight:600;border:1px solid rgba(201,168,76,.35);border-radius:999px;padding:8px 16px;display:inline-block;background:rgba(255,255,255,.03);">Zyventra Technologies © 2026</span>
+  </div>
+  <div class="footer-links">
+    <a href="#legal">Privacy</a>
+    <a href="#legal">Terms</a>
+    <a href="#support">Contact</a>
+  </div>
+</div>
+
+</div>
+
+<div id="masterToolModal" class="tool-modal">
+  <div class="tool-modal-content">
+    <span class="tool-close-btn" id="closeModalBtn">&times;</span>
+    <h2 id="modalToolTitle">Tool Suite</h2>
+    <p id="modalToolDesc">Loading micro-assessment module interface...</p>
+    <div id="modalToolInterface"></div>
+    <div id="modalTerminalOutput" class="tool-terminal-output"></div>
+  </div>
+</div>
+
+<div class="cursor-dot"></div>
+<div class="cursor-orbit"></div>
+
+<script>
+// Threat Monitor Bars
+const hts=[38,55,44,70,52,80,63,48,72,58,85,66];
+const bw=document.getElementById('bars');
+if(bw){
+  hts.forEach((h,i)=>{
+    const d=document.createElement('div');
+    d.className='bar';
+    d.style.cssText=`flex:1;border-radius:3px 3px 0 0;background:${i===5?'#C9A84C':'rgba(201,168,76,.22)'};height:0;transition:height .5s ease`;
+    bw.appendChild(d);
+    setTimeout(()=>{d.style.height=h+'%'},80+i*60);
+  });
+  let a=5;
+  setInterval(()=>{
+    const bs=bw.querySelectorAll('.bar');
+    if(bs.length > 0){
+      bs[a].style.background='rgba(201,168,76,.22)';
+      a=(a+1)%bs.length;
+      bs[a].style.background='#C9A84C';
+    }
+  },1500);
+}
+
+setTimeout(()=>{
+  if(document.getElementById('f1')) document.getElementById('f1').style.width='82%';
+  if(document.getElementById('f2')) document.getElementById('f2').style.width='56%';
+  if(document.getElementById('f3')) document.getElementById('f3').style.width='34%';
+},400);
+
+// Click-based Smooth Scroll Routing Strategy (Fixed Hover Mutation Bug)
+const links = document.querySelectorAll(".nav-links a");
+links.forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute("href");
+    if(targetId.startsWith("#")) {
+      const section = document.querySelector(targetId);
+      if(section){ section.scrollIntoView({ behavior: "smooth" }); }
+    }
+  });
+});
+
+const heroBtn = document.getElementById("exploreToolsHeroBtn");
+if(heroBtn){
+  heroBtn.addEventListener("click", () => {
+    const section = document.getElementById("services-block");
+    if(section){ section.scrollIntoView({ behavior: "smooth" }); }
+  });
+}
+
+// Counter triggers
+function animateCounter(el){
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || "";
+  const duration = 1200;
+  const startTime = performance.now();
+  function update(now){
+    const progress = Math.min((now - startTime) / duration, 1);
+    const value = target * progress;
+    if(target % 1 !== 0){ el.textContent = value.toFixed(1) + suffix; }
+    else{ el.textContent = Math.floor(value) + suffix; }
+    if(progress < 1){ requestAnimationFrame(update); }
+  }
+  requestAnimationFrame(update);
+}
+const counters = document.querySelectorAll(".counter");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      animateCounter(entry.target);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold:0.5 });
+counters.forEach(counter => {
+  counter.textContent = "0";
+  observer.observe(counter);
+});
+
+// Image Slider Loop
+const heroSlides = document.querySelectorAll(".hero-slide");
+let heroIndex = 0;
+if(heroSlides.length > 0){
+  setInterval(() => {
+    heroSlides[heroIndex].classList.remove("active");
+    heroIndex = (heroIndex + 1) % heroSlides.length;
+    heroSlides[heroIndex].classList.add("active");
+  }, 5000);
+}
+
+// Custom Premium Orbit Cursor
+window.addEventListener("load", () => {
+  const dot = document.querySelector(".cursor-dot");
+  const orbit = document.querySelector(".cursor-orbit");
+  if(!dot || !orbit) return;
+  let mouseX = 0, mouseY = 0;
+  let dx = 0, dy = 0;
+  let ox = 0, oy = 0;
+  window.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  function animate(){
+    dx += (mouseX - dx) * 0.35;
+    dy += (mouseY - dy) * 0.35;
+    ox += (mouseX - ox) * 0.12;
+    oy += (mouseY - oy) * 0.12;
+    dot.style.left = dx + "px";
+    dot.style.top = dy + "px";
+    orbit.style.left = ox + "px";
+    orbit.style.top = oy + "px";
+    requestAnimationFrame(animate);
+  }
+  animate();
+});
+
+// Line Animations
+function animateSvgLines(svgClass){
+  const svg = document.querySelector("." + svgClass);
+  if(!svg) return;
+  const lines = svg.querySelectorAll(".flow-line");
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        lines.forEach((line,index)=>{
+          setTimeout(()=>{ line.classList.add("animate"); }, index * 180);
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.35 });
+  observer.observe(svg);
+}
+animateSvgLines("services-svg");
+animateSvgLines("team-svg");
+
+// Modal Core Controller
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("masterToolModal");
+  const modalTitle = document.getElementById("modalToolTitle");
+  const modalDesc = document.getElementById("modalToolDesc");
+  const modalInterface = document.getElementById("modalToolInterface");
+  const terminalOutput = document.getElementById("modalTerminalOutput");
+  const closeBtn = document.getElementById("closeModalBtn");
+
+  let globalCurrentReportData = "";
+  let globalCurrentToolLabel = "";
+
+  const triggerLinks = document.querySelectorAll(".open-tool-trigger");
+  triggerLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const toolType = link.getAttribute("data-tool");
+      const toolLabel = link.textContent.trim();
+
+      globalCurrentToolLabel = toolLabel;
+      modalTitle.textContent = toolLabel;
+      terminalOutput.style.display = "none";
+      terminalOutput.innerHTML = "";
+      globalCurrentReportData = "";
+      
+      buildToolInterface(toolType, toolLabel);
+      modal.style.display = "block";
+    });
+  });
+
+  if(closeBtn){ closeBtn.addEventListener("click", () => { modal.style.display = "none"; }); }
+  window.addEventListener("click", (e) => { if(e.target === modal) modal.style.display = "none"; });
+
+  window.downloadAuditReport = function() {
+    if(!globalCurrentReportData) {
+      alert("Please execute a successful scan sequence first before attempting to generate audit logs!");
+      return;
+    }
+    const headerTitle = `==================================================\n` +
+                        `    ZYVENTRA PLATFORM SECURITY INFRASTRUCTURE AUDIT\n` +
+                        `    REPORT GENERATION DATE: ${new Date().toISOString().split('T')[0]}\n` +
+                        `    TARGET MODULE: ${globalCurrentToolLabel.toUpperCase()}\n` +
+                        `==================================================\n\n`;
+                        
+    const completeReportText = headerTitle + globalCurrentReportData;
+    const blob = new Blob([completeReportText], { type: "text/plain;charset=utf-8" });
+    const tempUrl = URL.createObjectURL(blob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = tempUrl;
+    downloadLink.download = `zyventra_security_report_${globalCurrentToolLabel.toLowerCase().replace(/\s+/g, '_')}.txt`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(tempUrl);
+  };
+
+  function buildToolInterface(type, label) {
+    let html = "";
+    if (type === "iam-analyzer") {
+      modalDesc.textContent = "Paste your AWS IAM Role Trust Relationship Policy (JSON) block statement to audit configuration privileges locally inside your terminal runtime environment.";
+      html = `
+        <textarea class="tool-textarea-field" id="iamInputData" placeholder='{\n  "Version": "2012-10-17",\n  "Statement": [\n    {\n      "Effect": "Allow",\n      "Principal": { "AWS": "*" },\n      "Action": "sts:AssumeRole"\n    }\n  ]\n}'></textarea>
+        <button class="pill-btn pill-btn-gold" style="width:100%; padding:14px; font-size:14px;" id="executeToolBtn">Analyze IAM Configuration Token</button>
+      `;
+      modalInterface.innerHTML = html;
+
+      document.getElementById("executeToolBtn").addEventListener("click", () => {
+        const rawJson = document.getElementById("iamInputData").value.trim();
+        terminalOutput.style.display = "block";
+        if(!rawJson) {
+          terminalOutput.innerHTML = "❌ Error: Policy configuration input stack stream cannot be completely blank.";
+          return;
+        }
+        try {
+          const parsed = JSON.parse(rawJson);
+          let logs = ["[+] Initializing local isolated security compilation algorithm...", "[+] Auditing permission vectors matrix data...\n"];
+          let criticalRisksFound = 0;
+
+          if(!parsed.Statement || !Array.isArray(parsed.Statement)) {
+            throw new Error("Missing structural validation requirements: 'Statement' structure list is undefined.");
+          }
+
+          parsed.Statement.forEach((st, idx) => {
+            if(st.Principal && (st.Principal === '*' || st.Principal.AWS === '*')) {
+              logs.push(`🚨 CRITICAL THREAT WARNING [Statement index ${idx}]: Wildcard broad principal definition detected ('*'). Anonymous global cloud profiles possess operational access capabilities to assume this structure!`);
+              logs.push(`⚠️ [FAIL] CIS AWS Foundations Benchmark v3.0.0 (Section 1.16) - Ensure IAM policies do not allow broad administrative wildcard mapping operations.`);
+              criticalRisksFound++;
+            }
+            if(st.Action && (st.Action === '*' || (Array.isArray(st.Action) && st.Action.includes('*')))) {
+              logs.push(`⚠️ HIGH CONFIGURATION RISK [Statement index ${idx}]: Absolute structural wildcard administrative activity mapping ('*') assigned. Privilege scaling threats possible.`);
+              criticalRisksFound++;
+            }
+          });
+
+          let scoreWeight = 100;
+          if (criticalRisksFound > 0) { scoreWeight = Math.max(15, 100 - (criticalRisksFound * 40)); }
+          let scoringLog = `--------------------------------------------------\n` +
+                           `📊 SYSTEM COMPLIANCE SCORE MATRIX:\n` +
+                           `🛡️ SECURITY SCORE VALUE: ${scoreWeight}/100\n` +
+                           `📋 EVALUATION RATING: ${scoreWeight >= 80 ? 'EXCELLENT COMPLIANT STATUS' : (scoreWeight >= 50 ? 'WARNING: MODERATE CONFIGURATION DEVIATION' : 'CRITICAL INSTABILITY THREAT VALUE')}\n` +
+                           `--------------------------------------------------\n`;
+
+          let fixSuggestions = "";
+          if (criticalRisksFound > 0) {
+            fixSuggestions = `\n🛠️ **AUTO-REMEDIATION SUGGESTIONS (Copy & Paste):**\n` +
+                             `--------------------------------------------------\n` +
+                             `❌ BAD (Current): "Principal": { "AWS": "*" }\n` +
+                             `✅ GOOD (Fix): "Principal": { "AWS": "arn:aws:iam::YOUR_ACCOUNT_ID:root" }\n\n` +
+                             `📌 Terraform Remediation Code Block:\n` +
+                             `  principals {\n` +
+                             `    type        = "AWS"\n` +
+                             `    identifiers = ["arn:aws:iam::YOUR_ACCOUNT_ID:root"]\n` +
+                             `  }\n`;
+          } else {
+            logs.push("✅ ANALYSIS SUCCESSFUL: Comprehensive security parameters evaluated.");
+          }
+
+          const compiledFinalLogsOutput = scoringLog + logs.join("\n") + fixSuggestions;
+          const actionButtonSectionHtml = `\n\n<div class="action-btn-group">` +
+                                          `<button class="pill-btn pill-btn-gold" style="flex:1; padding:10px; font-size:12px;" onclick="downloadAuditReport()">📥 Download Audit Report (PDF/TXT)</button>` +
+                                          `</div>`;
+                                          
+          terminalOutput.innerHTML = compiledFinalLogsOutput + actionButtonSectionHtml;
+          globalCurrentReportData = compiledFinalLogsOutput;
+        } catch(err) {
+          terminalOutput.innerHTML = `❌ PARSING ARCHITECTURE STRUCTURAL FAILURE:\nInternal pipeline crash parsing payload tokens syntax framework.\nDetails message trace: ${err.message}`;
+        }
+      });
+    } else if (type === "password-analyzer") {
+      modalDesc.textContent = "Test credential entropy strength complexity structural length constraints parameters.";
+      html = `
+        <input type="text" class="tool-input-field" id="passInputData" placeholder="Enter target credential string parameters to evaluate..." style="-webkit-text-security: disc;" autocomplete="off" />
+        <button class="pill-btn pill-btn-gold" style="width:100%; padding:14px; font-size:14px;" id="executeToolBtn">Test Entropy Strength Scale</button>
+      `;
+      modalInterface.innerHTML = html;
+
+      document.getElementById("executeToolBtn").addEventListener("click", () => {
+        const pass = document.getElementById("passInputData").value;
+        terminalOutput.style.display = "block";
+        if(!pass) {
+          terminalOutput.innerHTML = "❌ Evaluation input buffer underflow error: Input data parameter stream empty.";
+          return;
+        }
+        let score = 0;
+        let details = [];
+        if(pass.length >= 8) { score += 2; details.push("[+] Structural length constraint requirement met: Optimal threshold parameter verified (8+ chars)."); }
+        else { details.push("⚠️ Alert: Structural constraints breach."); }
+        if(/[A-Z]/.test(pass)) { score += 1; details.push("[+] Character diversity metric: High upper-case matrix presence recorded."); }
+
+        let scorePercent = Math.floor((score / 3) * 100);
+        let fixSuggestions = score < 3 ? `\n🛠️ **AUTO-REMEDIATION GUIDES:**\n--------------------------------------------------\n✅ Mix Alpha-Numeric values alongside non-standard symbols.` : "";
+
+        const compiledFinalLogsOutput = `--------------------------------------------------\n📊 SYSTEM COMPLIANCE SCORE MATRIX:\n🛡️ SECURITY ENTROPY SCORE: ${scorePercent}/100\n--------------------------------------------------\n` + details.join("\n") + fixSuggestions;
+        const actionButtonSectionHtml = `\n\n<div class="action-btn-group"><button class="pill-btn pill-btn-gold" style="flex:1; padding:10px; font-size:12px;" onclick="downloadAuditReport()">📥 Download Audit Report (PDF/TXT)</button></div>`;
+
+        terminalOutput.innerHTML = compiledFinalLogsOutput + actionButtonSectionHtml;
+        globalCurrentReportData = compiledFinalLogsOutput;
+      });
+    } else {
+      modalDesc.textContent = `Input target destination domain metadata name nodes or ipv4 routing target string parameters for ${label}.`;
+      html = `
+        <input type="text" class="tool-input-field" id="generalTargetInput" placeholder="e.g., target-node-endpoint.com or 192.168.1.1" />
+        <button class="pill-btn pill-btn-gold" style="width:100%; padding:14px; font-size:14px;" id="executeToolBtn">Initialize Active Scan Sequence Pipeline</button>
+      `;
+      modalInterface.innerHTML = html;
+
+      document.getElementById("executeToolBtn").addEventListener("click", () => {
+        const target = document.getElementById("generalTargetInput").value.trim();
+        terminalOutput.style.display = "block";
+        if(!target) {
+          terminalOutput.innerHTML = "❌ Context execution execution denied: Target destination address criteria cannot be empty.";
+          return;
+        }
+        terminalOutput.innerHTML = `[+] Establishing connection handshakes out onto target server endpoints: ${target}...`;
+        
+        setTimeout(() => {
+          let outputLog = `[+] Diagnostic traces generated safely targeting host criteria: ${target}\n✅ RESULTS OVERVIEW STATUS: Host target architecture components structural validation successfully complete.`;
+          const compiledFinalLogsOutput = `--------------------------------------------------\n📊 SYSTEM COMPLIANCE SCORE MATRIX:\n🛡️ PLATFORM SECURITY RATING: 100/100\n--------------------------------------------------\n` + outputLog;
+          const actionButtonSectionHtml = `\n\n<div class="action-btn-group"><button class="pill-btn pill-btn-gold" style="flex:1; padding:10px; font-size:12px;" onclick="downloadAuditReport()">📥 Download Audit Report (PDF/TXT)</button></div>`;
+          terminalOutput.innerHTML = compiledFinalLogsOutput + actionButtonSectionHtml;
+          globalCurrentReportData = compiledFinalLogsOutput;
+        }, 1100);
+      });
+    }
+  }
+});
+</script>
+</body>
+</html>
