@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 )
-
 // Request aur Response structures
 type AnalyzeRequest struct {
 	TerraformCode string `json:"terraform_code"`
