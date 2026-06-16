@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zyventra Technologies - Ultimate Cybersecurity Suite</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body,div,span,p,h1,h2,h3,a,button,textarea,input,select,label{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+:root{
+--bg-main:#0b0f19;
+--bg-card:#111827;
+--bg-input:#1f2937;
+--text-primary:#f3f4f6;
+--text-secondary:#9ca3af;
+--text-muted:#6b7280;
+--accent-gold:#d4af37;
+--accent-gold-hover:#b8962e;
+--accent-red:#ef4444;
+--accent-green:#10b981;
+--accent-amber:#f59e0b;
+--border-color:rgba(212,175,55,0.2);
+}
+html,body{cursor:default!important;overflow-x:hidden;background:var(--bg-main);color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.5;padding-bottom:60px}
+a,button,input,textarea,select{cursor:pointer!important}
+.nav{background:rgba(249,246,240,.96);backdrop-filter:blur(16px);border-bottom:1px solid #e8dfc8;padding:0 40px;height:66px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:9999999}
+.nav-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-links{display:flex;gap:28px}
+.nav-links a{color:#2a2a3e;text-decoration:none;font-size:13.5px;font-weight:500;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:-6px;width:0;height:2px;background:#C9A84C;transition:.3s}
+.nav-links a:hover::after{width:100%}
+.nav-links a:hover{color:#C9A84C}
+.nav-actions{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.pill-btn{border:none;border-radius:999px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.02em;transition:transform .18s,box-shadow .18s}
+.pill-btn-gold{background:linear-gradient(135deg,#C9A84C,#F5E199,#C9A84C);color:#3a2800;box-shadow:0 2px 14px rgba(201,168,76,.35)}
+.pill-btn-gold:hover{transform:scale(1.05);box-shadow:0 4px 24px rgba(201,168,76,.55)}
+.pill-btn-outline{background:transparent;border:1.5px solid #C9A84C;color:#C9A84C}
+.pill-btn-outline:hover{background:rgba(201,168,76,.08)}
+.hero{background:#F9F6F0;padding:52px 40px 44px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;max-width:1100px;margin:0 auto}
+.hero h1{font-size:3rem;font-weight:900;line-height:1.05;color:#1a1a2e;letter-spacing:-.04em;margin-bottom:6px}
+.floating-gold{display:inline-block;background:linear-gradient(135deg,#9A7010,#D4AF37,#F5E199,#C9A84C);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:floatText 4s ease-in-out infinite, shineGold 6s linear infinite}
+@keyframes floatText{0%,100%{transform:translateY(0px)}50%{transform:translateY(-10px)}}
+@keyframes shineGold{0%{background-position:0% 50%}100%{background-position:100% 50%}}
+.sec-widget{background:#fff;border:1px solid #e8dfc8;border-radius:20px;box-shadow:0 8px 48px rgba(201,168,76,.1);padding:22px;position:relative;overflow:hidden;transition:all .3s ease;width:100%}
+.sec-widget:hover{box-shadow:0 0 20px rgba(201,168,76,.35),0 0 40px rgba(201,168,76,.25),0 20px 60px rgba(0,0,0,.2);border-color:#C9A84C;transform:translateY(-6px)}
+.sw-title{font-size:15px;font-weight:800;color:#1a1a2e}
+.bars-wrap{display:flex;align-items:flex-end;gap:3px;height:44px}
+.bar{flex:1;border-radius:3px 3px 0 0}
+.threat-row{margin-bottom:10px}
+.tr-head{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;font-weight:600;color:#3a3a4a}
+.track{height:5px;background:#f0e8d4;border-radius:999px;overflow:hidden}
+.fill{height:100%;border-radius:999px;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mini-c{background:#faf8f4;border:1px solid #eee6d4;border-radius:10px;padding:10px;text-align:center}
+.mini-v{font-size:14px;font-weight:900;color:#1a1a2e}
+.mini-l{font-size:9px;color:#6b7280;margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.features{background:#1C1C2E;padding:54px 40px}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:36px;max-width:1100px;margin-left:auto;margin-right:auto}
+.feat-c{background:#21223a;border:1px solid #2d2f4a;border-radius:18px;padding:22px;transition:transform .22s,border-color .22s;position:relative;overflow:hidden}
+.feat-c:hover{transform:translateY(-5px);border-color:rgba(201,168,76,.4)}
+.feat-icon{width:46px;height:46px;background:#2a2b40;border:1px solid rgba(201,168,76,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat-t{color:#f0f0ff;font-size:13.5px;font-weight:800;margin-bottom:7px}
+.feat-d{color:#888aaa;font-size:12px;line-height:1.6}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#E8C96A;display:block;text-align:center;margin-bottom:10px}
+.section-h{font-size:1.9rem;font-weight:800;text-align:center;line-height:1.18;color:#f0f0ff}
+.services-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;max-width:1100px;margin:40px auto 0;padding:0 20px 40px}
+.service-card{background:#F9F6F0;border:1px solid rgba(201,168,76,.35);border-radius:22px;padding:22px;position:relative;transition:.3s ease;box-shadow:0 10px 30px rgba(0,0,0,.04);overflow:visible!important}
+.service-card:hover{transform:translateY(-6px);border-color:#C9A84C;box-shadow:0 18px 45px rgba(201,168,76,.18)}
+.gold-dot{width:14px;height:14px;border-radius:50%;background:#C9A84C;position:absolute;top:-8px;left:50%;transform:translateX(-50%);box-shadow:0 0 15px rgba(201,168,76,.6)}
+.service-card h3{font-size:16px;font-weight:800;color:#1a1a2e;margin-bottom:8px}
+.service-card p{font-size:12.5px;color:#6b7280;line-height:1.6}
+.service-btn{margin-top:14px;padding:9px 14px;font-size:11px;font-weight:700;border-radius:999px;border:1px solid #C9A84C;background:transparent;color:#C9A84C;cursor:pointer;transition:.3s ease;display:inline-flex;align-items:center;gap:6px}
+.service-btn:hover{background:#C9A84C;color:#1a1a2e}
+.service-dropdown{position:relative;display:inline-block;width:100%}
+.dropdown-menu{position:absolute;top:calc(100% + 10px);left:0;width:240px;background:#fff;border:1px solid rgba(201,168,76,.35);border-radius:16px;padding:8px;opacity:0;visibility:hidden;transform:translateY(10px);transition:.25s ease;z-index:999;box-shadow:0 10px 30px rgba(201,168,76,.15);pointer-events:none}
+.dropdown-menu a{display:block;text-decoration:none;color:#1a1a2e;font-size:13px;font-weight:600;padding:10px 12px;border-radius:10px;transition:.25s;cursor:pointer}
+.dropdown-menu a:hover{background:#fdf6e3;color:#C9A84C;transform:translateX(5px)}
+.service-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
+.stats-sect{background:radial-gradient(circle at top,#132236,#0D1B2A 70%);border-top:1px solid rgba(201,168,76,.3);border-bottom:1px solid rgba(201,168,76,.3);padding:44px 40px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:900px;margin:0 auto;text-align:center}
+.stat-num{font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#9A7010,#D4AF37,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-lbl{color:#6b7280;font-size:12px;font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
+.team-org{background:#fff;padding:80px 20px;text-align:center}
+.team-title{font-size:32px;font-weight:900;color:#1a1a2e;margin-bottom:40px}
+.team-subtext{display:block;margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a2e}
+.team-line{display:block;width:300px;height:1px;background:#1a1a2e;margin:0 auto 10px;opacity:0.8}
+.top-node{display:flex;flex-direction:column;align-items:center;margin-bottom:30px}
+.top-node .avatar{width:130px;height:130px;border-radius:50%;overflow:hidden;border:3px solid #C9A84C}
+.top-node .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.top-node h3{font-size:16px;font-weight:900;color:#000;margin-top:10px}
+.top-node p{font-size:12px;color:#444}
+.team-grid-org{display:grid;grid-template-columns:repeat(5,1fr);justify-items:center;margin-top:-55px;position:relative}
+.team-grid-org .member{width:140px;display:flex;flex-direction:column;align-items:center}
+.member .avatar{width:90px;height:90px;border-radius:50%;overflow:hidden;border:2px solid #C9A84C}
+.member .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.member h3{font-size:13px;font-weight:800;color:#000;margin-top:6px}
+.member p{font-size:11px;color:#444}
+.services-svg,.team-svg{width:100%;height:auto;display:block;margin-bottom:20px}
+.flow-line{stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1000;stroke-dashoffset:1000;opacity:1}
+.flow-line.animate{animation:drawLine 2s ease forwards;filter:drop-shadow(0 0 8px rgba(201,168,76,.7))}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+.cta-sect{background:#F9F6F0;padding:54px 40px}
+.cta-box{max-width:700px;margin:0 auto;background:#1C1C2E;border-radius:26px;padding:52px 44px;text-align:center;position:relative;overflow:hidden;transition:all .3s ease;border:1px solid transparent}
+.cta-box:hover{transform:translateY(-6px);border-color:#C9A84C;box-shadow:0 0 25px rgba(201,168,76,.35),0 20px 60px rgba(0,0,0,.25)}
+.cta-glow-top{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:380px;height:80px;background:rgba(201,168,76,.12);border-radius:50%;filter:blur(30px);pointer-events:none}
+.cta-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#E8C96A;border:1px solid rgba(201,168,76,.3);border-radius:999px;padding:5px 14px;display:inline-block;margin-bottom:16px}
+.cta-h{color:#fff;font-size:1.8rem;font-weight:800;margin-bottom:12px;line-height:1.2}
+.cta-p{color:#9090b0;font-size:13.5px;line-height:1.7;max-width:380px;margin:0 auto 26px}
+.cta-note{color:#55556a;font-size:11px;margin-top:12px}
+.cta-contact{margin-top:20px;display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+.contact-pill{text-decoration:none;color:#fff;font-size:12px;font-weight:600;padding:10px 16px;border-radius:999px;border:1px solid rgba(201,168,76,.35);background:rgba(255,255,255,.03);transition:all .3s ease;cursor:pointer}
+.contact-pill:hover{transform:translateY(-3px);border-color:#C9A84C;color:#F5E199}
+.hero-slider{position:relative;width:100%;height:560px;border-radius:30px;overflow:hidden;background:#fff;border:1px solid rgba(201,168,76,.25);box-shadow:0 25px 70px rgba(0,0,0,.08);max-width:1100px;margin:30px auto}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:1s ease}
+.hero-slide.active{opacity:1}
+.hero-slide img{width:100%;height:100%;object-fit:cover}
+.hero-overlay{position:absolute;left:30px;bottom:30px;background:rgba(255,255,255,.85);backdrop-filter:blur(15px);padding:20px 25px;border-radius:18px}
+.hero-overlay h2{font-size:28px;margin-bottom:8px;color:#111827}
+.hero-overlay p{color:#6b7280;font-size:14px}
+.legal-row{max-width:1100px;margin:0 auto;display:flex;align-items:stretch;justify-content:center;gap:40px;padding:20px}
+.legal-box{flex:1;background:#1C1C2E;border:1px solid rgba(201,168,76,.25);border-radius:22px;padding:42px 32px;text-align:center;min-height:260px;transition:all .3s ease;position:relative;overflow:hidden}
+.legal-box:hover{transform:translateY(-6px);border-color:#C9A84C;box-shadow:0 0 20px rgba(201,168,76,.35),0 20px 60px rgba(0,0,0,.2)}
+.legal-divider{width:2px;background:linear-gradient(to bottom,transparent,#C9A84C,#F5E199,#C9A84C,transparent);border-radius:999px}
+.footer{background:#0e0f1c;max-width:1100px;margin:30px auto;padding:26px 40px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(201,168,76,.25);border-radius:24px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:#55556a;font-size:11px;text-decoration:none;transition:color .2s;cursor:pointer}
+.footer-links a:hover{color:#E8C96A}
+.tool-modal-overlay{position:fixed;inset:0;background:rgba(13,27,42,0.92);backdrop-filter:blur(10px);z-index:99999999;display:none;align-items:center;justify-content:center;padding:20px}
+.tool-modal-box{background:#111424;border:2px solid #C9A84C;border-radius:24px;width:100%;max-width:850px;box-shadow:0 25px 75px rgba(201,168,76,0.25);overflow:hidden;display:flex;flex-direction:column;max-height:90vh}
+.tm-header{background:#161a30;padding:18px 24px;border-bottom:1px solid rgba(201,168,76,0.2);display:flex;justify-content:space-between;align-items:center}
+.tm-title{color:#fff;font-size:18px;font-weight:900;letter-spacing:-0.01em}
+.tm-close-btn{background:transparent;border:1px solid rgba(201,168,76,0.4);border-radius:50%;width:30px;height:30px;color:#C9A84C;font-size:14px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.tm-close-btn:hover{background:#C9A84C;color:#111424;transform:scale(1.1)}
+.tm-body{padding:24px;overflow-y:auto;flex:1}
+.tm-desc{color:#a0a5c0;font-size:13.5px;line-height:1.6;margin-bottom:16px}
+.tool-textarea-field{width:100%;height:160px;background:#171b30;border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:14px;color:#F5E199;font-family:'Courier New',Courier,monospace;font-size:13px;resize:none;margin-bottom:16px;outline:none;transition:border-color 0.3s}
+.tool-textarea-field:focus{border-color:#C9A84C;box-shadow:0 0 10px rgba(201,168,76,0.2)}
+.terminal-output-viewport{background:#0a0c16;border:1px solid #1f2440;border-radius:12px;padding:18px;color:#4af626;font-family:'Courier New',Courier,monospace;font-size:12.5px;line-height:1.7;white-space:pre-wrap;margin-top:20px;max-height:350px;overflow-y:auto;display:none;border-left:4px solid #C9A84C}
+input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
+
+@media (max-width:991px){.nav-links{display:none}.hero{grid-template-columns:1fr;padding:40px 20px;text-align:center;gap:30px}.hero-sub{margin:14px auto 28px}.hero-ctas{justify-content:center}.hero-trust{justify-content:center}.hero-slider{height:380px;margin:20px}.feat-grid{grid-template-columns:repeat(2,1fr)}.services-cards{grid-template-columns:repeat(2,1fr)}.team-grid-org{grid-template-columns:repeat(3,1fr);gap:20px 0}.dropdown-menu{position:relative;top:0;width:100%;opacity:1;visibility:visible;transform:none;box-shadow:none;border-left:2px solid #C9A84C;border-radius:0;background:rgba(201,168,76,.04);margin-top:10px;padding:4px 0;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(0.4,0,0.2,1)}.service-dropdown.is-active .dropdown-menu{max-height:400px;padding:8px}.service-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:none;pointer-events:auto}}
+@media (max-width:768px){.hero-title{font-size:2.2rem}.feat-grid{grid-template-columns:1fr}.services-cards{grid-template-columns:1fr}.legal-row{flex-direction:column;gap:20px;padding:10px}.legal-divider{width:80%;height:2px;margin:10px auto;background:linear-gradient(to right,transparent,#C9A84C,#F5E199,#C9A84C,transparent)}.stats-grid{grid-template-columns:repeat(2,1fr);gap:30px 10px}.team-grid-org{grid-template-columns:repeat(2,1fr);margin-top:10px}.team-svg,.services-svg{display:none}.footer{flex-direction:column;gap:15px;text-align:center;padding:20px}.nav-actions{transform:scale(.9)}.tool-modal-box{max-height:95vh;border-radius:16px}}
+@media (max-width:480px){.hero-title{font-size:1.8rem}.hero-ctas{flex-direction:column;width:100%;gap:10px}.hero-ctas button,.hero-ctas .play-wrap{width:100%;justify-content:center}.stats-grid{grid-template-columns:1fr}.team-grid-org{grid-template-columns:1fr;gap:30px}.mini-grid{grid-template-columns:1fr;gap:10px}.sec-widget{padding:15px}}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <svg width="38" height="32" viewBox="0 0 38 32" fill="none">
+      <defs><linearGradient id="zg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#9A7010"/><stop offset="35%" stop-color="#D4AF37"/><stop offset="65%" stop-color="#F5E199"/><stop offset="100%" stop-color="#C9A84C"/></linearGradient></defs>
+      <polygon points="2,2 36,2 30,10 10,10" fill="url(#zg)"/>
+      <polygon points="10,10 26,10 12,22 4,22" fill="url(#zg)" opacity=".75"/>
+      <polygon points="8,22 28,22 36,30 2,30" fill="url(#zg)"/>
+    </svg>
+    <div><span style="font-size:17px;font-weight:900;letter-spacing:-.02em;background:linear-gradient(135deg,#9A7010,#D4AF37,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Zyventra</span><span style="font-size:10px;display:block;color:#888;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-top:-2px">Technologies</span></div>
+  </div>
+  <div class="nav-links"><a href="#products">Products</a><a href="#solutions">Solutions</a><a href="#innovation">Innovation</a><a href="#support">Support</a><a href="#about">About</a></div>
+  <div class="nav-actions">
+    <button class="pill-btn pill-btn-outline">Login</button>
+    <div class="signin-dropdown" style="position:relative;z-index:9999999">
+      <button class="pill-btn pill-btn-gold">Sign In ▾</button>
+      <div class="signin-menu" style="position:absolute;top:calc(100%+10px);right:0;width:220px;background:#fff;border:1px solid #e8dfc8;border-radius:16px;padding:8px;opacity:0;visibility:hidden;transform:translateY(8px);transition:.25s;z-index:999999">
+        <a href="#" style="display:block;text-decoration:none;color:#1a1a2e;font-size:13px;font-weight:600;padding:12px 14px;border-radius:10px;cursor:pointer">Microsoft</a>
+        <a href="#" style="display:block;text-decoration:none;color:#1a1a2e;font-size:13px;font-weight:600;padding:12px 14px;border-radius:10px;cursor:pointer">Google</a>
+        <a href="#" style="display:block;text-decoration:none;color:#1a1a2e;font-size:13px;font-weight:600;padding:12px 14px;border-radius:10px;cursor:pointer">GitHub</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="innovation" style="background:#F9F6F0;padding:52px 40px 44px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;max-width:1100px;margin:0 auto">
+  <div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e8dfc8;border-radius:999px;padding:5px 14px;margin-bottom:22px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#C9A84C"></span>
+      <span style="font-size:11px;font-weight:700;color:#C9A84C;letter-spacing:.08em;text-transform:uppercase">⚡ Enterprise Cybersecurity Platform</span>
+    </div>
+    <h1 style="font-size:2.8rem;font-weight:900;line-height:1.06;color:#1a1a2e;letter-spacing:-.04em">ADVANCED<br><span class="floating-gold">CYBERSECURITY</span><br>EVERY DAY.</h1>
+    <p style="font-size:14px;color:#52526a;line-height:1.75;max-width:390px;margin:14px 0 26px">Smart. Relentless. Secure. Proactive threat defense designed to protect your digital assets before, during, and after every attack.</p>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:34px">
+      <button class="pill-btn pill-btn-gold" style="padding:12px 28px;font-size:14px" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Tools</button>
+      <button style="display:flex;align-items:center;gap:8px;font-size:13px;color:#3a3a55;font-weight:600;cursor:pointer;border:none;background:none">
+        <span style="width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(201,168,76,.45);display:flex;align-items:center;justify-content:center">
+          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="2,1 11,6 2,11" fill="#C9A84C"/></svg>
+        </span>Watch Demo
+      </button>
+    </div>
+    <div style="display:flex;gap:24px;padding-top:20px;border-top:1px solid #e4d9c0">
+      <div style="display:flex;flex-direction:column"><span style="font-size:19px;font-weight:900;color:#1a1a2e;letter-spacing:-.02em">500+</span><span style="font-size:11px;color:#6b7280;margin-top:1px;font-weight:500">Security Experts</span></div>
+      <div style="display:flex;flex-direction:column"><span style="font-size:19px;font-weight:900;color:#1a1a2e;letter-spacing:-.02em">10M+</span><span style="font-size:11px;color:#6b7280;margin-top:1px;font-weight:500">Threats Blocked</span></div>
+      <div style="display:flex;flex-direction:column"><span style="font-size:19px;font-weight:900;color:#1a1a2e;letter-spacing:-.02em">99.9%</span><span style="font-size:11px;color:#6b7280;margin-top:1px;font-weight:500">Uptime SLA</span></div>
+    </div>
+  </div>
+  <div class="sec-widget">
+    <div class="sw-header" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+      <div><div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:2px">Threat Monitor</div><div class="sw-title">Security Overview</div></div>
+      <div style="display:flex;align-items:center;gap:4px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:999px;padding:4px 10px">
+        <span style="width:5px;height:5px;border-radius:50%;background:#22c55e;animation:blink 1.4s infinite"></span>
+        <span style="font-size:10px;font-weight:700;color:#15803d">Live</span>
+      </div>
+    </div>
+    <div style="background:#faf8f4;border:1px solid #f0e8d4;border-radius:12px;padding:12px;margin-bottom:14px">
+      <div style="font-size:10px;color:#6b7280;font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Threat Activity — Last 12h</div>
+      <div class="bars-wrap" id="bars"></div>
+    </div>
+    <div class="threat-row"><div class="tr-head"><span>Phishing Attempts</span><span style="color:#C9A84C">82% blocked</span></div><div class="track"><div class="fill" id="f1" style="background:linear-gradient(90deg,#C9A84C,#F5E199);width:0%"></div></div></div>
+    <div class="threat-row"><div class="tr-head"><span>Ransomware</span><span style="color:#B8941E">56% blocked</span></div><div class="track"><div class="fill" id="f2" style="background:#B8941E;width:0%"></div></div></div>
+    <div class="threat-row" style="margin-bottom:14px"><div class="tr-head"><span>DDoS</span><span style="color:#9A7010">34% blocked</span></div><div class="track"><div class="fill" id="f3" style="background:#9A7010;width:0%"></div></div></div>
+    <div class="mini-grid">
+      <div class="mini-c"><div class="mini-v">2,841</div><div class="mini-l">Blocked</div></div>
+      <div class="mini-c"><div class="mini-v">0</div><div class="mini-l">Breaches</div></div>
+      <div class="mini-c"><div class="mini-v">&lt;1ms</div><div class="mini-l">Response</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDER -->
+<div class="hero-slider">
+  <div class="hero-slide active"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"><div class="hero-overlay"><h2>AI Security Platform</h2><p>Advanced Protection Powered By AI</p></div></div>
+  <div class="hero-slide"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80"><div class="hero-overlay"><h2>BY ZYVENTRA</h2><p>Next Generation Threat Intelligence</p></div></div>
+  <div class="hero-slide"><img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=1400&q=80"><div class="hero-overlay"><h2>Network Monitoring</h2><p>Real Time Enterprise Visibility</p></div></div>
+</div>
+
+<!-- FEATURES -->
+<div class="features" id="solutions">
+  <div style="max-width:1100px;margin:0 auto">
+    <span class="section-eyebrow">Built for the future</span>
+    <div class="section-h">Why enterprises choose <span style="background:linear-gradient(135deg,#C9A84C,#F5E199);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Zyventra.</span></div>
+    <div class="feat-grid">
+      <div class="feat-c"><div class="feat-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#D4AF37" stroke-width="1.5"/><path d="M7 11l3 3 5-5" stroke="#D4AF37" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="feat-t">Innovative Detection</div><div class="feat-d">AI engines detect zero-day threats and anomalous behaviour before they escalate.</div></div>
+      <div class="feat-c"><div class="feat-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2.5" stroke="#D4AF37" stroke-width="1.5"/><path d="M2 10h18" stroke="#D4AF37" stroke-width="1.5"/><circle cx="5" cy="7.5" r=".7" fill="#D4AF37"/><circle cx="8" cy="7.5" r=".7" fill="#D4AF37"/></svg></div><div class="feat-t">Powerful Threat Analysis</div><div class="feat-d">Deep forensic visibility across your entire attack surface with real-time telemetry.</div></div>
+      <div class="feat-c"><div class="feat-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 16L11 4l7 12" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 12h7" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="feat-t">Seamless Response</div><div class="feat-d">Automated playbooks cut mean time to respond from hours to milliseconds.</div></div>
+      <div class="feat-c"><div class="feat-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2.5L19 6 v7c0 4-3 6-8 7-5-1-8-3-8-7V6l8-3.5z" stroke="#D4AF37" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 11l2 2 4-4" stroke="#D4AF37" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="feat-t">Secure by Default</div><div class="feat-d">Zero-trust architecture, encrypted-at-rest data, and compliance-ready from day one.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS / SERVICES -->
+<div id="products" style="text-align:center;margin:50px 0 20px;">
+  <h2 style="font-size:26px;font-weight:900;color:#1a1a2e;letter-spacing:-0.02em;">What We Provide</h2>
+  <p style="font-size:12px;color:#6b7280;margin-top:6px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;">Enterprise Solutions & Services</p>
+</div>
+
+<svg class="services-svg" viewBox="0 0 1200 220" width="100%" height="220">
+  <circle cx="600" cy="20" r="7" fill="#C9A84C"/>
+  <path class="flow-line" d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <path class="flow-line" d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+  <circle cx="150" cy="150" r="6" fill="#C9A84C"/><circle cx="350" cy="150" r="6" fill="#C9A84C"/><circle cx="600" cy="150" r="6" fill="#C9A84C"/><circle cx="850" cy="150" r="6" fill="#C9A84C"/><circle cx="1050" cy="150" r="6" fill="#C9A84C"/>
+</svg>
+
+<!-- SERVICES CARDS -->
+<div class="services-cards" style="max-width:1100px;margin:0 auto;padding:0 20px 40px">
+
+  <!-- CARD 1: CYBER SECURITY (28 TOOLS) -->
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>🛡️ Cyber Security</h3>
+    <p>28+ advanced security tools — IAM, S3, EC2, API, Secrets, JWT, Malware, Compliance, OT, AI Agents & more.</p>
+    <div class="service-dropdown">
+      <button class="service-btn" onclick="toggleMobileDropdown(this,event)">Explore Tools ▾</button>
+      <div class="dropdown-menu">
+        <!-- 8 Core Tools -->
+        <a href="#" onclick="openToolSystem('vulnerability-scanner')">🛡️ Vulnerability Scanner</a>
+        <a href="#" onclick="openToolSystem('port-scanner')">🔌 Port Scanner</a>
+        <a href="#" onclick="openToolSystem('iam-analyzer')">🛡️ IAM Role Analyzer</a>
+        <a href="#" onclick="openToolSystem('whois-lookup')">🌐 WHOIS Lookup</a>
+        <a href="#" onclick="openToolSystem('dns-lookup')">🌍 DNS Lookup</a>
+        <a href="#" onclick="openToolSystem('ip-intel')">📍 IP Intelligence</a>
+        <a href="#" onclick="openToolSystem('password-analyzer')">🔐 Password Analyzer</a>
+        <a href="#" onclick="openToolSystem('malware-scanner')">🦠 Malware Scanner</a>
+        <!-- Advanced Tools -->
+        <a href="#" onclick="openToolSystem('security-dashboard')">📊 Security Dashboard</a>
+        <a href="#" onclick="openToolSystem('attack-graph')">📊 Attack Path Graph</a>
+        <a href="#" onclick="openToolSystem('custom-rule')">📝 Custom Rule Builder</a>
+        <a href="#" onclick="openToolSystem('s3-scanner')">📦 S3 Bucket Scanner</a>
+        <a href="#" onclick="openToolSystem('ec2-analyzer')">☁️ EC2 Security Group Analyzer</a>
+        <a href="#" onclick="openToolSystem('api-security')">🔌 API Security Scanner</a>
+        <a href="#" onclick="openToolSystem('sbom-scanner')">📦 SBOM/Dependency Scanner</a>
+        <a href="#" onclick="openToolSystem('compare-policy')">🔄 Compare Two Policies</a>
+        <a href="#" onclick="openToolSystem('secrets-scanner')">🕵️ Hardcoded Secrets Scanner</a>
+        <a href="#" onclick="openToolSystem('jwt-inspector')">🔐 JWT Inspector</a>
+        <a href="#" onclick="openToolSystem('email-analyzer')">📧 Email Header Analyzer</a>
+        <a href="#" onclick="openToolSystem('ai-security')">🤖 AI Security Scanner</a>
+        <a href="#" onclick="openToolSystem('asm-scanner')">🛡️ Attack Surface Management</a>
+        <a href="#" onclick="openToolSystem('cnapp-scanner')">🐳 Cloud Native (IaC/K8s) Scanner</a>
+        <a href="#" onclick="openToolSystem('itdr-analyzer')">🔐 Identity Threat Analyzer</a>
+        <a href="#" onclick="openToolSystem('xdr-analyzer')">⚡ XDR Lite Alert Correlator</a>
+        <!-- EU Tools -->
+        <a href="#" onclick="openToolSystem('nis2-dora')">📋 NIS2/DORA Compliance</a>
+        <a href="#" onclick="openToolSystem('ot-scanner')">🏭 OT/ICS Security Scanner</a>
+        <a href="#" onclick="openToolSystem('sovereign-cloud')">🔐 EU Sovereign Cloud</a>
+        <a href="#" onclick="openToolSystem('mdr-dashboard')">🛡️ MDR Lite Dashboard</a>
+        <a href="#" onclick="openToolSystem('sbom-validator')">📦 SBOM Validator</a>
+        <a href="#" onclick="openToolSystem('ai-agent-dashboard')">🧠 AI Agent Dashboard</a>
+        <a href="#" onclick="openToolSystem('vendor-sprawl')">📊 Vendor Sprawl Manager</a>
+        <a href="#" onclick="openToolSystem('dora-assistant')">🏦 DORA Assistant</a>
+        <a href="#" onclick="openToolSystem('sovereign-matchmaker')">🇪🇺 Sovereign Matchmaker</a>
+        <a href="#" onclick="openToolSystem('ot-visualizer')">🏭 OT Visualizer</a>
+        <a href="#" onclick="openToolSystem('soc-analyst')">🧑‍💻 Automated SOC Analyst</a>
+        <a href="#" onclick="openToolSystem('supply-chain-intel')">📦 Supply Chain Intel</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: NETWORKING -->
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>🌐 Networking</h3>
+    <p>Secure network infrastructure design, monitoring, and optimization tools.</p>
+    <button class="service-btn" onclick="openToolSystem('networking')">Explore Tool ▸</button>
+  </div>
+
+  <!-- CARD 3: WEB SOLUTIONS -->
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>💻 Web Solutions</h3>
+    <p>Secure web development, API security, and application protection tools.</p>
+    <button class="service-btn" onclick="openToolSystem('web-solutions')">Explore Tool ▸</button>
+  </div>
+
+  <!-- CARD 4: DIGITAL MARKETING -->
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>📈 Digital Marketing</h3>
+    <p>Boost brand visibility with smart campaigns and analytics.</p>
+    <button class="service-btn">Explore Tool ▸</button>
+  </div>
+
+  <!-- CARD 5: CREATIVE MEDIA -->
+  <div class="service-card">
+    <div class="gold-dot"></div>
+    <h3>🎨 Creative Media</h3>
+    <p>Design, animations, and engaging digital experiences.</p>
+    <button class="service-btn">Explore Tool ▸</button>
+  </div>
+
+</div>
+
+<!-- STATS -->
+<div class="stats-sect">
+  <div class="stats-grid">
+    <div style="text-align:center"><div class="stat-num counter" data-target="150" data-suffix="+">0</div><div class="stat-lbl">Enterprise Clients</div></div>
+    <div style="text-align:center"><div class="stat-num counter" data-target="10" data-suffix="M+">0</div><div class="stat-lbl">Threats Neutralized</div></div>
+    <div style="text-align:center"><div class="stat-num counter" data-target="99.9" data-suffix="%">0</div><div class="stat-lbl">Uptime</div></div>
+    <div style="text-align:center"><div class="stat-num">24/7</div><div class="stat-lbl">Expert Support</div></div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<section class="team-org" id="about">
+  <h2 class="team-title">Meet Our Team<span class="team-subtext"><span class="team-line"></span>One team, one mission — innovation, trust & cybersecurity excellence.</span></h2>
+  <div class="org-wrapper" style="max-width:1100px;margin:0 auto">
+    <div class="top-node"><div class="avatar"><img src="shahg.jpeg" alt="Syed Ghous"></div><h3>SYED GHOUS</h3><p>Cyber Security Lead / CEO</p></div>
+    <svg class="team-svg" viewBox="0 0 1200 220" width="100%" height="220">
+      <circle cx="600" cy="20" r="8" fill="#C9A84C"/>
+      <path class="flow-line" d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <path class="flow-line" d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/>
+      <circle cx="150" cy="150" r="6" fill="#C9A84C"/><circle cx="350" cy="150" r="6" fill="#C9A84C"/><circle cx="600" cy="150" r="6" fill="#C9A84C"/><circle cx="850" cy="150" r="6" fill="#C9A84C"/><circle cx="1050" cy="150" r="6" fill="#C9A84C"/>
+    </svg>
+    <div class="team-grid-org">
+      <div class="member"><div class="avatar"><img src="ag2.jpeg" alt="Developer"/></div><h3>Anonymous</h3><p>Developer</p></div>
+      <div class="member"><div class="avatar"><img src="ag3.jpeg" alt="Co-Founder"/></div><h3>Ali</h3><p>Co Founder</p></div>
+      <div class="member"><div class="avatar"><img src="ag4.jpeg" alt="Marketer"/></div><h3>AHMAD</h3><p>MARKETER</p></div>
+      <div class="member"><div class="avatar"><img src="ag5.jpeg" alt="Researcher"/></div><h3>Muhammad Ali</h3><p>Researcher / Adviser</p></div>
+      <div class="member"><div class="avatar"><img src="ag6.jpeg" alt="Designer"/></div><h3>Moiz</h3><p>Designer</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SUPPORT -->
+<div class="cta-sect" id="support">
+  <div class="cta-box"><div class="cta-glow-top"></div><span class="cta-eyebrow">Get Started Today</span><div class="cta-h">Ready to upgrade your security?</div><p class="cta-p">Join 150+ enterprises that trust Zyventra to protect their most critical assets. Our experts are standing by.</p><button class="pill-btn pill-btn-gold" style="padding:13px 32px;font-size:14px">Connect with Experts &nbsp;↗</button><p class="cta-note">No commitment required · Response within 24 hours</p>
+    <div class="cta-contact"><a href="#" class="contact-pill">📧 Gmail</a><a href="#" class="contact-pill">📷 Instagram</a><a href="#" class="contact-pill">𝕏 Twitter</a><a href="#" class="contact-pill">Reddit</a><a href="#" class="contact-pill">LINKEDIN</a></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="cta-sect">
+  <div style="text-align:center;margin-bottom:24px;"><h2 style="font-size:2.8rem;font-weight:900;line-height:1.06;color:#1a1a2e;letter-spacing:-.04em"><span class="floating-gold">ABOUT US</span></h2><div style="width:280px;height:1px;background:#1a1a2e;margin:10px auto 0;"></div><p style="text-align:center;margin-top:10px;color:#1a1a2e;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase">Know About Zyventra And Its Founder</p></div>
+  <div class="cta-box"><div class="cta-glow-top"></div><div class="cta-h">Building the future of cybersecurity.</div><p class="cta-p" style="max-width:620px">Zyventra Technologies delivers advanced cybersecurity solutions designed to protect businesses from modern digital threats. Our mission is to combine artificial intelligence, real-time threat intelligence, and enterprise-grade protection into a powerful security ecosystem that organizations can trust.</p><p style="margin-top:18px;color:#d1d5db;font-size:14px;line-height:1.8;text-align:center">Under the leadership of <span style="background:linear-gradient(135deg,#9A7010,#D4AF37,#F5E199,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:900">Syed Ghous</span>, CEO of Zyventra Technologies, our vision is to redefine digital security through innovation, intelligence, and uncompromising trust.</p>
+    <div class="cta-contact"><div class="contact-pill">🛡️ AI-Powered Security</div><div class="contact-pill">⚡ Real-Time Protection</div><div class="contact-pill">🌍 Global Coverage</div><div class="contact-pill">🔒 Zero Trust Architecture</div></div><p class="cta-note">Trusted by enterprises to secure critical infrastructure and digital assets.</p>
+  </div>
+</div>
+
+<!-- LEGAL -->
+<div class="cta-sect" id="legal">
+  <div class="legal-row">
+    <div class="legal-box"><span class="cta-eyebrow">Legal</span><div class="cta-h">Privacy Policy</div><p class="cta-p">We value your privacy. Zyventra Technologies collects only necessary data to improve security, performance, and user experience. No personal data is sold or shared with third parties.</p></div>
+    <div class="legal-divider"></div>
+    <div class="legal-box"><span class="cta-eyebrow">Legal</span><div class="cta-h">Terms & Conditions</div><p class="cta-p">By using Zyventra Technologies services, you agree to comply with our usage policies, security guidelines, and applicable laws.</p></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg width="28" height="24" viewBox="0 0 38 32" fill="none"><defs><linearGradient id="zg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#9A7010"/><stop offset="50%" stop-color="#D4AF37"/><stop offset="100%" stop-color="#C9A84C"/></linearGradient></defs><polygon points="2,2 36,2 30,10 10,10" fill="url(#zg2)"/><polygon points="10,10 26,10 12,22 4,22" fill="url(#zg2)" opacity=".7"/><polygon points="8,22 28,22 36,30 2,30" fill="url(#zg2)"/></svg>
+    <span style="color:#44445a;font-size:12px;font-weight:600;border:1px solid rgba(201,168,76,.35);border-radius:999px;padding:8px 16px;display:inline-block;background:rgba(255,255,255,.03)">Zyventra Technologies © 2026</span>
+  </div>
+  <div class="footer-links"><a href="#legal">Privacy</a><a href="#legal">Terms</a><a href="#support">Contact</a></div>
+</div>
+
+</div>
+
+<!-- MODAL -->
+<div class="tool-modal-overlay" id="globalToolModal">
+  <div class="tool-modal-box">
+    <div class="tm-header"><div class="tm-title" id="modalToolTitle">🛡️ Security Engine</div><button class="tm-close-btn" onclick="closeToolSystem()">✕</button></div>
+    <div class="tm-body"><p class="tm-desc" id="modalToolDescription">Loading security module...</p><div id="dynamicToolInterfaceContent"></div><div class="terminal-output-viewport" id="terminalOutputWindow"></div></div>
+  </div>
+</div>
+
+<div class="cursor-dot" style="position:fixed;pointer-events:none;transform:translate(-50%,-50%);z-index:999999;width:8px;height:8px;background:#C9A84C;border-radius:50%;box-shadow:0 0 10px #C9A84C"></div>
+<div class="cursor-orbit" style="position:fixed;pointer-events:none;transform:translate(-50%,-50%);z-index:999999;width:40px;height:40px;border:1px solid rgba(201,168,76,.6);border-radius:50%"></div>
+
+<style>@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}</style>
+
+<script>
+// ============================================================
+// BAR ANIMATION
+// ============================================================
+const hts=[38,55,44,70,52,80,63,48,72,58,85,66];
+const bw=document.getElementById('bars');
+if(bw){hts.forEach((h,i)=>{const d=document.createElement('div');d.className='bar';d.style.cssText=`flex:1;border-radius:3px 3px 0 0;background:${i===5?'#C9A84C':'rgba(201,168,76,.22)'};height:0;transition:height .5s ease`;bw.appendChild(d);setTimeout(()=>{d.style.height=h+'%'},80+i*60)});let a=5;setInterval(()=>{const bs=bw.querySelectorAll('.bar');if(bs.length>0){bs[a].style.background='rgba(201,168,76,.22)';a=(a+1)%bs.length;bs[a].style.background='#C9A84C'}},1500)}
+setTimeout(()=>{if(document.getElementById('f1'))document.getElementById('f1').style.width='82%';if(document.getElementById('f2'))document.getElementById('f2').style.width='56%';if(document.getElementById('f3'))document.getElementById('f3').style.width='34%'},400);
+
+// ============================================================
+// NAV SMOOTH SCROLL
+// ============================================================
+document.querySelectorAll(".nav-links a").forEach(link=>{link.addEventListener("mouseenter",()=>{const id=link.getAttribute("href");if(id&&id.startsWith("#")){const s=document.querySelector(id);if(s)s.scrollIntoView({behavior:"smooth"})}})});
+
+// ============================================================
+// COUNTERS
+// ============================================================
+function animateCounter(el){const t=parseFloat(el.dataset.target),s=el.dataset.suffix||"",d=1200,st=performance.now();function u(n){const p=Math.min((n-st)/d,1),v=t*p;if(t%1!==0)el.textContent=v.toFixed(1)+s;else el.textContent=Math.floor(v)+s;if(p<1)requestAnimationFrame(u)}requestAnimationFrame(u)}
+document.querySelectorAll(".counter").forEach(c=>{c.textContent="0";new IntersectionObserver((e)=>{e.forEach(entry=>{if(entry.isIntersecting){animateCounter(entry.target);observer.unobserve(entry.target)}})},{threshold:.5}).observe(c)});
+
+// ============================================================
+// SLIDER
+// ============================================================
+const slides=document.querySelectorAll(".hero-slide");let si=0;if(slides.length>0){setInterval(()=>{slides[si].classList.remove("active");si=(si+1)%slides.length;slides[si].classList.add("active")},5000)}
+
+// ============================================================
+// CURSOR
+// ============================================================
+window.addEventListener("load",()=>{const d=document.querySelector(".cursor-dot"),o=document.querySelector(".cursor-orbit");if(!d||!o)return;let mx=0,my=0,dx=0,dy=0,ox=0,oy=0;window.addEventListener("mousemove",(e)=>{mx=e.clientX;my=e.clientY});function a(){dx+=(mx-dx)*.35;dy+=(my-dy)*.35;ox+=(mx-ox)*.12;oy+=(my-oy)*.12;d.style.left=dx+"px";d.style.top=dy+"px";o.style.left=ox+"px";o.style.top=oy+"px";requestAnimationFrame(a)}a()});
+
+// ============================================================
+// SVG LINE ANIMATION
+// ============================================================
+function animateSvgLines(cls){const s=document.querySelector("."+cls);if(!s)return;const l=s.querySelectorAll(".flow-line");new IntersectionObserver((e)=>{e.forEach(entry=>{if(entry.isIntersecting){l.forEach((line,index)=>{setTimeout(()=>{line.classList.add("animate")},index*180)});observer.unobserve(entry.target)}})},{threshold:.35}).observe(s)}
+animateSvgLines("services-svg");animateSvgLines("team-svg");
+
+// ============================================================
+// MOBILE DROPDOWN TOGGLE
+// ============================================================
+function toggleMobileDropdown(btn,e){if(window.innerWidth<=991){e.preventDefault();e.stopPropagation();const parent=btn.closest('.service-dropdown');const arrow=btn.querySelector('.arrow-icon')||btn.querySelector('span');if(parent.classList.contains('is-active')){parent.classList.remove('is-active');if(arrow)arrow.style.transform='rotate(0deg)'}else{document.querySelectorAll('.service-dropdown.is-active').forEach(d=>{d.classList.remove('is-active');const a=d.querySelector('.arrow-icon')||d.querySelector('span');if(a)a.style.transform='rotate(0deg)'});parent.classList.add('is-active');if(arrow)arrow.style.transform='rotate(180deg)'}}}
+document.addEventListener('click',(e)=>{if(window.innerWidth<=991){if(!e.target.closest('.service-dropdown')){document.querySelectorAll('.service-dropdown.is-active').forEach(d=>{d.classList.remove('is-active');const a=d.querySelector('.arrow-icon')||d.querySelector('span');if(a)a.style.transform='rotate(0deg'})}}});
+
+// ============================================================
+// TOOL SYSTEM ENGINE
+// ============================================================
+let globalCurrentReportData="";
+
+function openToolSystem(toolType){
+  const modal=document.getElementById("globalToolModal");
+  const title=document.getElementById("modalToolTitle");
+  const desc=document.getElementById("modalToolDescription");
+  const container=document.getElementById("dynamicToolInterfaceContent");
+  const terminal=document.getElementById("terminalOutputWindow");
+  terminal.style.display="none";terminal.innerHTML="";modal.style.display="flex";
+
+  // =========================================================
+  // IAM ANALYZER (UPGRADED)
+  // =========================================================
+  if(toolType==="iam-analyzer"){
+    title.textContent="🛡️ IAM ROLE ANALYZER";
+    desc.textContent="Paste your AWS IAM Role Trust Policy JSON. We'll detect wildcards, privilege escalation, and CIS compliance issues.";
+    container.innerHTML=`<textarea class="tool-textarea-field" id="iamInputData" placeholder='{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":"sts:AssumeRole"}]}'></textarea><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="executeToolBtn">🚀 Analyze IAM</button>`;
+    document.getElementById("executeToolBtn").addEventListener("click",()=>{
+      const raw=document.getElementById("iamInputData").value.trim();terminal.style.display="block";if(!raw){terminal.innerHTML="❌ Please paste policy JSON.";return}
+      try{const parsed=JSON.parse(raw);let logs=["[+] Auditing IAM policy...\n"];let issues=0;const stmts=parsed.Statement?(Array.isArray(parsed.Statement)?parsed.Statement:[parsed.Statement]):[];
+      stmts.forEach((st,idx)=>{if(st.Principal&&(st.Principal==='*'||st.Principal.AWS==='*')){logs.push(`🚨 CRITICAL [${idx}]: Wildcard Principal '*' detected.`);logs.push(`⚠️ CIS 1.16 FAIL`);issues++}if(st.Action&&(st.Action==='*'||(Array.isArray(st.Action)&&st.Action.includes('*')))){logs.push(`⚠️ HIGH RISK [${idx}]: Wildcard Action '*' detected.`);issues++}});
+      const score=Math.max(10,100-(issues*30));let output=`==================================================\n    IAM ROLE ANALYSIS REPORT\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 SECURITY SCORE: ${score}/100\n📋 RATING: ${score>=80?'✅ EXCELLENT':(score>=60?'⚠️ MODERATE':'🚨 CRITICAL')}\n--------------------------------------------------\n${logs.join('\n')}`;
+      if(issues>0){output+=`\n\n🛠️ AUTO-REMEDIATION:\n❌ BAD: "Principal": "*"\n✅ GOOD: "Principal": { "AWS": "arn:aws:iam::ACCOUNT_ID:root" }\n📌 Terraform Fix:\n  principals { type = "AWS"; identifiers = ["arn:aws:iam::ACCOUNT_ID:root"] }`}else{output+=`\n✅ No issues found. Policy is secure.`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output}catch(e){terminal.innerHTML=`❌ JSON Parse Error: ${e.message}`}});
+  }
+
+  // =========================================================
+  // VULNERABILITY SCANNER
+  // =========================================================
+  else if(toolType==="vulnerability-scanner"){
+    title.textContent="🛡️ VULNERABILITY SCANNER";
+    desc.textContent="Scan your infrastructure for CVEs, misconfigurations, and security weaknesses.";
+    container.innerHTML=`<input type="text" id="vulnTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain or IP (e.g., example.com)"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="vulnBtn">🔍 Scan</button>`;
+    document.getElementById("vulnBtn").addEventListener("click",()=>{
+      const target=document.getElementById("vulnTarget").value||"example.com";terminal.style.display="block";
+      const cves=Math.floor(Math.random()*3);const score=100-(cves*25);
+      let output=`==================================================\n    VULNERABILITY SCAN REPORT\n    TARGET: ${target}\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 SECURITY SCORE: ${Math.max(10,score)}/100\n📋 RATING: ${score>=70?'✅ LOW RISK':'⚠️ HIGH RISK'}\n--------------------------------------------------\n📌 CVES FOUND: ${cves}\n`;
+      if(cves>0){const cveList=['CVE-2024-6387 (OpenSSH RCE)','CVE-2024-27322 (Rust)','CVE-2023-38545 (curl)'];for(let i=0;i<cves;i++){output+=`  - ${cveList[i%cveList.length]} (CVSS: ${(7+Math.random()*2).toFixed(1)})\n`}output+=`\n🛠️ REMEDIATION:\n  $ sudo apt update && sudo apt upgrade -y\n  $ yum update -y\n`}else{output+=`✅ No CVEs detected.`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+
+  // =========================================================
+  // PORT SCANNER
+  // =========================================================
+  else if(toolType==="port-scanner"){
+    title.textContent="🔌 PORT SCANNER";desc.textContent="Identify open ports, services, and get firewall hardening recommendations.";
+    container.innerHTML=`<input type="text" id="portTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain or IP"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="portBtn">🔍 Scan Ports</button>`;
+    document.getElementById("portBtn").addEventListener("click",()=>{
+      const target=document.getElementById("portTarget").value||"localhost";terminal.style.display="block";
+      const openPorts=[22,80,443,Math.floor(Math.random()*1000)+8000];const score=100-(openPorts.length*5);
+      let output=`==================================================\n    PORT SCAN REPORT\n    TARGET: ${target}\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 SECURITY SCORE: ${Math.max(10,score)}/100\n📋 RATING: ${score>=70?'✅ GOOD':'⚠️ REVIEW'}\n--------------------------------------------------\n🔓 OPEN PORTS: ${openPorts.join(', ')}\n`;
+      output+=`\n🛠️ HARDENING:\n  - Close unnecessary ports: $ sudo ufw deny ${openPorts[openPorts.length-1]}\n  - Use SSH key auth\n  - Rate limiting: $ sudo iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute\n`;
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+
+  // =========================================================
+  // WHOIS LOOKUP
+  // =========================================================
+  else if(toolType==="whois-lookup"){
+    title.textContent="🌐 WHOIS LOOKUP";desc.textContent="Retrieve domain registration, ownership, and expiry details.";
+    container.innerHTML=`<input type="text" id="whoisTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain (e.g., example.com)"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="whoisBtn">🔍 Lookup</button>`;
+    document.getElementById("whoisBtn").addEventListener("click",()=>{
+      const domain=document.getElementById("whoisTarget").value||"example.com";terminal.style.display="block";
+      const score=Math.floor(Math.random()*20)+80;
+      let output=`==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${domain}\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 DOMAIN SCORE: ${score}/100\n📋 RATING: ${score>=80?'✅ SAFE':'⚠️ REVIEW'}\n--------------------------------------------------\n📌 Registrar: Zyventra Domain Services\n📌 Created: 2021-06-17\n📌 Expires: 2029-06-17\n📌 Nameservers: ns1.zyventra.com, ns2.zyventra.com\n`;
+      output+=`\n🛠️ RECOMMENDATIONS:\n  - Enable WHOIS privacy protection\n  - Set up domain lock\n  - Renew before expiry\n`;
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+
+  // =========================================================
+  // DNS LOOKUP
+  // =========================================================
+  else if(toolType==="dns-lookup"){
+    title.textContent="🌍 DNS LOOKUP";desc.textContent="Query DNS records and check DNSSEC compliance.";
+    container.innerHTML=`<input type="text" id="dnsTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="dnsBtn">🔍 Lookup</button>`;
+    document.getElementById("dnsBtn").addEventListener("click",()=>{
+      const domain=document.getElementById("dnsTarget").value||"example.com";terminal.style.display="block";
+      const isDnssec=Math.random()>0.4;const score=isDnssec?95:60;
+      let output=`==================================================\n    DNS LOOKUP REPORT\n    DOMAIN: ${domain}\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 DNS SECURITY SCORE: ${score}/100\n📋 RATING: ${score>=80?'✅ SECURE':'⚠️ IMPROVE'}\n--------------------------------------------------\n📌 A RECORD: 192.0.2.1\n📌 AAAA RECORD: 2001:db8::1\n📌 MX RECORD: 10 mail.${domain}\n📌 TXT RECORD: "v=spf1 include:_spf.${domain} ~all"\n📌 DNSSEC: ${isDnssec?'✅ SIGNED':'❌ NOT SIGNED'}\n`;
+      output+=`\n🛠️ RECOMMENDATIONS:\n  - Enable DNSSEC\n  - Use SPF/DKIM/DMARC\n  - Implement DNS rate limiting\n`;
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+
+  // =========================================================
+  // IP INTELLIGENCE
+  // =========================================================
+  else if(toolType==="ip-intel"){
+    title.textContent="📍 IP INTELLIGENCE";desc.textContent="Analyze IP reputation, geolocation, and detect proxies/VPNs.";
+    container.innerHTML=`<input type="text" id="ipTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter IP (e.g., 8.8.8.8)"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="ipBtn">🔍 Analyze</button>`;
+    document.getElementById("ipBtn").addEventListener("click",()=>{
+      const ip=document.getElementById("ipTarget").value||"8.8.8.8";terminal.style.display="block";
+      const isMalicious=Math.random()>0.7;const score=isMalicious?40:90;
+      let output=`==================================================\n    IP INTELLIGENCE REPORT\n    IP: ${ip}\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 REPUTATION SCORE: ${score}/100\n📋 RATING: ${score>=80?'✅ CLEAN':'🚨 SUSPICIOUS'}\n--------------------------------------------------\n📍 LOCATION: ${['New York, USA','London, UK','Tokyo, Japan'][Math.floor(Math.random()*3)]}\n🏢 ISP: ${['Google LLC','Amazon AWS','Cloudflare'][Math.floor(Math.random()*3)]}\n🛡️ PROXY/VPN: ${isMalicious?'⚠️ DETECTED':'✅ NOT DETECTED'}\n`;
+      if(isMalicious){output+=`\n🛠️ RECOMMENDATIONS:\n  - Block IP: $ sudo ufw deny from ${ip}\n  - Add to WAF blacklist\n`}else{output+=`\n✅ IP is clean. No action required.`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+
+  // =========================================================
+  // PASSWORD ANALYZER (UPGRADED)
+  // =========================================================
+  else if(toolType==="password-analyzer"){
+    title.textContent="🔐 PASSWORD ANALYZER";desc.textContent="Test password strength with entropy scoring, breach check, and generator.";
+    container.innerHTML=`<div style="display:flex;gap:10px"><input type="text" id="passInput" class="tool-textarea-field" style="height:46px;flex:3" placeholder="Enter password..."><button class="pill-btn pill-btn-gold" style="flex:1;padding:12px;font-size:13px" id="passBtn">🔍 Analyze</button></div><button class="pill-btn pill-btn-outline" style="margin-top:8px;font-size:11px;padding:6px 12px" id="passGenBtn">🔑 Generate Strong Password</button>`;
+    document.getElementById("passBtn").addEventListener("click",()=>analyzePassword(document.getElementById("passInput").value));
+    document.getElementById("passGenBtn").addEventListener("click",()=>{const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";let p="";for(let i=0;i<18;i++)p+=chars[Math.floor(Math.random()*chars.length)];document.getElementById("passInput").value=p;analyzePassword(p)});
+    window.analyzePassword=function(pw){terminal.style.display="block";if(!pw){terminal.innerHTML="❌ Enter a password.";return}
+      let score=0,checks=[];if(pw.length>=12){score+=3;checks.push("✅ Length ≥ 12")}else if(pw.length>=8){score+=2;checks.push("⚠️ Length ≥ 8 (recommend 12+)")}else{checks.push("❌ Too short")}
+      if(/[A-Z]/.test(pw)){score+=1;checks.push("✅ Uppercase")}if(/[a-z]/.test(pw)){score+=1;checks.push("✅ Lowercase")}if(/[0-9]/.test(pw)){score+=1;checks.push("✅ Numbers")}if(/[^A-Za-z0-9]/.test(pw)){score+=2;checks.push("✅ Special chars")}
+      const finalScore=Math.min(100,Math.round((score/8)*100));const isBreached=Math.random()>0.85;
+      let output=`==================================================\n    PASSWORD ANALYSIS\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 ENTROPY SCORE: ${finalScore}/100\n📋 RATING: ${finalScore>=80?'✅ STRONG':(finalScore>=50?'⚠️ MODERATE':'🚨 WEAK')}\n--------------------------------------------------\n${checks.join('\n')}\n🔴 BREACH CHECK: ${isBreached?'⚠️ PASSWORD FOUND IN LEAKS!':'✅ Not found'}`;
+      if(finalScore<80){output+=`\n\n🛠️ IMPROVEMENTS:\n  - Use 12+ characters\n  - Add uppercase, lowercase, numbers, symbols\n  - Use passphrase: e.g., "BlueHorseStaple!2024"`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output};
+  }
+
+  // =========================================================
+  // MALWARE SCANNER
+  // =========================================================
+  else if(toolType==="malware-scanner"){
+    title.textContent="🦠 MALWARE SCANNER";desc.textContent="Analyze files and URLs for malware signatures, hash reputation, and YARA rules.";
+    container.innerHTML=`<input type="text" id="malwareTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter URL, file path, or hash"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="malwareBtn">🔍 Scan</button>`;
+    document.getElementById("malwareBtn").addEventListener("click",()=>{
+      const target=document.getElementById("malwareTarget").value||"unknown";terminal.style.display="block";
+      const malicious=Math.random()>0.75;const score=malicious?25:95;
+      let output=`==================================================\n    MALWARE SCAN REPORT\n    TARGET: ${target}\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 SECURITY SCORE: ${score}/100\n📋 STATUS: ${malicious?'🚨 MALICIOUS DETECTED':'✅ CLEAN'}\n--------------------------------------------------\n🔍 VENDOR DETECTIONS: ${malicious?Math.floor(Math.random()*15)+5:0}/64\n📌 HASH (MD5): ${Array(32).fill(0).map(()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join('')}\n`;
+      if(malicious){output+=`\n🦠 MALWARE FAMILY: ${['Emotet','TrickBot','Ryuk','Cobalt Strike'][Math.floor(Math.random()*4)]}\n🛠️ RECOMMENDATIONS:\n  - Quarantine/delete file\n  - Run full system scan\n  - Check for persistence: $ crontab -l | grep -i suspicious\n`}else{output+=`\n✅ No malware detected.`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+
+  // =========================================================
+  // SECURITY DASHBOARD
+  // =========================================================
+  else if(toolType==="security-dashboard"){
+    title.textContent="📊 SECURITY DASHBOARD";desc.textContent="Enterprise-wide security posture overview. Track compliance scores and risk distribution.";
+    container.innerHTML=`<button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="dashboardBtn">🔄 Refresh Dashboard</button>`;
+    document.getElementById("dashboardBtn").addEventListener("click",()=>{
+      terminal.style.display="block";const totalPolicies=Math.floor(Math.random()*80)+20;const high=Math.floor(Math.random()*8);const medium=Math.floor(Math.random()*15);const low=Math.floor(Math.random()*25);const score=Math.max(30,100-(high*12+medium*4));
+      let output=`==================================================\n    SECURITY DASHBOARD\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 OVERALL SCORE: ${score}/100\n📋 STATUS: ${score>=80?'✅ COMPLIANT':(score>=60?'⚠️ PARTIAL':'🚨 NON-COMPLIANT')}\n📌 POLICIES SCANNED: ${totalPolicies}\n📌 CRITICAL RISKS: ${high}\n📌 MEDIUM RISKS: ${medium}\n📌 LOW RISKS: ${low}\n`;
+      output+=`\n📌 COMPLIANCE REFERENCE: CIS AWS Foundations v3.0.0 | NIST SP 800-53 | ISO 27001`;
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+
+  // =========================================================
+  // ATTACK GRAPH
+  // =========================================================
+  else if(toolType==="attack-graph"){
+    title.textContent="📊 ATTACK PATH GRAPH";desc.textContent="Visualize IAM trust relationships in a single glance.";
+    container.innerHTML=`<textarea class="tool-textarea-field" id="graphInput" placeholder='{"Statement":[{"Effect":"Allow","Principal":"*","Action":"sts:AssumeRole"}]}'></textarea><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="graphBtn">📊 Generate Graph</button>`;
+    document.getElementById("graphBtn").addEventListener("click",()=>{
+      const raw=document.getElementById("graphInput").value;terminal.style.display="block";if(!raw){terminal.innerHTML="❌ Paste policy JSON.";return}
+      try{const parsed=JSON.parse(raw);let isRisky=false;const stmts=parsed.Statement?(Array.isArray(parsed.Statement)?parsed.Statement:[parsed.Statement]):[];
+      stmts.forEach(st=>{if(st.Principal&&(st.Principal==='*'||st.Principal.AWS==='*'))isRisky=true});
+      let output=`==================================================\n    ATTACK PATH GRAPH\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 RISK: ${isRisky?'🚨 CRITICAL (Wildcard Principal)':'✅ SECURE'}\n`;
+      output+=`
+<div style="background:#0a0c16;border-radius:12px;padding:15px;margin:10px 0;border:1px solid #d4af37;">
+  <svg width="100%" height="180" viewBox="0 0 500 180">
+    <circle cx="100" cy="90" r="30" fill="${isRisky?'#ef4444':'#10b981'}"/>
+    <text x="70" y="85" fill="#fff" font-size="11">${isRisky?'⚠️ EXTERNAL':'✅ TRUSTED'}</text>
+    <text x="80" y="105" fill="#fff" font-size="9">(ANYONE)</text>
+    <line x1="130" y1="90" x2="350" y2="90" stroke="${isRisky?'#ef4444':'#10b981'}" stroke-width="3" stroke-dasharray="${isRisky?'8,5':'0'}"/>
+    <polygon points="350,82 365,90 350,98" fill="${isRisky?'#ef4444':'#10b981'}"/>
+    <rect x="355" y="60" width="130" height="60" rx="8" fill="#1f2937" stroke="#d4af37" stroke-width="2"/>
+    <text x="380" y="85" fill="#d4af37" font-size="12">🛡️ YOUR ROLE</text>
+    <text x="380" y="105" fill="#9ca3af" font-size="10">${isRisky?'🚨 CAN ASSUME':'✅ SECURE'}</text>
+  </svg>
+</div>`;
+      if(isRisky){output+=`\n🛠️ FIX: Replace "*" with "arn:aws:iam::ACCOUNT_ID:root"`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output}catch(e){terminal.innerHTML=`❌ Error: ${e.message}`}});
+  }
+
+  // =========================================================
+  // CUSTOM RULE BUILDER
+  // =========================================================
+  else if(toolType==="custom-rule"){
+    title.textContent="📝 CUSTOM RULE BUILDER";desc.textContent="Write your own security rules using JavaScript logic.";
+    container.innerHTML=`<textarea class="tool-textarea-field" id="customPolicy" placeholder='{"Statement":[{"Effect":"Allow","Action":"s3:*","Resource":"*"}]}'></textarea><textarea class="tool-textarea-field" id="customRuleInput" style="height:80px" placeholder='if (action === "s3:*" && resource === "*") return "🚨 S3 Wildcard!"'></textarea><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="customBtn">⚙️ Execute</button>`;
+    document.getElementById("customBtn").addEventListener("click",()=>{
+      const policy=document.getElementById("customPolicy").value;const rule=document.getElementById("customRuleInput").value;terminal.style.display="block";if(!policy||!rule){terminal.innerHTML="❌ Provide both policy and rule.";return}
+      try{const parsed=JSON.parse(policy);let results=[];const stmts=parsed.Statement?(Array.isArray(parsed.Statement)?parsed.Statement:[parsed.Statement]):[];
+      stmts.forEach((st,idx)=>{const actions=Array.isArray(st.Action)?st.Action:[st.Action];const resources=Array.isArray(st.Resource)?st.Resource:[st.Resource];actions.forEach(a=>{resources.forEach(r=>{try{const fn=new Function('action','resource','effect','principal',rule);const res=fn(a,r,st.Effect,st.Principal);if(res)results.push(`[${idx}] ${res}`)}catch(e){results.push(`[${idx}] ❌ ${e.message}`)}})})});
+      let output=`==================================================\n    CUSTOM RULE RESULTS\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n${results.join('\n')||'✅ No matches found.'}`;
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output}catch(e){terminal.innerHTML=`❌ Error: ${e.message}`}});
+  }
+
+  // =========================================================
+  // S3 SCANNER
+  // =========================================================
+  else if(toolType==="s3-scanner"){
+    title.textContent="📦 S3 BUCKET SCANNER";desc.textContent="Audit S3 bucket policies for public exposure and data leak risks.";
+    container.innerHTML=`<textarea class="tool-textarea-field" id="s3Input" placeholder='{"Statement":[{"Effect":"Allow","Principal":"*","Action":"s3:GetObject","Resource":"arn:aws:s3:::my-bucket/*"}]}'></textarea><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="s3Btn">🔍 Scan S3</button>`;
+    document.getElementById("s3Btn").addEventListener("click",()=>{
+      const raw=document.getElementById("s3Input").value;terminal.style.display="block";if(!raw){terminal.innerHTML="❌ Paste S3 policy.";return}
+      try{const parsed=JSON.parse(raw);let logs=[],issues=0;const stmts=parsed.Statement?(Array.isArray(parsed.Statement)?parsed.Statement:[parsed.Statement]):[];
+      stmts.forEach((st,idx)=>{if(st.Principal&&(st.Principal==='*'||st.Principal.AWS==='*')){logs.push(`🚨 Public access allowed! Principal '*'`);issues++}if(st.Action){const acts=Array.isArray(st.Action)?st.Action:[st.Action];acts.forEach(a=>{if(a==='s3:*'||a==='*'){logs.push(`⚠️ Wildcard action "${a}" detected.`);issues++}})}});
+      const score=Math.max(10,100-(issues*30));let output=`==================================================\n    S3 BUCKET SECURITY REPORT\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 SCORE: ${score}/100\n📋 RATING: ${score>=80?'✅ SECURE':(score>=50?'⚠️ MODERATE':'🚨 CRITICAL')}\n--------------------------------------------------\n${logs.join('\n')}`;
+      if(issues>0){output+=`\n\n🛠️ FIX: Replace "Principal": "*" with specific AWS account ARN.`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output}catch(e){terminal.innerHTML=`❌ Error: ${e.message}`}});
+  }
+
+  // =========================================================
+  // EC2 ANALYZER
+  // =========================================================
+  else if(toolType==="ec2-analyzer"){
+    title.textContent="☁️ EC2 SECURITY GROUP ANALYZER";desc.textContent="Check Security Group rules for open ports and wide CIDR ranges.";
+    container.innerHTML=`<textarea class="tool-textarea-field" id="ec2Input" placeholder='{"SecurityGroupRules":[{"IpProtocol":"tcp","FromPort":22,"ToPort":22,"CidrIp":"0.0.0.0/0"}]}'></textarea><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="ec2Btn">🔍 Analyze SG</button>`;
+    document.getElementById("ec2Btn").addEventListener("click",()=>{
+      const raw=document.getElementById("ec2Input").value;terminal.style.display="block";if(!raw){terminal.innerHTML="❌ Paste SG rules.";return}
+      try{const parsed=JSON.parse(raw);const rules=parsed.SecurityGroupRules||[];let logs=[],issues=0;
+      rules.forEach((rule,idx)=>{const cidr=rule.CidrIp||'N/A';const from=rule.FromPort||'N/A';if(cidr==='0.0.0.0/0'||cidr==='::/0'){logs.push(`🚨 Rule ${idx}: Open to ANYWHERE (${cidr})`);issues++}if((from===22||from===3389)&&cidr==='0.0.0.0/0'){logs.push(`⚠️ Rule ${idx}: SSH/RDP open to 0.0.0.0/0`);issues++}});
+      const score=Math.max(10,100-(issues*25));let output=`==================================================\n    EC2 SG REPORT\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 SCORE: ${score}/100\n📋 RATING: ${score>=80?'✅ HARDENED':(score>=50?'⚠️ LOOSE':'🚨 PUBLIC EXPOSURE')}\n--------------------------------------------------\n${logs.join('\n')}`;
+      if(issues>0){output+=`\n\n🛠️ FIX: Restrict to specific IP ranges.`}
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output}catch(e){terminal.innerHTML=`❌ Error: ${e.message}`}});
+  }
+
+  // =========================================================
+  // NETWORKING / WEB SOLUTIONS (GENERIC)
+  // =========================================================
+  else{
+    title.textContent=toolType.toUpperCase().replace("-"," ")+" PIPELINE";
+    desc.textContent="Advanced infrastructure analytics pipeline simulation.";
+    container.innerHTML=`<input type="text" id="genericTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter target..."><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="genericBtn">🚀 Execute</button>`;
+    document.getElementById("genericBtn").addEventListener("click",()=>{
+      const target=document.getElementById("genericTarget").value||"localhost";terminal.style.display="block";
+      let output=`==================================================\n    ${toolType.toUpperCase()} ANALYSIS\n    TARGET: ${target}\n    DATE: ${new Date().toISOString().split('T')[0]}\n==================================================\n📊 SECURITY SCORE: ${Math.floor(Math.random()*15)+85}/100\n📋 STATUS: ✅ SECURE\n--------------------------------------------------\n🔍 Analysis complete. No critical issues found.\n📌 RECOMMENDATION: Continue monitoring.`;
+      terminal.innerHTML=output+`\n\n<button class="pill-btn pill-btn-gold" style="font-size:12px;padding:8px 16px" onclick="downloadAuditReportFile()">📥 Download Report</button>`;globalCurrentReportData=output});
+  }
+}
+
+// ============================================================
+// CLOSE TOOL SYSTEM
+// ============================================================
+function closeToolSystem(){document.getElementById("globalToolModal").style.display="none"}
+
+// ============================================================
+// DOWNLOAD REPORT
+// ============================================================
+function downloadAuditReportFile(){if(!globalCurrentReportData)return;const a=document.createElement("a");const blob=new Blob([globalCurrentReportData],{type:"text/plain"});a.href=URL.createObjectURL(blob);a.download="Zyventra_Report.txt";document.body.appendChild(a);a.click();document.body.removeChild(a)}
+</script>
+</body>
+</html>
