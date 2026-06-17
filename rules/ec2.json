@@ -1,0 +1,18 @@
+[
+  {
+    "id": "EC2-001",
+    "name": "EC2 Security Group World Open",
+    "severity": "critical",
+    "patterns": ["\"CidrIp\": \"0.0.0.0/0\"", "\"CidrIp\": \"::/0\""],
+    "suggestion": "Restrict to specific IP ranges like 192.168.0.0/16",
+    "reference": "CIS 4.1"
+  },
+  {
+    "id": "EC2-002",
+    "name": "EC2 SSH Port Open to World",
+    "severity": "high",
+    "patterns": ["\"FromPort\": 22", "\"ToPort\": 22"],
+    "suggestion": "Restrict SSH access to bastion or VPN IPs",
+    "reference": "CIS 4.1"
+  }
+]
