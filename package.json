@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Infrastructure intelligence platform — 3-way truth reconciliation engine (Intent, State, Cloud)",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "build": "ncc build index.js -o dist",
-    "test": "node tests/run.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "ncc build index.js -o dist"
   },
   "dependencies": {
+    "commander": "^12.1.0",
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.1.0",
     "execa": "^8.0.0",
