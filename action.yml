@@ -1,0 +1,24 @@
+name: 'Zyventra PR Impact Analyzer'
+description: 'Analyze infrastructure changes in PRs and post observable structure comments.'
+author: 'Zyventra Technologies'
+branding:
+  icon: 'shield'
+  color: 'yellow'
+
+inputs:
+  github-token:
+    description: 'GitHub token for commenting'
+    required: true
+    default: ${{ github.token }}
+  scan-paths:
+    description: 'Comma-separated file patterns to scan'
+    required: false
+    default: '**.tf,**.json,**.yaml,**.yml'
+  verbose:
+    description: 'Enable verbose logging'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
