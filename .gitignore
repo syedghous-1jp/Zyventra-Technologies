@@ -1,0 +1,5 @@
+-node_modules/
+.zyventra-cache/
+*.log
+.DS_Store
+dist/
