@@ -1,0 +1,18 @@
+[
+  {
+    "id": "S3-001",
+    "name": "S3 Public Access",
+    "severity": "critical",
+    "patterns": ["\"Principal\": \"*\"", "\"publicly_accessible\": true"],
+    "suggestion": "Set publicly_accessible = false or restrict Principal",
+    "reference": "CIS 2.1.1"
+  },
+  {
+    "id": "S3-002",
+    "name": "S3 Wildcard Action",
+    "severity": "high",
+    "patterns": ["\"Action\": \"s3:*\""],
+    "suggestion": "Use specific s3:GetObject, s3:PutObject, etc.",
+    "reference": "CIS 2.1.1"
+  }
+]
