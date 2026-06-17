@@ -1,24 +1,21 @@
-name: 'Zyventra PR Impact Analyzer'
-description: 'Analyze infrastructure changes in PRs and post observable structure comments.'
+name: 'Zyventra Cloud Security Scanner'
+description: 'Scan your IaC code and live cloud infrastructure for security drifts and misconfigurations.'
 author: 'Zyventra Technologies'
-branding:
-  icon: 'shield'
-  color: 'yellow'
 
 inputs:
-  github-token:
-    description: 'GitHub token for commenting'
-    required: true
-    default: ${{ github.token }}
-  scan-paths:
-    description: 'Comma-separated file patterns to scan'
+  terraform_state:
+    description: 'Path to the terraform.tfstate file'
     required: false
-    default: '**.tf,**.json,**.yaml,**.yml'
-  verbose:
-    description: 'Enable verbose logging'
+    default: 'terraform.tfstate'
+  rules_dir:
+    description: 'Path to the security rules directory'
     required: false
-    default: 'false'
+    default: 'rules'
 
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'node20'
+  main: 'index.js'
+
+branding:
+  icon: 'shield'
+  color: 'green'
