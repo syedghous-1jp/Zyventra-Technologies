@@ -1,0 +1,17 @@
+{
+  "short_name": "Zyventra",
+  "name": "Zyventra Security Suite",
+  "description": "Zyventra Technologies Automated Cybersecurity Scanner and Tools",
+  "icons": [
+    {
+      "src": "/zyventra-icon-logo.png",
+      "type": "image/png",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0c0c0d",
+  "theme_color": "#00ffcc",
+  "display": "standalone",
+  "orientation": "portrait"
+}
