@@ -7,7 +7,8 @@
   <!-- PWA Manifest -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" id="themeColorMeta" content="#fbf9f4">
-  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Zyventra · Dashboard</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -3038,10 +3039,28 @@ Jeden Tag taucht ein neuer Angriff oder eine neue Technik auf. Bleibe am Ball, b
   // =============================================
   // 14. PWA INSTALL LOGIC (unchanged)
   // =============================================
-  if ('serviceWorker' in navigator) {
+ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('SW Registered!', reg))
+        .then(reg => {
+          console.log('SW Registered!', reg);
+          
+          // Har baar load hone par naye update ke liye check karega
+          reg.update();
+
+          reg.onupdatefound = () => {
+            const installingWorker = reg.installing;
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  // Naya version milte hi app page ko auto-refresh kar degi
+                  console.log('New version detected! Reloading app...');
+                  window.location.reload();
+                }
+              }
+            };
+          };
+        })
         .catch(err => console.log('SW Error:', err));
     });
   }
