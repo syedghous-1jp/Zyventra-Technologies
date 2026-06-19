@@ -34,11 +34,24 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Fetch Requests ko handle karna
+// 3. Fetch Requests ko handle karna (Network-First Strategy)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
+    // Pehle hamesha internet (network) se naya data fetch karne ki koshish karega
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Agar network sahi chal raha hai, toh naya response cache mein save karein aur return karein
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Agar internet nahi chal raha (offline hai), toh cache se file uthaye
+        return caches.match(event.request);
+      })
   );
 });
