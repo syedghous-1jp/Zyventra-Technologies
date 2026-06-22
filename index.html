@@ -1408,12 +1408,12 @@ function openToolSystem(toolType) {
     });
     setTimeout(hideLoader, 300);
   }
-        // ==========================================
-  // WHOIS LOOKUP - REAL (Raw Text)
+          // ==========================================
+  // WHOIS LOOKUP - REAL (whoisjson.com)
   // ==========================================
   else if (toolType === "whois-lookup") {
     title.textContent = "🌐 WHOIS LOOKUP (REAL)";
-    desc.textContent = "Retrieve real domain registration details via WHOIS (raw text).";
+    desc.textContent = "Retrieve real domain registration details via WHOIS API.";
     container.innerHTML = `
       <input type="text" id="whoisTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain (e.g., google.com)">
       <button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="whoisBtn">🔍 Lookup</button>
@@ -1434,11 +1434,19 @@ function openToolSystem(toolType) {
           terminal.style.display = "block";
           terminal.innerHTML = `❌ Error: ${data.error}`;
         } else {
-          let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${domain}\n==================================================\n\n`;
+          let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${data.domain || domain}\n==================================================\n\n`;
           
-          // Show raw WHOIS data
-          if (data.data && data.data.raw) {
-            output += data.data.raw;
+          const whoisData = data.data;
+          if (whoisData && whoisData.whois) {
+            const fields = whoisData.whois;
+            output += `📌 Registrar: ${fields.registrar || 'N/A'}\n`;
+            output += `📌 Creation Date: ${fields.creation_date || fields.creationDate || 'N/A'}\n`;
+            output += `📌 Expiration Date: ${fields.expiration_date || fields.expirationDate || 'N/A'}\n`;
+            output += `📌 Name Servers: ${fields.name_servers ? fields.name_servers.join(', ') : fields.nameServers ? fields.nameServers.join(', ') : 'N/A'}\n`;
+            output += `📌 Status: ${fields.status || 'N/A'}\n`;
+            output += `📌 Domain Age: ${fields.age || 'N/A'}\n`;
+          } else if (whoisData && whoisData.raw) {
+            output += whoisData.raw;
           } else {
             output += "No WHOIS data found.\n";
           }
