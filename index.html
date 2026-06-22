@@ -1408,12 +1408,12 @@ function openToolSystem(toolType) {
     });
     setTimeout(hideLoader, 300);
   }
-         // ==========================================
-  // WHOIS LOOKUP - REAL (ip-api.com)
+  // ==========================================
+  // WHOIS LOOKUP - REAL (whois-api.com)
   // ==========================================
   else if (toolType === "whois-lookup") {
     title.textContent = "🌐 WHOIS LOOKUP (REAL)";
-    desc.textContent = "Retrieve real WHOIS data (raw text).";
+    desc.textContent = "Retrieve real domain registration details via WHOIS API.";
     container.innerHTML = `
       <input type="text" id="whoisTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain (e.g., google.com)">
       <button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="whoisBtn">🔍 Lookup</button>
@@ -1436,8 +1436,26 @@ function openToolSystem(toolType) {
         } else {
           let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${data.domain || domain}\n==================================================\n\n`;
           
-          if (data.data && data.data.raw) {
-            output += data.data.raw;
+          const whoisData = data.data;
+          if (whoisData) {
+            // Try structured fields
+            const registrar = whoisData.registrar || whoisData.Registrar || 'N/A';
+            const creationDate = whoisData.creation_date || whoisData.CreationDate || whoisData.creationDate || 'N/A';
+            const expiryDate = whoisData.expiration_date || whoisData.ExpirationDate || whoisData.expirationDate || 'N/A';
+            const nameServers = whoisData.name_servers || whoisData.NameServers || 'N/A';
+            const status = whoisData.status || whoisData.Status || 'N/A';
+            
+            output += `📌 Registrar: ${registrar}\n`;
+            output += `📌 Creation Date: ${creationDate}\n`;
+            output += `📌 Expiration Date: ${expiryDate}\n`;
+            output += `📌 Name Servers: ${Array.isArray(nameServers) ? nameServers.join(', ') : nameServers}\n`;
+            output += `📌 Status: ${Array.isArray(status) ? status.join(', ') : status}\n`;
+            
+            // Raw fallback
+            if (registrar === 'N/A' && creationDate === 'N/A') {
+              output += '\n⚠️ No structured data found. Raw response:\n';
+              output += JSON.stringify(whoisData, null, 2);
+            }
           } else {
             output += "No WHOIS data found.\n";
           }
