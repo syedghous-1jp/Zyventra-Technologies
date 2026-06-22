@@ -1408,8 +1408,8 @@ function openToolSystem(toolType) {
     });
     setTimeout(hideLoader, 300);
   }
-   // ==========================================
-  // WHOIS LOOKUP - REAL (whoisjson.com)
+    // ==========================================
+  // WHOIS LOOKUP - FINAL WORKING VERSION
   // ==========================================
   else if (toolType === "whois-lookup") {
     title.textContent = "🌐 WHOIS LOOKUP (REAL)";
@@ -1433,29 +1433,54 @@ function openToolSystem(toolType) {
           const terminal = document.getElementById("terminalOutputWindow");
           terminal.style.display = "block";
           terminal.innerHTML = `❌ Error: ${data.error}`;
-        } else {
-          let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${data.domain || domain}\n==================================================\n\n`;
-          
-          const whoisData = data.data;
-          if (whoisData && whoisData.whois) {
-            const fields = whoisData.whois;
-            output += `📌 Registrar: ${fields.registrar || fields.Registrar || 'N/A'}\n`;
-            output += `📌 Creation Date: ${fields.creation_date || fields.CreationDate || fields.creationDate || 'N/A'}\n`;
-            output += `📌 Expiration Date: ${fields.expiration_date || fields.ExpirationDate || fields.expirationDate || 'N/A'}\n`;
-            output += `📌 Name Servers: ${fields.name_servers ? fields.name_servers.join(', ') : fields.NameServers ? fields.NameServers.join(', ') : 'N/A'}\n`;
-            output += `📌 Status: ${fields.status || fields.Status || 'N/A'}\n`;
-            output += `📌 Domain Age: ${fields.age || 'N/A'}\n`;
-          } else if (whoisData && whoisData.raw) {
-            output += whoisData.raw;
-          } else {
-            output += "No WHOIS data found.\n";
-          }
-          
+          return;
+        }
+        
+        let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${data.domain || domain}\n==================================================\n\n`;
+        
+        const whoisData = data.data;
+        
+        // If we have raw text
+        if (whoisData && whoisData.raw) {
+          output += whoisData.raw;
           const terminal = document.getElementById("terminalOutputWindow");
           terminal.style.display = "block";
           terminal.innerHTML = output;
           globalCurrentReportData = output;
+          return;
         }
+        
+        // If we have structured data
+        if (whoisData) {
+          // Try different possible structures
+          const fields = whoisData.whois || whoisData;
+          
+          const registrar = fields.registrar || fields.Registrar || fields.registrant || 'N/A';
+          const creationDate = fields.creation_date || fields.CreationDate || fields.creationDate || fields.created || 'N/A';
+          const expiryDate = fields.expiration_date || fields.ExpirationDate || fields.expirationDate || fields.expires || 'N/A';
+          const nameServers = fields.name_servers || fields.NameServers || fields.nameservers || 'N/A';
+          const status = fields.status || fields.Status || 'N/A';
+          
+          output += `📌 Registrar: ${registrar}\n`;
+          output += `📌 Creation Date: ${creationDate}\n`;
+          output += `📌 Expiration Date: ${expiryDate}\n`;
+          output += `📌 Name Servers: ${Array.isArray(nameServers) ? nameServers.join(', ') : nameServers}\n`;
+          output += `📌 Status: ${Array.isArray(status) ? status.join(', ') : status}\n`;
+          
+          // If all fields are N/A, show raw data
+          if (registrar === 'N/A' && creationDate === 'N/A' && expiryDate === 'N/A') {
+            output += '\n⚠️ Raw WHOIS data:\n';
+            output += JSON.stringify(whoisData, null, 2);
+          }
+        } else {
+          output += "No WHOIS data found.\n";
+        }
+        
+        const terminal = document.getElementById("terminalOutputWindow");
+        terminal.style.display = "block";
+        terminal.innerHTML = output;
+        globalCurrentReportData = output;
+        
       } catch (error) {
         hideLoader();
         const terminal = document.getElementById("terminalOutputWindow");
