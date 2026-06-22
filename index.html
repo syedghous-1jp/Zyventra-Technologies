@@ -1409,7 +1409,7 @@ function openToolSystem(toolType) {
     setTimeout(hideLoader, 300);
   }
          // ==========================================
-  // WHOIS LOOKUP - REAL (Raw Text)
+  // WHOIS LOOKUP - REAL (ip-api.com)
   // ==========================================
   else if (toolType === "whois-lookup") {
     title.textContent = "🌐 WHOIS LOOKUP (REAL)";
@@ -1437,7 +1437,6 @@ function openToolSystem(toolType) {
           let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${data.domain || domain}\n==================================================\n\n`;
           
           if (data.data && data.data.raw) {
-            // Show raw WHOIS data
             output += data.data.raw;
           } else {
             output += "No WHOIS data found.\n";
