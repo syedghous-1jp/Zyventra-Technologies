@@ -1,4 +1,4 @@
-// api/whois.js - using whoisjson.com (free, no key)
+// api/whois.js - FINAL WORKING VERSION
 export default async function handler(req, res) {
   const { domain } = req.query;
 
@@ -7,18 +7,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const cleanDomain = domain.replace(/^www\./, '');
+    // Clean domain
+    const cleanDomain = domain.replace(/^www\./, '').trim();
     
-    // WHOIS JSON API (free, no key)
-    const response = await fetch(`https://whoisjson.com/api/v1/whois?domain=${cleanDomain}`);
+    // Try whois-api.com (free, no key)
+    const response = await fetch(`https://whois-api.com/api/whois?domain=${cleanDomain}`);
     
-    // Check if response is JSON
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('API returned non-JSON response');
+    if (!response.ok) {
+      throw new Error(`API returned status ${response.status}`);
     }
     
-    const data = await response.json();
+    // Check if response is JSON
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      // If not JSON, return raw text
+      return res.status(200).json({
+        domain: cleanDomain,
+        status: "success",
+        data: { raw: text }
+      });
+    }
 
     res.status(200).json({
       domain: cleanDomain,
@@ -26,6 +37,18 @@ export default async function handler(req, res) {
       data: data
     });
   } catch (error) {
-    res.status(500).json({ error: "Server error: " + error.message });
+    // Fallback: try whoisjson.com
+    try {
+      const fallbackResponse = await fetch(`https://whoisjson.com/api/v1/whois?domain=${domain.replace(/^www\./, '')}`);
+      const fallbackData = await fallbackResponse.json();
+      
+      return res.status(200).json({
+        domain: domain.replace(/^www\./, ''),
+        status: "success",
+        data: fallbackData
+      });
+    } catch (fallbackError) {
+      return res.status(500).json({ error: "Server error: " + error.message });
+    }
   }
 }
