@@ -1408,22 +1408,59 @@ function openToolSystem(toolType) {
     });
     setTimeout(hideLoader, 300);
   }
-    // WHOIS Lookup
-    else if (toolType === "whois-lookup") {
-        title.textContent = "🌐 WHOIS LOOKUP";
-        desc.textContent = "Retrieve domain registration details.";
-        container.innerHTML = `<input type="text" id="whoisTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="whoisBtn">🔍 Lookup</button>`;
-        document.getElementById("whoisBtn").addEventListener("click", () => {
-            const domain = document.getElementById("whoisTarget").value || "example.com";
-            showLoader(`Looking up WHOIS for ${domain}...`);
-            setTimeout(() => {
-                const findings = [`📌 DOMAIN: ${domain}`, `📌 Registrar: Zyventra Domain Services`, `📌 Created: ${new Date(Date.now() - 31536000000 * 4).toISOString().split('T')[0]}`, `📌 Expires: ${new Date(Date.now() + 31536000000 * 3).toISOString().split('T')[0]}`, `📌 Status: clientTransferProhibited`];
-                const score = 85;
-                buildOutput("WHOIS LOOKUP REPORT", findings, score, "Enable WHOIS privacy protection\nSet up domain lock\nRenew before expiry", "ICANN Security Framework");
-            }, 1200);
-        });
-        setTimeout(hideLoader, 300);
-    }
+     // ==========================================
+  // WHOIS LOOKUP - REAL (whois-api.com)
+  // ==========================================
+  else if (toolType === "whois-lookup") {
+    title.textContent = "🌐 WHOIS LOOKUP (REAL)";
+    desc.textContent = "Retrieve real domain registration details via WHOIS API.";
+    container.innerHTML = `
+      <input type="text" id="whoisTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain (e.g., google.com)">
+      <button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="whoisBtn">🔍 Lookup</button>
+    `;
+    document.getElementById("whoisBtn").addEventListener("click", async () => {
+      const domain = document.getElementById("whoisTarget").value || "example.com";
+      
+      showLoader(`Looking up WHOIS for ${domain}...`);
+      
+      try {
+        const response = await fetch(`/api/whois?domain=${domain}`);
+        const data = await response.json();
+        
+        hideLoader();
+        
+        if (data.error) {
+          const terminal = document.getElementById("terminalOutputWindow");
+          terminal.style.display = "block";
+          terminal.innerHTML = `❌ Error: ${data.error}`;
+        } else {
+          let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${domain}\n==================================================\n`;
+          
+          const whoisData = data.data;
+          if (whoisData) {
+            output += `📌 Registrar: ${whoisData.registrar || 'N/A'}\n`;
+            output += `📌 Creation Date: ${whoisData.creation_date || 'N/A'}\n`;
+            output += `📌 Expiration Date: ${whoisData.expiration_date || 'N/A'}\n`;
+            output += `📌 Name Servers: ${whoisData.name_servers ? whoisData.name_servers.join(', ') : 'N/A'}\n`;
+            output += `📌 Status: ${whoisData.status || 'N/A'}\n`;
+          } else {
+            output += "No WHOIS data found.\n";
+          }
+          
+          const terminal = document.getElementById("terminalOutputWindow");
+          terminal.style.display = "block";
+          terminal.innerHTML = output;
+          globalCurrentReportData = output;
+        }
+      } catch (error) {
+        hideLoader();
+        const terminal = document.getElementById("terminalOutputWindow");
+        terminal.style.display = "block";
+        terminal.innerHTML = `❌ Error: ${error.message}`;
+      }
+    });
+    setTimeout(hideLoader, 300);
+  }
     // IP Intelligence
     else if (toolType === "ip-intel") {
         title.textContent = "📍 IP INTELLIGENCE";
