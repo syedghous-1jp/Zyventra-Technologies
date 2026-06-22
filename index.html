@@ -1344,23 +1344,70 @@ function openToolSystem(toolType) {
         });
         setTimeout(hideLoader, 300);
     }
-    // DNS Lookup
-    else if (toolType === "dns-lookup") {
-        title.textContent = "🌍 DNS LOOKUP";
-        desc.textContent = "Query DNS records and DNSSEC compliance.";
-        container.innerHTML = `<input type="text" id="dnsTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain"><button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="dnsBtn">🔍 Lookup</button>`;
-        document.getElementById("dnsBtn").addEventListener("click", () => {
-            const domain = document.getElementById("dnsTarget").value || "example.com";
-            showLoader(`Querying DNS for ${domain}...`);
-            setTimeout(() => {
-                const isDnssec = Math.random() > 0.4;
-                const findings = [`📌 A RECORD: 192.0.2.${Math.floor(Math.random() * 255) + 1}`, `📌 MX RECORD: 10 mail.${domain}`, `📌 TXT RECORD: "v=spf1 include:_spf.${domain} ~all"`, `📌 DNSSEC: ${isDnssec ? '✅ SIGNED' : '❌ NOT SIGNED'}`];
-                const score = isDnssec ? 95 : 60;
-                buildOutput("DNS LOOKUP REPORT", findings, score, isDnssec ? "✅ DNSSEC enabled" : "Enable DNSSEC\nUse SPF/DKIM/DMARC\nImplement DNS rate limiting", isDnssec ? "NIST SP 800-81-2" : "NIST SP 800-81-2");
-            }, 1300);
-        });
-        setTimeout(hideLoader, 300);
-    }
+     // ==========================================
+  // DNS LOOKUP - REAL (Google DNS API)
+  // ==========================================
+  else if (toolType === "dns-lookup") {
+    title.textContent = "🌍 DNS LOOKUP (REAL)";
+    desc.textContent = "Query real DNS records (A, MX, TXT, CNAME, etc.) via Google DNS API.";
+    container.innerHTML = `
+      <input type="text" id="dnsTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain (e.g., google.com)">
+      <button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="dnsBtn">🔍 Lookup</button>
+    `;
+    document.getElementById("dnsBtn").addEventListener("click", async () => {
+      const domain = document.getElementById("dnsTarget").value || "example.com";
+      
+      // Show loader
+      showLoader(`Querying DNS for ${domain}...`);
+      
+      try {
+        // REAL API CALL to Vercel backend
+        const response = await fetch(`/api/dns-lookup?domain=${domain}`);
+        const data = await response.json();
+        
+        // Hide loader
+        hideLoader();
+        
+        if (data.error) {
+          // Show error in terminal
+          const terminal = document.getElementById("terminalOutputWindow");
+          terminal.style.display = "block";
+          terminal.innerHTML = `❌ Error: ${data.error}`;
+        } else {
+          // Format the output nicely
+          let output = `==================================================\n    DNS LOOKUP REPORT\n    DOMAIN: ${domain}\n==================================================\n`;
+          
+          // Parse the DNS records
+          const records = data.records;
+          if (records.Answer) {
+            records.Answer.forEach(record => {
+              output += `${record.type} RECORD: ${record.data}\n`;
+            });
+          } else {
+            output += "No records found.\n";
+          }
+          
+          // Show DNSSEC status if available
+          if (records.AD === true) output += "✅ DNSSEC: SIGNED\n";
+          else output += "⚠️ DNSSEC: NOT SIGNED\n";
+          
+          // Show in terminal
+          const terminal = document.getElementById("terminalOutputWindow");
+          terminal.style.display = "block";
+          terminal.innerHTML = output;
+          
+          // Save report for download
+          globalCurrentReportData = output;
+        }
+      } catch (error) {
+        hideLoader();
+        const terminal = document.getElementById("terminalOutputWindow");
+        terminal.style.display = "block";
+        terminal.innerHTML = `❌ Error: ${error.message}`;
+      }
+    });
+    setTimeout(hideLoader, 300);
+  }
     // WHOIS Lookup
     else if (toolType === "whois-lookup") {
         title.textContent = "🌐 WHOIS LOOKUP";
