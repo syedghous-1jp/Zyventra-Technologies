@@ -1,28 +1,24 @@
-// api/whois.js - using whois.nic (raw text)
 export default async function handler(req, res) {
   const { domain } = req.query;
-
-  if (!domain) {
-    return res.status(400).json({ error: "Domain name is required" });
-  }
+  if (!domain) return res.status(400).json({ error: "Domain required" });
 
   try {
     const cleanDomain = domain.replace(/^www\./, '');
+    const response = await fetch(`https://whois-api.com/api/whois?domain=${cleanDomain}`);
     
-    // Get TLD (com, org, etc.)
-    const parts = cleanDomain.split('.');
-    const tld = parts.length > 1 ? parts[parts.length - 1] : 'com';
+    if (!response.ok) throw new Error('API rate limit or error');
     
-    // WHOIS.nic server (raw text)
-    const response = await fetch(`https://whois.nic.${tld}/whois?domain=${cleanDomain}`);
-    const data = await response.text();
-
-    res.status(200).json({
-      domain: cleanDomain,
-      status: "success",
-      data: { raw: data }
-    });
+    const data = await response.json();
+    res.json({ domain: cleanDomain, status: "success", data });
   } catch (error) {
-    res.status(500).json({ error: "Server error: " + error.message });
+    // Fallback to raw WHOIS
+    try {
+      const tld = cleanDomain.split('.').pop();
+      const raw = await fetch(`https://whois.nic.${tld}/whois?domain=${cleanDomain}`);
+      const text = await raw.text();
+      res.json({ domain: cleanDomain, status: "success", data: { raw: text } });
+    } catch (e) {
+      res.status(500).json({ error: "WHOIS lookup failed" });
+    }
   }
 }
