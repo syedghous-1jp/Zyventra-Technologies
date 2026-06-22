@@ -1,4 +1,4 @@
-// api/whois.js - Simple WHOIS (raw text)
+// api/whois.js - Using ip-api.com WHOIS (works!)
 export default async function handler(req, res) {
   const { domain } = req.query;
 
@@ -7,15 +7,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Remove www.
+    // Clean domain
     const cleanDomain = domain.replace(/^www\./, '');
     
-    // Get TLD (com, org, etc.)
-    const parts = cleanDomain.split('.');
-    const tld = parts[parts.length - 1];
-    
-    // Simple WHOIS lookup via whois.nic
-    const response = await fetch(`https://whois.nic.${tld}/whois?domain=${cleanDomain}`);
+    // ip-api.com WHOIS endpoint
+    const response = await fetch(`http://ip-api.com/whois/${cleanDomain}`);
     const data = await response.text();
 
     res.status(200).json({
