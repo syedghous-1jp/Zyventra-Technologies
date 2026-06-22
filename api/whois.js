@@ -1,4 +1,4 @@
-// api/whois.js
+// api/whois.js (Alternative)
 export default async function handler(req, res) {
   const { domain } = req.query;
 
@@ -7,14 +7,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Free WHOIS API (no key needed for basic queries)
-    const response = await fetch(`https://whois-api.com/api/whois?domain=${domain}`);
-    const data = await response.json();
+    // Alternative free WHOIS API
+    const response = await fetch(`https://whois.nic.${domain.split('.').pop()}/whois?domain=${domain}`);
+    const data = await response.text();
 
     res.status(200).json({
       domain: domain,
       status: "success",
-      data: data
+      data: { raw: data }
     });
   } catch (error) {
     res.status(500).json({ error: "Server error: " + error.message });
