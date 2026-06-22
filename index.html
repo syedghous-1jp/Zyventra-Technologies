@@ -1408,12 +1408,12 @@ function openToolSystem(toolType) {
     });
     setTimeout(hideLoader, 300);
   }
-      // ==========================================
-  // WHOIS LOOKUP - REAL (whois-api.com)
+       // ==========================================
+  // WHOIS LOOKUP - REAL (Raw Text)
   // ==========================================
   else if (toolType === "whois-lookup") {
     title.textContent = "🌐 WHOIS LOOKUP (REAL)";
-    desc.textContent = "Retrieve real domain registration details via WHOIS API.";
+    desc.textContent = "Retrieve real domain registration details via WHOIS (raw text).";
     container.innerHTML = `
       <input type="text" id="whoisTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain (e.g., google.com)">
       <button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="whoisBtn">🔍 Lookup</button>
@@ -1436,13 +1436,9 @@ function openToolSystem(toolType) {
         } else {
           let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${domain}\n==================================================\n`;
           
-          const whoisData = data.data;
-          if (whoisData) {
-            output += `📌 Registrar: ${whoisData.registrar || 'N/A'}\n`;
-            output += `📌 Creation Date: ${whoisData.creation_date || 'N/A'}\n`;
-            output += `📌 Expiration Date: ${whoisData.expiration_date || 'N/A'}\n`;
-            output += `📌 Name Servers: ${whoisData.name_servers ? whoisData.name_servers.join(', ') : 'N/A'}\n`;
-            output += `📌 Status: ${whoisData.status || 'N/A'}\n`;
+          // Show raw WHOIS data
+          if (data.data && data.data.raw) {
+            output += data.data.raw;
           } else {
             output += "No WHOIS data found.\n";
           }
