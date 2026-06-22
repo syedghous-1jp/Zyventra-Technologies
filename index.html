@@ -1408,12 +1408,12 @@ function openToolSystem(toolType) {
     });
     setTimeout(hideLoader, 300);
   }
-          // ==========================================
-  // WHOIS LOOKUP - REAL (whoisjson.com)
+         // ==========================================
+  // WHOIS LOOKUP - REAL (Raw Text)
   // ==========================================
   else if (toolType === "whois-lookup") {
     title.textContent = "🌐 WHOIS LOOKUP (REAL)";
-    desc.textContent = "Retrieve real domain registration details via WHOIS API.";
+    desc.textContent = "Retrieve real WHOIS data (raw text).";
     container.innerHTML = `
       <input type="text" id="whoisTarget" class="tool-textarea-field" style="height:46px" placeholder="Enter domain (e.g., google.com)">
       <button class="pill-btn pill-btn-gold" style="width:100%;padding:14px;font-size:14px" id="whoisBtn">🔍 Lookup</button>
@@ -1436,17 +1436,9 @@ function openToolSystem(toolType) {
         } else {
           let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${data.domain || domain}\n==================================================\n\n`;
           
-          const whoisData = data.data;
-          if (whoisData && whoisData.whois) {
-            const fields = whoisData.whois;
-            output += `📌 Registrar: ${fields.registrar || 'N/A'}\n`;
-            output += `📌 Creation Date: ${fields.creation_date || fields.creationDate || 'N/A'}\n`;
-            output += `📌 Expiration Date: ${fields.expiration_date || fields.expirationDate || 'N/A'}\n`;
-            output += `📌 Name Servers: ${fields.name_servers ? fields.name_servers.join(', ') : fields.nameServers ? fields.nameServers.join(', ') : 'N/A'}\n`;
-            output += `📌 Status: ${fields.status || 'N/A'}\n`;
-            output += `📌 Domain Age: ${fields.age || 'N/A'}\n`;
-          } else if (whoisData && whoisData.raw) {
-            output += whoisData.raw;
+          if (data.data && data.data.raw) {
+            // Show raw WHOIS data
+            output += data.data.raw;
           } else {
             output += "No WHOIS data found.\n";
           }
