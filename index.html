@@ -1408,7 +1408,7 @@ function openToolSystem(toolType) {
     });
     setTimeout(hideLoader, 300);
   }
-       // ==========================================
+        // ==========================================
   // WHOIS LOOKUP - REAL (Raw Text)
   // ==========================================
   else if (toolType === "whois-lookup") {
@@ -1434,7 +1434,7 @@ function openToolSystem(toolType) {
           terminal.style.display = "block";
           terminal.innerHTML = `❌ Error: ${data.error}`;
         } else {
-          let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${domain}\n==================================================\n`;
+          let output = `==================================================\n    WHOIS LOOKUP REPORT\n    DOMAIN: ${domain}\n==================================================\n\n`;
           
           // Show raw WHOIS data
           if (data.data && data.data.raw) {
