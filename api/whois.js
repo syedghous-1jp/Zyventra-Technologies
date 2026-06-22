@@ -1,4 +1,4 @@
-// api/whois.js - FINAL WORKING VERSION
+// api/whois.js - using whois.nic (raw text)
 export default async function handler(req, res) {
   const { domain } = req.query;
 
@@ -7,48 +7,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Clean domain
-    const cleanDomain = domain.replace(/^www\./, '').trim();
+    const cleanDomain = domain.replace(/^www\./, '');
     
-    // Try whois-api.com (free, no key)
-    const response = await fetch(`https://whois-api.com/api/whois?domain=${cleanDomain}`);
+    // Get TLD (com, org, etc.)
+    const parts = cleanDomain.split('.');
+    const tld = parts.length > 1 ? parts[parts.length - 1] : 'com';
     
-    if (!response.ok) {
-      throw new Error(`API returned status ${response.status}`);
-    }
-    
-    // Check if response is JSON
-    const text = await response.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      // If not JSON, return raw text
-      return res.status(200).json({
-        domain: cleanDomain,
-        status: "success",
-        data: { raw: text }
-      });
-    }
+    // WHOIS.nic server (raw text)
+    const response = await fetch(`https://whois.nic.${tld}/whois?domain=${cleanDomain}`);
+    const data = await response.text();
 
     res.status(200).json({
       domain: cleanDomain,
       status: "success",
-      data: data
+      data: { raw: data }
     });
   } catch (error) {
-    // Fallback: try whoisjson.com
-    try {
-      const fallbackResponse = await fetch(`https://whoisjson.com/api/v1/whois?domain=${domain.replace(/^www\./, '')}`);
-      const fallbackData = await fallbackResponse.json();
-      
-      return res.status(200).json({
-        domain: domain.replace(/^www\./, ''),
-        status: "success",
-        data: fallbackData
-      });
-    } catch (fallbackError) {
-      return res.status(500).json({ error: "Server error: " + error.message });
-    }
+    res.status(500).json({ error: "Server error: " + error.message });
   }
 }
