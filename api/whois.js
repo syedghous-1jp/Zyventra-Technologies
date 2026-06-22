@@ -1,4 +1,4 @@
-// api/whois.js (Alternative)
+// api/whois.js
 export default async function handler(req, res) {
   const { domain } = req.query;
 
@@ -7,8 +7,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Alternative free WHOIS API
-    const response = await fetch(`https://whois.nic.${domain.split('.').pop()}/whois?domain=${domain}`);
+    // Get TLD from domain
+    const parts = domain.split('.');
+    const tld = parts.length > 1 ? parts[parts.length - 1] : 'com';
+    
+    // WHOIS server for the TLD
+    const whoisServer = `whois.nic.${tld}`;
+    
+    // Fetch WHOIS data
+    const response = await fetch(`https://${whoisServer}/whois?domain=${domain}`);
     const data = await response.text();
 
     res.status(200).json({
