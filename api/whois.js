@@ -1,4 +1,4 @@
-// api/whois.js
+// api/whois.js - using whoisjson.com (free, no key)
 export default async function handler(req, res) {
   const { domain } = req.query;
 
@@ -7,21 +7,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get TLD from domain
-    const parts = domain.split('.');
-    const tld = parts.length > 1 ? parts[parts.length - 1] : 'com';
+    // Remove 'www.' if present
+    const cleanDomain = domain.replace(/^www\./, '');
     
-    // WHOIS server for the TLD
-    const whoisServer = `whois.nic.${tld}`;
+    // WHOIS JSON API (free, no key)
+    const response = await fetch(`https://whoisjson.com/api/v1/whois?domain=${cleanDomain}`);
     
-    // Fetch WHOIS data
-    const response = await fetch(`https://${whoisServer}/whois?domain=${domain}`);
-    const data = await response.text();
+    if (!response.ok) {
+      throw new Error(`API responded with status ${response.status}`);
+    }
+    
+    const data = await response.json();
 
     res.status(200).json({
-      domain: domain,
+      domain: cleanDomain,
       status: "success",
-      data: { raw: data }
+      data: data
     });
   } catch (error) {
     res.status(500).json({ error: "Server error: " + error.message });
