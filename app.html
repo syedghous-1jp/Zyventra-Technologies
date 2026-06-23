@@ -1883,52 +1883,73 @@ function updateChatBadge() {
 }
 
   // =============================================
-  // 14. ADMIN: BAN / UNBAN
-  // =============================================
-  function showBanModal() {
-    document.getElementById('banModal').style.display = 'flex';
-    document.getElementById('banUserName').value = '';
-    document.getElementById('banError').style.display = 'none';
-    document.getElementById('banUserName').focus();
-  }
+// 14. ADMIN: BAN / UNBAN
+// =============================================
+function showBanModal() {
+  document.getElementById('banModal').style.display = 'flex';
+  document.getElementById('banUserName').value = '';
+  document.getElementById('banError').style.display = 'none';
+  document.getElementById('banUserName').focus();
+}
 
-  function executeBan() {
-    const name = document.getElementById('banUserName').value.trim();
-    if (!name) {or 12 hours.`);
-    renderDMList(); document.getElementById('banError').textContent = 'Please enter a username.'; document.getElementById('banError').style.display = 'block'; return; }
-    const user = users.find(u => u.name.toLowerCase() === name.toLowerCase());
-    if (!user) { document.getElementById('banError').textContent = 'User not found.'; document.getElementById('banError').style.display = 'block'; return; }
-    if (user.isFounder || user.name.toLowerCase() === FOUNDER_NAME.toLowerCase()) { document.getElementById('banError').textContent = 'Cannot ban the founder!'; document.getElementById('banError').style.display = 'block'; return; }
-    const existing = bannedUsers.find(b => b.name === user.name);
-    if (existing && existing.expires > Date.now()) { document.getElementById('banError').textContent = 'User is already banned.'; document.getElementById('banError').style.display = 'block'; return; }
-    const expires = Date.now() + 12 * 60 * 60 * 1000;
-    bannedUsers.push({ name: user.name, expires });
-    localStorage.setItem('zyventra_banned_users', JSON.stringify(bannedUsers));
-    document.getElementById('banModal').style.display = 'none';
-    showToast('🚫', `${user.name} banned f
-    renderPublicChat();
+function executeBan() {
+  const name = document.getElementById('banUserName').value.trim();
+  if (!name) {
+    document.getElementById('banError').textContent = 'Please enter a username.';
+    document.getElementById('banError').style.display = 'block';
+    return;
   }
-
-  function showUnbanModal() {
-    document.getElementById('unbanModal').style.display = 'flex';
-    document.getElementById('unbanUserName').value = '';
-    document.getElementById('unbanError').style.display = 'none';
-    document.getElementById('unbanUserName').focus();
+  const user = users.find(u => u.name.toLowerCase() === name.toLowerCase());
+  if (!user) {
+    document.getElementById('banError').textContent = 'User not found.';
+    document.getElementById('banError').style.display = 'block';
+    return;
   }
-
-  function executeUnban() {
-    const name = document.getElementById('unbanUserName').value.trim();
-    if (!name) { document.getElementById('unbanError').textContent = 'Please enter a username.'; document.getElementById('unbanError').style.display = 'block'; return; }
-    const index = bannedUsers.findIndex(b => b.name.toLowerCase() === name.toLowerCase());
-    if (index === -1) { document.getElementById('unbanError').textContent = 'User is not banned.'; document.getElementById('unbanError').style.display = 'block'; return; }
-    bannedUsers.splice(index, 1);
-    localStorage.setItem('zyventra_banned_users', JSON.stringify(bannedUsers));
-    document.getElementById('unbanModal').style.display = 'none';
-    showToast('✅', `${name} unbanned successfully.`);
-    renderDMList();
-    renderPublicChat();
+  if (user.isFounder || user.name.toLowerCase() === FOUNDER_NAME.toLowerCase()) {
+    document.getElementById('banError').textContent = 'Cannot ban the founder!';
+    document.getElementById('banError').style.display = 'block';
+    return;
   }
+  const existing = bannedUsers.find(b => b.name === user.name);
+  if (existing && existing.expires > Date.now()) {
+    document.getElementById('banError').textContent = 'User is already banned.';
+    document.getElementById('banError').style.display = 'block';
+    return;
+  }
+  const expires = Date.now() + 12 * 60 * 60 * 1000;
+  bannedUsers.push({ name: user.name, expires });
+  localStorage.setItem('zyventra_banned_users', JSON.stringify(bannedUsers));
+  document.getElementById('banModal').style.display = 'none';
+  showToast('🚫', `${user.name} banned for 12 hours.`);
+  renderDMList();  // ✅ Sirf DM list refresh (public chat automatic hai)
+}
 
+function showUnbanModal() {
+  document.getElementById('unbanModal').style.display = 'flex';
+  document.getElementById('unbanUserName').value = '';
+  document.getElementById('unbanError').style.display = 'none';
+  document.getElementById('unbanUserName').focus();
+}
+
+function executeUnban() {
+  const name = document.getElementById('unbanUserName').value.trim();
+  if (!name) {
+    document.getElementById('unbanError').textContent = 'Please enter a username.';
+    document.getElementById('unbanError').style.display = 'block';
+    return;
+  }
+  const index = bannedUsers.findIndex(b => b.name.toLowerCase() === name.toLowerCase());
+  if (index === -1) {
+    document.getElementById('unbanError').textContent = 'User is not banned.';
+    document.getElementById('unbanError').style.display = 'block';
+    return;
+  }
+  bannedUsers.splice(index, 1);
+  localStorage.setItem('zyventra_banned_users', JSON.stringify(bannedUsers));
+  document.getElementById('unbanModal').style.display = 'none';
+  showToast('✅', `${name} unbanned successfully.`);
+  renderDMList();  // 
+}
   // =============================================
   // 15. PWA INSTALL LOGIC
   // =============================================
