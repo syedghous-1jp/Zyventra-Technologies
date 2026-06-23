@@ -7,10 +7,14 @@
   <meta name="theme-color" id="themeColorMeta" content="#fbf9f4">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Zyventra · Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
+ <title>Zyventra · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- 🔥 ABLY CDN (Live Chat Ke Liye) -->
+<script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+
+<style>
     /* ============================
        THEME — CREAMY/GOLD
     ============================ */
@@ -326,11 +330,15 @@
 </div>
 <script>
 // =============================================
+// 🔥 ABLY API KEY - YAHAN APNI KEY DAALO
+// =============================================
+const ABLY_API_KEY = 'hyh5eg.alxDVw:bniQaJen9pCR_T_ytbiqJJHghA_F6UrNqBW6HkD8Qgk';  // 
+
+// =============================================
 // 1. TOAST SYSTEM
 // =============================================
 let toastTimer=null;
 function showToast(icon,message){const toast=document.getElementById('appToast');document.getElementById('toastIcon').textContent=icon||'✅';document.getElementById('toastMessage').textContent=message;toast.classList.add('show');if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),2800);}
-// =============================================
 // 2. FOUNDER PASSWORD SYSTEM
 // =============================================
 let pendingFounderName=null;let isFounder=false;const FOUNDER_PASSWORD='ghous177ag';const FOUNDER_NAME='Syed Ghous';
@@ -1651,41 +1659,36 @@ const introDe = `<strong>CYBERSICHERHEIT</strong><br>Einführung: Von A bis Z �
     showToast('🌍', langData[lang] || 'Language changed');
   }
 
-  // =============================================
-  // 13. LIVE CHAT (unchanged, full from original)
-  // =============================================
-  const MESSAGE_RETENTION_DAYS = 30;
-  const RETENTION_MS = MESSAGE_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+// =============================================
+// 13. LIVE CHAT (ABLY REAL-TIME)
+// =============================================
 
-  let currentChatTab = 'public';
-  let currentDMUser = null;
-  let chatMessages = [];
-  let dmMessages = {};
-  let users = [];
-  let bannedUsers = [];
+let currentChatTab = 'public';
+let currentDMUser = null;
+let users = [];
+let bannedUsers = [];
 
-  function cleanOldMessages() {
-    const now = Date.now();
-    const cutoff = now - RETENTION_MS;
-    if (Array.isArray(chatMessages)) {
-      chatMessages = chatMessages.filter(msg => msg.time > cutoff);
-    }
-    let dirty = false;
-    Object.keys(dmMessages).forEach(key => {
-      if (Array.isArray(dmMessages[key])) {
-        dmMessages[key] = dmMessages[key].filter(msg => msg.time > cutoff);
-        if (dmMessages[key].length === 0) { delete dmMessages[key]; dirty = true; }
-      }
-    });
-    if (dirty) localStorage.setItem('zyventra_dm_chat', JSON.stringify(dmMessages));
+function initChat() {
+  // Ably se connect karo
+  if (!ABLY_API_KEY) {
+   showToast('⚠️', 'Please set your Ably API key first!');
+    return;
   }
+  try {
+    window.ably = new Ably.Realtime(ABLY_API_KEY);
+    window.publicChannel = ably.channels.get('zyventra-public');
+    
+    // Public messages suno (real-time)
+    publicChannel.subscribe('message', function(message) {
+      const msg = message.data;
+      appendPublicMessage(msg.sender, msg.text, msg.time || Date.now());
+    });
 
-  function initChat() {
+    // Users load karo (localStorage se)
     const savedUsers = localStorage.getItem('zyventra_chat_users');
     if (savedUsers) {
       users = JSON.parse(savedUsers);
     } else {
-      const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
       users = [
         { id: 'user1', name: 'Syed Ghous', online: true, isFounder: true },
         { id: 'user2', name: 'Ali', online: true },
@@ -1696,198 +1699,188 @@ const introDe = `<strong>CYBERSICHERHEIT</strong><br>Einführung: Von A bis Z �
         { id: 'user7', name: 'Hamza', online: false },
         { id: 'user8', name: 'Fatima', online: true }
       ];
-      if (!users.find(u => u.name === currentUser)) {
-        const isFounderUser = currentUser.toLowerCase() === FOUNDER_NAME.toLowerCase() || localStorage.getItem('zyventra_is_founder') === 'true';
-        users.push({ id: 'user_' + Date.now(), name: currentUser, online: true, isFounder: isFounderUser });
-      }
       localStorage.setItem('zyventra_chat_users', JSON.stringify(users));
     }
 
+    // Banned users load karo
     const savedBanned = localStorage.getItem('zyventra_banned_users');
     if (savedBanned) {
       bannedUsers = JSON.parse(savedBanned);
-      const now = Date.now();
-      bannedUsers = bannedUsers.filter(b => b.expires > now);
+      bannedUsers = bannedUsers.filter(b => b.expires > Date.now());
       localStorage.setItem('zyventra_banned_users', JSON.stringify(bannedUsers));
-    } else { bannedUsers = []; }
-
-    const savedPublic = localStorage.getItem('zyventra_public_chat');
-    chatMessages = savedPublic ? JSON.parse(savedPublic) : [
-      { id: 1, sender: 'Syed Ghous', text: 'Welcome to Zyventra Public Chat! 🔥', time: Date.now() - 300000 },
-      { id: 2, sender: 'Ali', text: 'Testing the new chat feature!', time: Date.now() - 180000 }
-    ];
-
-    const savedDMs = localStorage.getItem('zyventra_dm_chat');
-    dmMessages = savedDMs ? JSON.parse(savedDMs) : {};
-
-    cleanOldMessages();
-
-    users.forEach(u => u.online = true);
-    localStorage.setItem('zyventra_chat_users', JSON.stringify(users));
-
-    renderPublicChat();
-    renderDMList();
-    updateChatBadge();
-
-    const adminControls = document.getElementById('adminControls');
-    const isFounderUser = isFounder || localStorage.getItem('zyventra_is_founder') === 'true';
-    if (isFounderUser) adminControls.style.display = 'flex';
-    else adminControls.style.display = 'none';
-  }
-
-  function renderPublicChat() {
-    const container = document.getElementById('publicChatMessages');
-    container.innerHTML = '';
-    const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
-    chatMessages.forEach(msg => {
-      const isSent = msg.sender === currentUser;
-      const isBanned = bannedUsers.some(b => b.name === msg.sender && b.expires > Date.now());
-      const div = document.createElement('div');
-      div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
-      const isFounderSender = msg.sender.toLowerCase() === FOUNDER_NAME.toLowerCase() || users.find(u => u.name === msg.sender)?.isFounder;
-      div.innerHTML = `
-        <span class="msg-sender">${msg.sender}${isFounderSender ? ' <span class="founder-badge">👑 Founder</span>' : ''}${isBanned ? ' <span class="banned-label">🚫 Banned</span>' : ''}</span>
-        ${msg.text}
-        <span class="msg-time">${new Date(msg.time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
-      `;
-      if (isBanned) div.style.opacity = '0.5';
-      container.appendChild(div);
-    });
-    container.scrollTop = container.scrollHeight;
-  }
-
-  function renderDMList() {
-    const container = document.getElementById('dmList');
-    container.innerHTML = '';
-    const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
-    const otherUsers = users.filter(u => u.name !== currentUser);
-    otherUsers.forEach(user => {
-      const lastMsg = dmMessages[user.id]?.length > 0 ? dmMessages[user.id][dmMessages[user.id].length - 1].text : 'No messages yet';
-      const isBanned = bannedUsers.some(b => b.name === user.name && b.expires > Date.now());
-      const div = document.createElement('div');
-      div.className = 'dm-item';
-      div.innerHTML = `
-        <div class="avatar">${user.name.charAt(0).toUpperCase()}</div>
-        <div class="info">
-          <div class="name">${user.name}${user.isFounder ? ' <span class="founder-tag">👑</span>' : ''}${isBanned ? ' <span class="ban-badge">🚫 Banned</span>' : ''}</div>
-          <div class="last">${lastMsg.substring(0, 40)}${lastMsg.length > 40 ? '...' : ''}</div>
-        </div>
-        <div class="online-dot ${user.online ? 'online' : 'offline'}"></div>
-      `;
-      div.onclick = () => {
-        if (isBanned) { showToast('🚫', 'This user is banned for 12 hours.'); return; }
-        openDM(user);
-      };
-      container.appendChild(div);
-    });
-  }
-
-  function openDM(user) {
-    currentDMUser = user;
-    document.getElementById('dmList').style.display = 'none';
-    document.getElementById('dmChatMessages').style.display = 'flex';
-    document.getElementById('publicChatMessages').style.display = 'none';
-    document.getElementById('dmSearchBar').style.display = 'none';
-    const container = document.getElementById('dmChatMessages');
-    container.innerHTML = `
-      <div style="display:flex; align-items:center; gap:12px; padding-bottom:10px; border-bottom:var(--border-lux); margin-bottom:8px;">
-        <button class="dm-back-btn" onclick="closeDM()"><i class="fa-solid fa-arrow-left"></i></button>
-        <span style="font-weight:700; font-size:16px;">${user.name}</span>
-        ${user.isFounder ? '<span style="font-size:11px; background:var(--accent-gold); color:#fff; padding:1px 10px; border-radius:20px;">👑 Founder</span>' : ''}
-        <span class="online-dot ${user.online ? 'online' : 'offline'}" style="width:8px; height:8px;"></span>
-      </div>
-    `;
-    const msgs = dmMessages[user.id] || [];
-    const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
-    msgs.forEach(msg => {
-      const isSent = msg.sender === currentUser;
-      const div = document.createElement('div');
-      div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
-      div.innerHTML = `${msg.text}<span class="msg-time">${new Date(msg.time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
-      container.appendChild(div);
-    });
-    container.scrollTop = container.scrollHeight;
-  }
-
-  function closeDM() {
-    currentDMUser = null;
-    document.getElementById('dmList').style.display = 'block';
-    document.getElementById('dmChatMessages').style.display = 'none';
-    document.getElementById('publicChatMessages').style.display = 'none';
-    document.getElementById('dmSearchBar').style.display = 'block';
-    renderDMList();
-  }
-
-  function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const text = input.value.trim();
-    if (!text) return;
-    const sender = localStorage.getItem('zyventra_app_user') || 'Explorer';
-    const isBanned = bannedUsers.some(b => b.name === sender && b.expires > Date.now());
-    if (isBanned) { showToast('🚫', 'You are banned for 12 hours. Cannot send messages.'); return; }
-    const msg = { id: Date.now(), sender, text, time: Date.now() };
-    if (currentChatTab === 'public') {
-      chatMessages.push(msg);
-      localStorage.setItem('zyventra_public_chat', JSON.stringify(chatMessages));
-      cleanOldMessages();
-      renderPublicChat();
-    } else if (currentDMUser) {
-      if (!dmMessages[currentDMUser.id]) dmMessages[currentDMUser.id] = [];
-      dmMessages[currentDMUser.id].push(msg);
-      localStorage.setItem('zyventra_dm_chat', JSON.stringify(dmMessages));
-      cleanOldMessages();
-      openDM(currentDMUser);
-      setTimeout(() => simulateReply(currentDMUser), 1500);
     }
-    input.value = '';
-    updateChatBadge();
-  }
 
-  function simulateReply(user) {
-    const replies = ['Interesting!', 'I agree 👍', 'Let me check that', 'Got it!', 'Thanks for sharing', 'Sounds good!', 'Will do.', 'Hmm, let me think...'];
-    const replyText = replies[Math.floor(Math.random() * replies.length)];
-    const msg = { id: Date.now(), sender: user.name, text: replyText, time: Date.now() };
-    if (!dmMessages[user.id]) dmMessages[user.id] = [];
-    dmMessages[user.id].push(msg);
-    localStorage.setItem('zyventra_dm_chat', JSON.stringify(dmMessages));
-    cleanOldMessages();
-    openDM(user);
-    updateChatBadge();
-  }
+    // Admin controls
+    const adminControls = document.getElementById('adminControls');
+    if (isFounder || localStorage.getItem('zyventra_is_founder') === 'true') {
+      adminControls.style.display = 'flex';
+    } else {
+      adminControls.style.display = 'none';
+    }
 
-  function switchChatTab(tab) {
-    currentChatTab = tab;
-    document.querySelectorAll('.chat-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-    document.getElementById('publicChatMessages').style.display = tab === 'public' ? 'flex' : 'none';
-    document.getElementById('dmList').style.display = tab === 'dm' ? 'block' : 'none';
-    document.getElementById('dmChatMessages').style.display = 'none';
-    document.getElementById('dmSearchBar').style.display = tab === 'dm' ? 'block' : 'none';
-    if (tab === 'public') renderPublicChat();
-    if (tab === 'dm') renderDMList();
-    currentDMUser = null;
+    renderDMList();
+    showToast('✅', 'Live Chat Connected!');
+  } catch (error) {
+    console.error('Ably init error:', error);
+    showToast('❌', 'Failed to connect to live chat.');
   }
+}
 
-  function filterDMUsers(query) {
-    const items = document.querySelectorAll('.dm-item');
-    const q = query.toLowerCase().trim();
-    items.forEach(item => {
-      const name = item.querySelector('.name')?.textContent?.toLowerCase() || '';
-      item.style.display = q === '' || name.includes(q) ? 'flex' : 'none';
-    });
-  }
+// =============================================
+// PUBLIC CHAT FUNCTIONS
+// =============================================
 
-  function updateChatBadge() {
-    const badge = document.getElementById('chatBadge');
-    const now = Date.now();
-    const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
-    let total = 0;
-    chatMessages.forEach(m => { if (m.sender !== currentUser && now - m.time < 300000) total++; });
-    Object.keys(dmMessages).forEach(key => {
-      dmMessages[key].forEach(m => { if (m.sender !== currentUser && now - m.time < 300000) total++; });
-    });
-    badge.textContent = total > 9 ? '9+' : total;
-    badge.style.display = total > 0 ? 'flex' : 'none';
+function appendPublicMessage(sender, text, time) {
+  const container = document.getElementById('publicChatMessages');
+  const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
+  const isSent = sender === currentUser;
+  const isBanned = bannedUsers.some(b => b.name === sender && b.expires > Date.now());
+  const div = document.createElement('div');
+  div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
+  const isFounderSender = sender.toLowerCase() === FOUNDER_NAME.toLowerCase() || users.find(u => u.name === sender)?.isFounder;
+  div.innerHTML = `
+    <span class="msg-sender">${sender}${isFounderSender ? ' <span class="founder-badge">👑 Founder</span>' : ''}${isBanned ? ' <span class="banned-label">🚫 Banned</span>' : ''}</span>
+    ${text}
+    <span class="msg-time">${new Date(time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+  `;
+  if (isBanned) div.style.opacity = '0.5';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+// =============================================
+// DM FUNCTIONS
+// =============================================
+
+function renderDMList() {
+  const container = document.getElementById('dmList');
+  container.innerHTML = '';
+  const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
+  const otherUsers = users.filter(u => u.name !== currentUser);
+  otherUsers.forEach(user => {
+    const isBanned = bannedUsers.some(b => b.name === user.name && b.expires > Date.now());
+    const div = document.createElement('div');
+    div.className = 'dm-item';
+    div.innerHTML = `
+      <div class="avatar">${user.name.charAt(0).toUpperCase()}</div>
+      <div class="info">
+        <div class="name">${user.name}${user.isFounder ? ' <span class="founder-tag">👑</span>' : ''}${isBanned ? ' <span class="ban-badge">🚫 Banned</span>' : ''}</div>
+        <div class="last">Click to chat</div>
+      </div>
+      <div class="online-dot ${user.online ? 'online' : 'offline'}"></div>
+    `;
+    div.onclick = () => {
+      if (isBanned) { showToast('🚫', 'This user is banned for 12 hours.'); return; }
+      openDM(user);
+    };
+    container.appendChild(div);
+  });
+}
+
+function openDM(user) {
+  currentDMUser = user;
+  document.getElementById('dmList').style.display = 'none';
+  document.getElementById('dmChatMessages').style.display = 'flex';
+  document.getElementById('publicChatMessages').style.display = 'none';
+  document.getElementById('dmSearchBar').style.display = 'none';
+  const container = document.getElementById('dmChatMessages');
+  container.innerHTML = `
+    <div style="display:flex; align-items:center; gap:12px; padding-bottom:10px; border-bottom:var(--border-lux); margin-bottom:8px;">
+      <button class="dm-back-btn" onclick="closeDM()"><i class="fa-solid fa-arrow-left"></i></button>
+      <span style="font-weight:700; font-size:16px;">${user.name}</span>
+      ${user.isFounder ? '<span style="font-size:11px; background:var(--accent-gold); color:#fff; padding:1px 10px; border-radius:20px;">👑 Founder</span>' : ''}
+      <span class="online-dot ${user.online ? 'online' : 'offline'}" style="width:8px; height:8px;"></span>
+    </div>
+  `;
+  
+  // DM channel subscribe (real-time)
+  const sender = localStorage.getItem('zyventra_app_user') || 'Explorer';
+  const dmChannelName = ['dm', sender, user.name].sort().join('-');
+  const dmChannel = ably.channels.get(dmChannelName);
+  dmChannel.subscribe('message', function(message) {
+    const msg = message.data;
+    appendDMMessage(user.name, msg.sender, msg.text, msg.time || Date.now());
+  });
+}
+
+function appendDMMessage(receiver, sender, text, time) {
+  const container = document.getElementById('dmChatMessages');
+  const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
+  const isSent = sender === currentUser;
+  const div = document.createElement('div');
+  div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
+  div.innerHTML = `
+    <span class="msg-sender">${sender}</span>
+    ${text}
+    <span class="msg-time">${new Date(time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function closeDM() {
+  currentDMUser = null;
+  document.getElementById('dmList').style.display = 'block';
+  document.getElementById('dmChatMessages').style.display = 'none';
+  document.getElementById('publicChatMessages').style.display = 'none';
+  document.getElementById('dmSearchBar').style.display = 'block';
+  renderDMList();
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const sender = localStorage.getItem('zyventra_app_user') || 'Explorer';
+  const isBanned = bannedUsers.some(b => b.name === sender && b.expires > Date.now());
+  if (isBanned) {
+    showToast('🚫', 'You are banned for 12 hours. Cannot send messages.');
+    return;
   }
+  const msg = { sender, text, time: Date.now() };
+  
+  if (currentChatTab === 'public') {
+    if (window.publicChannel) {
+      publicChannel.publish('message', msg);
+      appendPublicMessage(sender, text, Date.now());
+    } else {
+      showToast('❌', 'Chat not connected.');
+    }
+  } else if (currentDMUser) {
+    // Private DM
+    const dmChannelName = ['dm', sender, currentDMUser.name].sort().join('-');
+    const dmChannel = ably.channels.get(dmChannelName);
+    dmChannel.publish('message', msg);
+    appendDMMessage(currentDMUser.name, sender, text, Date.now());
+  }
+  input.value = '';
+}
+
+function switchChatTab(tab) {
+  currentChatTab = tab;
+  document.querySelectorAll('.chat-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.getElementById('publicChatMessages').style.display = tab === 'public' ? 'flex' : 'none';
+  document.getElementById('dmList').style.display = tab === 'dm' ? 'block' : 'none';
+  document.getElementById('dmChatMessages').style.display = 'none';
+  document.getElementById('dmSearchBar').style.display = tab === 'dm' ? 'block' : 'none';
+  if (tab === 'dm') renderDMList();
+  currentDMUser = null;
+}
+
+function filterDMUsers(query) {
+  const items = document.querySelectorAll('.dm-item');
+  const q = query.toLowerCase().trim();
+  items.forEach(item => {
+    const name = item.querySelector('.name')?.textContent?.toLowerCase() || '';
+    item.style.display = q === '' || name.includes(q) ? 'flex' : 'none';
+  });
+}
+
+function updateChatBadge() {
+  const badge = document.getElementById('chatBadge');
+  badge.textContent = '0';
+  badge.style.display = 'none';
+}
 
   // =============================================
   // 14. ADMIN: BAN / UNBAN
@@ -1901,7 +1894,8 @@ const introDe = `<strong>CYBERSICHERHEIT</strong><br>Einführung: Von A bis Z �
 
   function executeBan() {
     const name = document.getElementById('banUserName').value.trim();
-    if (!name) { document.getElementById('banError').textContent = 'Please enter a username.'; document.getElementById('banError').style.display = 'block'; return; }
+    if (!name) {or 12 hours.`);
+    renderDMList(); document.getElementById('banError').textContent = 'Please enter a username.'; document.getElementById('banError').style.display = 'block'; return; }
     const user = users.find(u => u.name.toLowerCase() === name.toLowerCase());
     if (!user) { document.getElementById('banError').textContent = 'User not found.'; document.getElementById('banError').style.display = 'block'; return; }
     if (user.isFounder || user.name.toLowerCase() === FOUNDER_NAME.toLowerCase()) { document.getElementById('banError').textContent = 'Cannot ban the founder!'; document.getElementById('banError').style.display = 'block'; return; }
@@ -1911,8 +1905,7 @@ const introDe = `<strong>CYBERSICHERHEIT</strong><br>Einführung: Von A bis Z �
     bannedUsers.push({ name: user.name, expires });
     localStorage.setItem('zyventra_banned_users', JSON.stringify(bannedUsers));
     document.getElementById('banModal').style.display = 'none';
-    showToast('🚫', `${user.name} banned for 12 hours.`);
-    renderDMList();
+    showToast('🚫', `${user.name} banned f
     renderPublicChat();
   }
 
