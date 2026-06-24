@@ -1970,6 +1970,243 @@ function executeUnban() {
     else { showToast('ℹ️', 'Already installed or not supported.'); }
   };
   window.addEventListener('appinstalled', () => { installBtn.style.display = 'none'; });
+  // =====================================================
+// 🔥 FINAL: NOTIFICATIONS + CUSTOM SOUNDS + VIBRATION
+// (Lock Screen par vibration kaam karegi!)
+// =====================================================
+
+// 1. 🎵 Sound Engine (Tab chalega jab app open ho)
+const SoundEngine = {
+    ctx: null,
+    init() {
+        try {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch(e) { console.log('Audio not supported'); }
+    },
+    play(type = 'normal') {
+        try {
+            if (!this.ctx) this.init();
+            if (!this.ctx) return;
+            if (this.ctx.state === 'suspended') this.ctx.resume();
+
+            const now = this.ctx.currentTime;
+            
+            if (type === 'founder') {
+                // 👑 Premium Double Chime (Snapchat jaisi)
+                [0, 0.18].forEach((delay) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.frequency.value = delay === 0 ? 880 : 1100;
+                    osc.type = 'sine';
+                    gain.gain.setValueAtTime(0.15, now + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.15);
+                    osc.start(now + delay);
+                    osc.stop(now + delay + 0.15);
+                });
+            } 
+            else if (type === 'alert') {
+                // 🚨 Siren (Hack attempt)
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.linearRampToValueAtTime(900, now + 0.15);
+                osc.type = 'square';
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } 
+            else {
+                // 💬 Normal "Pling"
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.value = 1200;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            }
+            
+            // 📳 Vibration (Ye LOCK SCREEN par bhi kaam karega!)
+            if (navigator.vibrate) {
+                if (type === 'founder') navigator.vibrate([50, 50, 50]);
+                else if (type === 'alert') navigator.vibrate([100, 50, 100]);
+                else navigator.vibrate(30);
+            }
+        } catch(e) { /* Ignore */ }
+    }
+};
+
+// 2. 🔔 Permission & Notification Sender
+function requestNotificationPermission() {
+    if (Notification.permission === 'granted') {
+        showToast('✅', 'Notifications ON!');
+        SoundEngine.play('founder');
+        new Notification('✅ Zyventra Ready!', {
+            body: 'Custom sounds & vibration active!',
+            icon: '🛡️',
+            vibrate: [200, 100, 200] 
+        });
+        return;
+    }
+    if (Notification.permission === 'denied') {
+        showToast('❌', 'Enable from browser settings.');
+        return;
+    }
+    showToast('🔔', 'Please Allow notifications!');
+    Notification.requestPermission().then(perm => {
+        if (perm === 'granted') {
+            showToast('🎉', 'Enabled!');
+            SoundEngine.play('founder');
+            new Notification('👑 Founder Test', {
+                body: 'Zyventra notifications are live!',
+                icon: '👑',
+                vibrate: [200, 100, 200]
+            });
+        } else {
+            showToast('⚠️', 'Blocked!');
+        }
+    });
+}
+
+// 3. 📨 Main Notification Sender (Sound + Vibration + Popup)
+function sendCustomNotification(sender, text, isFounder = false, isAlert = false) {
+    // Sound bajao (Sirf app open hai tab)
+    if (isAlert) SoundEngine.play('alert');
+    else if (isFounder) SoundEngine.play('founder');
+    else SoundEngine.play('normal');
+
+    if (Notification.permission !== 'granted') return;
+
+    try {
+        let title = `💬 ${sender}`;
+        let icon = '💬';
+        let requireInteraction = false;
+        let vibratePattern = [30]; // Default vibration
+
+        if (isFounder) {
+            title = `👑 FOUNDER: ${sender}`;
+            icon = '👑';
+            requireInteraction = true;
+            vibratePattern = [50, 50, 50]; // Founder ki alag vibration
+        } else if (isAlert) {
+            title = `🚨 ALERT: ${sender}`;
+            icon = '🚨';
+            vibratePattern = [100, 50, 100]; // Alert ki alag vibration
+        }
+
+        const notif = new Notification(title, {
+            body: text,
+            icon: icon,
+            vibrate: vibratePattern, // 🔥 Ye LOCK SCREEN par vibration generate karega!
+            requireInteraction: requireInteraction,
+            silent: true // Hum apni sound khud bana rahe hain, default OS sound band karo
+        });
+
+        notif.onclick = () => { window.focus(); notif.close(); };
+        if (!requireInteraction) setTimeout(() => notif.close(), 7000);
+    } catch(e) { /* ignore */ }
+}
+
+// =====================================================
+// 4. 🧩 INCOMING MESSAGE HANDLERS (Override)
+// =====================================================
+
+// --- Public Chat Override ---
+if (typeof appendPublicMessage === 'function') {
+    const originalPublic = appendPublicMessage;
+    window.appendPublicMessage = function(sender, text, time) {
+        // Original UI update
+        const container = document.getElementById('publicChatMessages');
+        const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
+        const isSent = sender === currentUser;
+        const isBanned = bannedUsers ? bannedUsers.some(b => b.name === sender && b.expires > Date.now()) : false;
+        const div = document.createElement('div');
+        div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
+        const isFounderSender = sender.toLowerCase() === FOUNDER_NAME.toLowerCase() || (users && users.find(u => u.name === sender)?.isFounder);
+        div.innerHTML = `
+            <span class="msg-sender">${sender}${isFounderSender ? ' <span class="founder-badge">👑 Founder</span>' : ''}${isBanned ? ' <span class="banned-label">🚫 Banned</span>' : ''}</span>
+            ${text}
+            <span class="msg-time">${new Date(time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        `;
+        if (isBanned) div.style.opacity = '0.5';
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+
+        // Notification Logic
+        if (!isSent) {
+            const typingEl = document.getElementById('typingIndicator');
+            if (typingEl) typingEl.style.opacity = '0';
+            const isAlert = /hack|attack|block|breach|virus|malware|ban|alert|unauthorized/i.test(text);
+            sendCustomNotification(sender, text, isFounderSender, isAlert);
+        }
+    };
+}
+
+// --- DM Chat Override ---
+if (typeof appendDMMessage === 'function') {
+    const originalDM = appendDMMessage;
+    window.appendDMMessage = function(receiver, sender, text, time) {
+        const container = document.getElementById('dmChatMessages');
+        const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
+        const isSent = sender === currentUser;
+        const div = document.createElement('div');
+        div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
+        div.innerHTML = `
+            <span class="msg-sender">${sender}</span>
+            ${text}
+            <span class="msg-time">${new Date(time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+        `;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+
+        if (!isSent) {
+            const isFounder = sender.toLowerCase() === FOUNDER_NAME.toLowerCase();
+            sendCustomNotification(sender, text, isFounder, false);
+        }
+    };
+}
+
+// =====================================================
+// 5. 🚀 INIT - SAB SE PEHLE POPUP
+// =====================================================
+document.addEventListener('DOMContentLoaded', function() {
+    SoundEngine.init();
+
+    // 2 sec baad permission maango (smooth experience)
+    setTimeout(() => {
+        if (Notification.permission === 'default') {
+            requestNotificationPermission();
+        } else if (Notification.permission === 'granted') {
+            SoundEngine.play('founder');
+            console.log('🔔 Zyventra Notifications Ready!');
+        }
+    }, 2000);
+
+    // Chat area mein Notification Button (agar nahi hai toh)
+    const chatInputArea = document.getElementById('chatInputArea');
+    if (chatInputArea && !document.getElementById('notifToggleBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'notifToggleBtn';
+        btn.innerHTML = '🔔';
+        btn.title = 'Enable Notifications';
+        btn.style.cssText = 'background:var(--bg-soft); border:var(--border-lux); border-radius:30px; padding:8px 14px; font-size:18px; cursor:pointer;';
+        btn.onclick = requestNotificationPermission;
+        chatInputArea.insertBefore(btn, chatInputArea.querySelector('input'));
+    }
+});
+
+console.log('✅ FINAL CODE LOADED: Custom Sounds + Vibration + Notifications');
+console.log('👑 Founder = Premium Chime + Pattern Vibration');
+console.log('🚨 Alert = Siren + Long Vibration');
+console.log('💬 Normal = Soft Pling + Short Vibration');
 </script>
 </body>
 </html>
