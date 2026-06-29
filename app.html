@@ -288,6 +288,167 @@
     .mobile-frame::-webkit-scrollbar { display:none; }
     #installAppBtn { background:var(--accent-gold); border:none; color:#fff; padding:6px 14px; border-radius:30px; font-size:11px; font-weight:700; display:none; cursor:pointer; box-shadow:0 4px 10px rgba(207,168,60,0.3); transition:transform 0.2s; white-space:nowrap; }
     #installAppBtn:active { transform:scale(0.95); }
+      /* =============================================
+       🆕 COMMUNITY FEED STYLES (X/Twitter Style)
+       ============================================= */
+    .feed-container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 10px 0;
+    }
+
+    /* Create Post Box */
+    .create-post-box {
+        background: var(--bg-white);
+        border: var(--border-lux);
+        border-radius: var(--card-radius);
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-lux);
+    }
+
+    .create-post-box textarea {
+        width: 100%;
+        height: 80px;
+        background: transparent;
+        border: none;
+        color: var(--text-dark);
+        font-size: 15px;
+        resize: none;
+        outline: none;
+        font-family: inherit;
+    }
+    .create-post-box textarea::placeholder {
+        color: var(--text-muted);
+    }
+
+    .post-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        border-top: var(--border-lux);
+        padding-top: 10px;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .post-actions input {
+        flex: 1;
+        background: var(--bg-soft);
+        border: var(--border-lux);
+        color: var(--text-dark);
+        padding: 8px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        outline: none;
+        min-width: 120px;
+    }
+    .post-actions input:focus {
+        border-color: var(--accent-gold);
+    }
+
+    .post-btn {
+        background: var(--accent-gold);
+        color: #fff;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+    .post-btn:active { transform: scale(0.95); }
+
+    /* Feed Post Cards */
+    .tweet-card {
+        background: var(--bg-white);
+        border: var(--border-lux);
+        border-radius: var(--card-radius);
+        padding: 16px;
+        margin-bottom: 15px;
+        box-shadow: var(--shadow-lux);
+        transition: 0.2s;
+    }
+    .tweet-card:active { transform: scale(0.99); }
+
+    .tweet-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 18px;
+        color: #fff;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .user-info .user-name {
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 15px;
+    }
+    .user-info .user-handle {
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .tweet-content {
+        color: var(--text-dark);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 12px;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .tweet-image {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: var(--border-lux);
+        margin-top: 8px;
+        background: var(--bg-soft);
+    }
+
+    .tweet-actions {
+        display: flex;
+        margin-top: 12px;
+        color: var(--text-muted);
+        font-size: 13px;
+        gap: 20px;
+        border-top: var(--border-lux);
+        padding-top: 10px;
+        align-items: center;
+    }
+
+    .action-item {
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 600;
+    }
+    .action-item:hover {
+        color: var(--accent-gold);
+    }
+    .action-item:active { transform: scale(0.9); }
+    .action-item.liked { color: #ef4444; }
+    .action-item.delete-post:hover { color: #ef4444; }
   </style>
 </head>
 <body>
@@ -299,7 +460,7 @@
   <!-- ONBOARDING -->
   <div id="onboarding-overlay"><div class="onboarding-modal"><h2>Welcome to Zyventra</h2><p>Configure your workspace identity.</p><input type="text" id="input-session-name" class="app-input" placeholder="Enter full name" oninput="checkFounderName(this.value)"><input type="number" id="input-session-age" class="app-input" placeholder="Enter age"><button class="action-submit" onclick="executeWorkspaceVerification()">Initialize Dashboard</button><p id="founderWarning" style="color:#cfa83c; font-size:12px; margin-top:8px; display:none;">⚠️ Founder name requires password verification.</p></div></div>
   <!-- HEADER -->
-  <header class="main-app-header"><div class="identity-greeting"><h1 id="user-greeting-label">Hello, Explorer!</h1><p id="greeting-time">Dashboard · Zyventra</p></div><div class="header-actions"><button id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-download"></i> Get</button><button class="header-btn" onclick="showToast('🔔','3 new notifications!')"><i class="fa-solid fa-bell"></i><span class="badge">3</span></button><button class="header-btn" onclick="toggleTheme()" id="themeToggle"><i class="fa-solid fa-moon"></i></button><div class="header-btn" onclick="navigateTo('profile')" style="background:var(--bg-soft); color:var(--accent-gold);"><i class="fa-solid fa-user"></i></div></div></header>
+  <header class="main-app-header"><div cl<nav class="dock-navigation-bar"<nav class="dock-navigation-barass="identity-greeting"><h1 id="user-greeting-label">Hello, Explorer!</h1><p id="greeting-time">Dashboard · Zyventra</p></div><div class="header-actions"><button id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-download"></i> Get</button><button class="header-btn" onclick="showToast('🔔','3 new notifications!')"><i class="fa-solid fa-bell"></i><span class="badge">3</span></button><button class="header-btn" onclick="toggleTheme()" id="themeToggle"><i class="fa-solid fa-moon"></i></button><div class="header-btn" onclick="navigateTo('profile')" style="background:var(--bg-soft); color:var(--accent-gold);"><i class="fa-solid fa-user"></i></div></div></header>
   <!-- PAGE HOME -->
   <div id="page-home" class="page active">
     <div class="health-metrics-row"><div class="health-score-card"><div class="score-ring"><svg viewBox="0 0 70 70"><circle cx="35" cy="35" r="30" fill="none" stroke="var(--bg-soft)" stroke-width="6"/><circle cx="35" cy="35" r="30" fill="none" stroke="var(--accent-gold)" stroke-width="6" stroke-dasharray="188" stroke-dashoffset="15" stroke-linecap="round"/></svg><span class="num">92</span></div><span class="score-label">Security Score</span></div><div class="metrics-grid"><div class="metric-card"><div class="metric-label">Scans</div><div class="metric-value" id="statScans">0</div><div class="metric-change up"><i class="fa-solid fa-arrow-up"></i> 12%</div></div><div class="metric-card"><div class="metric-label">Vulnerabilities</div><div class="metric-value" id="statVuln">0</div><div class="metric-change down"><i class="fa-solid fa-arrow-down"></i> 3%</div></div><div class="metric-card"><div class="metric-label">Response</div><div class="metric-value"><span class="gold">&lt;1</span>ms</div><div class="metric-change up"><i class="fa-solid fa-arrow-up"></i> 22%</div></div><div class="metric-card"><div class="metric-label">Uptime</div><div class="metric-value"><span class="gold" id="statUptime">99.9</span>%</div><div class="metric-change up"><i class="fa-solid fa-arrow-up"></i> 0.2%</div></div></div></div>
@@ -318,16 +479,39 @@
   <div id="page-connect" class="page"><div class="chat-container"><div class="admin-controls" id="adminControls"><span class="admin-label">👑 Admin Panel</span><button class="ban-btn" onclick="showBanModal()">🚫 Ban User</button><button class="unban-btn" onclick="showUnbanModal()">✅ Unban User</button></div><div class="chat-tabs"><div class="chat-tab active" data-tab="public" onclick="switchChatTab('public')">💬 Public</div><div class="chat-tab" data-tab="dm" onclick="switchChatTab('dm')">✉️ DMs</div></div><div class="chat-search" id="dmSearchBar" style="display:none;"><input type="text" id="dmSearchInput" placeholder="🔍 Search users..." oninput="filterDMUsers(this.value)"></div><div class="chat-messages" id="publicChatMessages"></div><div class="dm-list" id="dmList" style="display:none;"></div><div class="chat-messages" id="dmChatMessages" style="display:none;"></div><div class="chat-input-area" id="chatInputArea"><input type="text" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()"><button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button><div class="chat-retention-label">📅 Messages retained for 30 days</div></div></div></div>
   <!-- PAGE PROFILE -->
   <div id="page-profile" class="page"><div class="profile-card"><div class="big-avatar" onclick="document.getElementById('profilePicInput').click()"><img id="profileAvatarImg" src="" alt="Profile" style="display:none;"><i id="profileAvatarIcon" class="fa-solid fa-user-shield"></i><div class="camera-overlay"><i class="fa-solid fa-camera"></i></div></div><input type="file" id="profilePicInput" accept="image/*" style="display:none;"><h2 id="profileName">Explorer</h2><p class="sub-text" id="profileAge">Age: --</p><p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Member since 2026</p><div class="profile-stats"><div><div class="num" id="profileScans">0</div><div class="lbl">Total Scans</div></div><div><div class="num">9</div><div class="lbl">Tools</div></div><div><div class="num">3</div><div class="lbl">Day Streak</div></div></div><div class="contact-section"><div class="contact-header" onclick="toggleContact()"><span>📬 Contact Zyventra</span><i class="fa-solid fa-chevron-down" id="contactArrow"></i></div><div class="contact-options" id="contactOptions"><a href="mailto:zyventratechnology@gmail.com"><i class="fa-solid fa-envelope email-icon"></i> zyventratechnology@gmail.com</a><a href="https://instagram.com/zyventratechnology" target="_blank"><i class="fa-brands fa-instagram insta-icon"></i> @zyventratechnology</a></div></div><button class="action-submit" style="margin-top:20px; background:var(--bg-soft); color:var(--text-dark); box-shadow:none;" onclick="if(confirm('Are you sure?')){ localStorage.clear(); location.reload(); }"><i class="fa-solid fa-arrow-right-from-bracket"></i> Reset & Logout</button></div></div>
+  <!-- PAGE FEED (Community) -->
+  <div id="page-feed" class="page">
+    <div class="feed-container">
   <!-- DARK WEB MODAL -->
   <div class="darkweb-modal-overlay" id="darkwebModal"><div class="darkweb-modal-box"><h3>🌑 Dark Web Monitor</h3><p>Check if your email has been exposed in a data breach. (Live via HIBP)</p><div class="input-group"><input type="email" id="darkwebEmail" placeholder="Enter your email address" value=""><button id="darkwebCheckBtn" onclick="checkDarkWeb()">Check</button></div><div class="loader-spinner" id="darkwebLoader"><div class="spinner"></div><span>Scanning dark web...</span></div><div id="darkwebResult"></div><button class="btn-close-darkweb" onclick="closeDarkWebMonitor()">Close</button></div></div>
   <!-- BAN / UNBAN MODALS -->
   <div id="banModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:99999; display:none; align-items:center; justify-content:center; padding:24px;"><div style="background:var(--bg-white); border-radius:28px; padding:32px 24px; max-width:360px; width:100%; border:var(--border-lux); box-shadow:0 25px 50px rgba(0,0,0,0.2);"><h2 style="font-size:20px; font-weight:800; text-align:center; color:var(--text-dark);">🚫 Ban User</h2><p style="color:var(--text-muted); font-size:13px; text-align:center; margin:8px 0 16px 0;">Enter the exact username to ban for 12 hours.</p><input type="text" id="banUserName" placeholder="Username to ban..." style="width:100%; padding:14px; border:var(--border-lux); border-radius:16px; background:var(--bg-soft); font-size:15px; color:var(--text-dark); outline:none; margin-bottom:12px;"><button onclick="executeBan()" style="width:100%; padding:14px; background:#ef4444; border:none; border-radius:16px; font-weight:700; font-size:15px; color:#fff; cursor:pointer;">Ban User</button><button onclick="document.getElementById('banModal').style.display='none'" style="width:100%; padding:12px; background:transparent; border:none; font-weight:600; font-size:14px; color:var(--text-muted); cursor:pointer; margin-top:6px;">Cancel</button><p id="banError" style="color:#ef4444; font-size:12px; text-align:center; margin-top:8px; display:none;"></p></div></div>
   <div id="unbanModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:99999; display:none; align-items:center; justify-content:center; padding:24px;"><div style="background:var(--bg-white); border-radius:28px; padding:32px 24px; max-width:360px; width:100%; border:var(--border-lux); box-shadow:0 25px 50px rgba(0,0,0,0.2);"><h2 style="font-size:20px; font-weight:800; text-align:center; color:var(--text-dark);">✅ Unban User</h2><p style="color:var(--text-muted); font-size:13px; text-align:center; margin:8px 0 16px 0;">Enter the username to unban.</p><input type="text" id="unbanUserName" placeholder="Username to unban..." style="width:100%; padding:14px; border:var(--border-lux); border-radius:16px; background:var(--bg-soft); font-size:15px; color:var(--text-dark); outline:none; margin-bottom:12px;"><button onclick="executeUnban()" style="width:100%; padding:14px; background:#10b981; border:none; border-radius:16px; font-weight:700; font-size:15px; color:#fff; cursor:pointer;">Unban User</button><button onclick="document.getElementById('unbanModal').style.display='none'" style="width:100%; padding:12px; background:transparent; border:none; font-weight:600; font-size:14px; color:var(--text-muted); cursor:pointer; margin-top:6px;">Cancel</button><p id="unbanError" style="color:#ef4444; font-size:12px; text-align:center; margin-top:8px; display:none;"></p></div></div>
   <!-- BOTTOM NAV -->
-  <nav class="dock-navigation-bar"><button class="dock-link-element active-route" data-page="home" onclick="navigateTo('home')"><i class="fa-solid fa-house-chimney"></i><span>Home</span></button><button class="dock-link-element" data-page="tools" onclick="navigateTo('tools')"><i class="fa-solid fa-layer-group"></i><span>Tools</span></button><button class="dock-link-element" data-page="connect" onclick="navigateTo('connect')" style="position:relative;"><i class="fa-solid fa-comments"></i><span>Connect</span><span id="chatBadge" style="position:absolute; top:-4px; right:-8px; background:#ef4444; color:#fff; font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid var(--bg-frame);">0</span></button><button class="dock-link-element" data-page="study" onclick="navigateTo('study')"><i class="fa-solid fa-graduation-cap"></i><span>Study</span></button><button class="dock-link-element" data-page="profile" onclick="navigateTo('profile')"><i class="fa-solid fa-user"></i><span>Profile</span></button></nav>
+  <nav class="dock-navigation-bar"><button class="dock-link-element" data-page="feed" onclick="navigateTo('feed')">
+    <i class="fa-solid fa-rss"></i><span>Feed</span>
+</button><button class="dock-link-element active-route" data-page="home" onclick="navigateTo('home')"><i class="fa-solid fa-house-chimney"></i><span>Home</span></button><button class="dock-link-element" data-page="tools" onclick="navigateTo('tools')"><i class="fa-solid fa-layer-group"></i><span>Tools</span></button><button class="dock-link-element" data-page="connect" onclick="navigateTo('connect')" style="position:relative;"><i class="fa-solid fa-comments"></i><span>Connect</span><span id="chatBadge" style="position:absolute; top:-4px; right:-8px; background:#ef4444; color:#fff; font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid var(--bg-frame);">0</span></button><button class="dock-link-element" data-page="study" onclick="navigateTo('study')"><i class="fa-solid fa-graduation-cap"></i><span>Study</span></button><button class="dock-link-element" data-page="profile" onclick="navigateTo('profile')"><i class="fa-solid fa-user"></i><span>Profile</span></button></nav>
   <!-- TOAST -->
   <div id="appToast" class="app-toast"><span id="toastIcon" class="toast-icon">✅</span><span id="toastMessage">Hello</span></div>
 </div>
+
+        
+        <!-- Create Post Box -->
+        <div class="create-post-box">
+            <textarea id="post-text-input" placeholder="Kya naya seekha aaj? Share karein..."></textarea>
+            <div class="post-actions">
+                <input type="text" id="post-image-input" placeholder="Image URL (Optional)">
+                <button onclick="createNewPost()" class="post-btn"><i class="fa-solid fa-pen"></i> Share</button>
+            </div>
+        </div>
+
+        <!-- Feed Posts -->
+        <div id="community-feed-posts">
+            <!-- Dynamic Posts yahan JavaScript se aayengi -->
+        </div>
+
+    </div>
+  </div>
 <script>
 // =============================================
 // 🔥 ABLY API KEY - YAHAN APNI KEY DAALO
@@ -2271,6 +2455,150 @@ console.log('✅ FINAL CODE LOADED: Custom Sounds + Vibration + Notifications');
 console.log('👑 Founder = Premium Chime + Pattern Vibration');
 console.log('🚨 Alert = Siren + Long Vibration');
 console.log('💬 Normal = Soft Pling + Short Vibration');
+// =============================================
+// 👑 FEED SYSTEM (PocketBase + Founder Controls)
+// =============================================
+
+async function loadFeedPosts() {
+    const container = document.getElementById('community-feed-posts');
+    if (!container) return;
+    container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading feed...</div>';
+    try {
+        const response = await fetch(`${PB_URL}/api/collections/posts/records?sort=-created&perPage=50`);
+        const data = await response.json();
+        container.innerHTML = '';
+        if (!data.items || data.items.length === 0) {
+            container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">No posts yet. Be the first! 🚀</div>`;
+            return;
+        }
+        data.items.forEach(post => renderFeedPost(post));
+    } catch (error) {
+        console.error('Error loading feed:', error);
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:#ef4444;">Failed to load feed. Is PocketBase running?</div>';
+    }
+}
+
+function renderFeedPost(post) {
+    const container = document.getElementById('community-feed-posts');
+    const imageHTML = post.image ? `<img src="${post.image}" class="tweet-image" alt="Post Image" onerror="this.style.display='none'">` : '';
+    const deleteBtn = isFounder ? 
+        `<span class="action-item delete-post" onclick="deletePost('${post.id}')" style="color:#ef4444; margin-left:auto; cursor:pointer;">🗑️ Delete</span>` : '';
+    const postHTML = `
+        <div class="tweet-card" data-id="${post.id}">
+            <div class="tweet-header">
+                <div class="user-avatar">${post.name.charAt(0).toUpperCase()}</div>
+                <div class="user-info">
+                    <div class="user-name">${post.name}</div>
+                    <div class="user-handle">${post.handle || '@member'}</div>
+                </div>
+            </div>
+            <div class="tweet-content">${post.content}</div>
+            ${imageHTML}
+            <div class="tweet-actions">
+                <div class="action-item" onclick="toggleLike('${post.id}')" id="like-parent-${post.id}">
+                    🤍 <span id="like-count-${post.id}">${post.likes || 0}</span>
+                </div>
+                <div class="action-item" onclick="sharePost('${post.id}')">🔄 Share</div>
+                ${deleteBtn}
+            </div>
+        </div>
+    `;
+    container.innerHTML += postHTML;
+}
+
+async function createNewPost() {
+    const textInput = document.getElementById('post-text-input');
+    const imageInput = document.getElementById('post-image-input');
+    const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
+    const isBanned = bannedUsers.some(b => b.name === currentUser && b.expires > Date.now());
+    if (isBanned) { showToast('🚫', 'You are banned!'); return; }
+    if (!textInput || textInput.value.trim() === "") { showToast('⚠️', 'Kuch likhen!'); return; }
+    const postData = {
+        name: currentUser,
+        handle: `@${currentUser.toLowerCase().replace(' ', '')}`,
+        content: textInput.value.trim(),
+        image: imageInput.value.trim() !== "" ? imageInput.value.trim() : null,
+        likes: 0
+    };
+    try {
+        const response = await fetch(`${PB_URL}/api/collections/posts/records`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(postData)
+        });
+        if (!response.ok) throw new Error('Failed');
+        textInput.value = '';
+        imageInput.value = '';
+        showToast('✅', 'Post shared!');
+        loadFeedPosts();
+    } catch (error) {
+        console.error(error);
+        showToast('❌', 'Failed. Is PocketBase running?');
+    }
+}
+
+async function toggleLike(postId) {
+    const countSpan = document.getElementById(`like-count-${postId}`);
+    if (!countSpan) return;
+    const parent = countSpan.closest('.action-item');
+    const currentlyLiked = parent.classList.contains('liked');
+    let currentCount = parseInt(countSpan.textContent) || 0;
+    const newCount = currentlyLiked ? currentCount - 1 : currentCount + 1;
+    countSpan.textContent = newCount;
+    parent.classList.toggle('liked');
+    const iconText = parent.classList.contains('liked') ? '❤️ ' : '🤍 ';
+    parent.childNodes[0].textContent = iconText;
+    try {
+        await fetch(`${PB_URL}/api/collections/posts/records/${postId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ likes: newCount })
+        });
+    } catch (error) {
+        countSpan.textContent = currentCount;
+        parent.classList.toggle('liked');
+        parent.childNodes[0].textContent = parent.classList.contains('liked') ? '❤️ ' : '🤍 ';
+        showToast('⚠️', 'Like failed.');
+    }
+}
+
+function sharePost(postId) {
+    const card = document.querySelector(`.tweet-card[data-id="${postId}"]`);
+    if (card) {
+        const contentDiv = card.querySelector('.tweet-content');
+        if (contentDiv && navigator.clipboard) {
+            navigator.clipboard.writeText(`"${contentDiv.textContent}" - Shared from Zyventra`).then(() => {
+                showToast('📋', 'Copied!');
+            }).catch(() => showToast('📋', 'Share coming soon!'));
+        } else {
+            showToast('📋', 'Share coming soon!');
+        }
+    }
+}
+
+async function deletePost(postId) {
+    if (!isFounder) { showToast('🚫', 'Only Founder!'); return; }
+    if (!confirm('Delete this post?')) return;
+    try {
+        const response = await fetch(`${PB_URL}/api/collections/posts/records/${postId}`, { method: 'DELETE' });
+        if (response.ok) {
+            showToast('🗑️', 'Deleted!');
+            loadFeedPosts();
+        } else {
+            showToast('❌', 'Failed to delete.');
+        }
+    } catch (error) {
+        console.error(error);
+        showToast('❌', 'Error deleting.');
+    }
+}
+
+// Auto-load feed when app starts
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        if (typeof loadFeedPosts === 'function') loadFeedPosts();
+    }, 700);
+});
 </script>
 </body>
 </html>
