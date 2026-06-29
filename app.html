@@ -332,7 +332,8 @@
 // =============================================
 // 🔥 ABLY API KEY - YAHAN APNI KEY DAALO
 // =============================================
-const ABLY_API_KEY = 'hyh5eg.alxDVw:bniQaJen9pCR_T_ytbiqJJHghA_F6UrNqBW6HkD8Qgk';  // 
+const ABLY_API_KEY = 'hyh5eg.alxDVw:bniQaJen9pCR_T_ytbiqJJHghA_F6UrNqBW6HkD8Qgk'; //
+const PB_URL = 'http://127.0.0.1:8090'; // PocketBase URL (Computer par test)
 
 // =============================================
 // 1. TOAST SYSTEM
@@ -1669,9 +1670,14 @@ let users = [];
 let bannedUsers = [];
 
 function initChat() {
-  // Ably se connect karo
+  // 🔥 Duplicate listener se bachao
+  if (window._chatInitialized) {
+    console.log('Chat already initialized.');
+    return;
+  }
+
   if (!ABLY_API_KEY) {
-   showToast('⚠️', 'Please set your Ably API key first!');
+    showToast('⚠️', 'Please set your Ably API key first!');
     return;
   }
   try {
@@ -1702,7 +1708,6 @@ function initChat() {
       localStorage.setItem('zyventra_chat_users', JSON.stringify(users));
     }
 
-    // Banned users load karo
     const savedBanned = localStorage.getItem('zyventra_banned_users');
     if (savedBanned) {
       bannedUsers = JSON.parse(savedBanned);
@@ -1710,7 +1715,6 @@ function initChat() {
       localStorage.setItem('zyventra_banned_users', JSON.stringify(bannedUsers));
     }
 
-    // Admin controls
     const adminControls = document.getElementById('adminControls');
     if (isFounder || localStorage.getItem('zyventra_is_founder') === 'true') {
       adminControls.style.display = 'flex';
@@ -1719,35 +1723,46 @@ function initChat() {
     }
 
     renderDMList();
-    showToast('✅', 'Live Chat Connected!');
+    
+    // 🔥 NAYA: 7 din pehle ki messages PocketBase se load karo
+    loadSevenDayHistory();
+    
+    showToast('✅', 'Live Chat + 7-Day History Connected!');
+    window._chatInitialized = true;
   } catch (error) {
     console.error('Ably init error:', error);
     showToast('❌', 'Failed to connect to live chat.');
   }
 }
-
 // =============================================
 // PUBLIC CHAT FUNCTIONS
 // =============================================
 
 function appendPublicMessage(sender, text, time) {
-  const container = document.getElementById('publicChatMessages');
+  // 1️⃣ Screen par pehle dikhao (UI update)
+  renderMessageOnScreen(sender, text, time);
+
+  // 2️⃣ Ab is message ko PocketBase mein Save karo (7 din history ke liye)
+  fetch(`${PB_URL}/api/collections/messages/records`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sender: sender, text: text })
+  })
+  .then(res => res.json())
+  .then(data => console.log('✅ Message saved to PocketBase', data))
+  .catch(err => console.error('PocketBase Save Error:', err));
+
+  // 3️⃣ Notification & Sound (jo pehle se tha)
   const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
   const isSent = sender === currentUser;
-  const isBanned = bannedUsers.some(b => b.name === sender && b.expires > Date.now());
-  const div = document.createElement('div');
-  div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
-  const isFounderSender = sender.toLowerCase() === FOUNDER_NAME.toLowerCase() || users.find(u => u.name === sender)?.isFounder;
-  div.innerHTML = `
-    <span class="msg-sender">${sender}${isFounderSender ? ' <span class="founder-badge">👑 Founder</span>' : ''}${isBanned ? ' <span class="banned-label">🚫 Banned</span>' : ''}</span>
-    ${text}
-    <span class="msg-time">${new Date(time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
-  `;
-  if (isBanned) div.style.opacity = '0.5';
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
+  if (!isSent) {
+    const typingEl = document.getElementById('typingIndicator');
+    if (typingEl) typingEl.style.opacity = '0';
+    const isFounderSender = sender.toLowerCase() === FOUNDER_NAME.toLowerCase() || users?.find(u => u.name === sender)?.isFounder;
+    const isAlert = /hack|attack|block|breach|virus|malware|ban|alert|unauthorized/i.test(text);
+    sendCustomNotification(sender, text, isFounderSender, isAlert);
+  }
 }
-
 // =============================================
 // DM FUNCTIONS
 // =============================================
@@ -1801,6 +1816,55 @@ function openDM(user) {
     const msg = message.data;
     appendDMMessage(user.name, msg.sender, msg.text, msg.time || Date.now());
   });
+}
+  // =============================================
+// 🆕 POCKETBASE FUNCTIONS (7 DAY HISTORY)
+// =============================================
+
+// 📥 7 din pehle ki messages PocketBase se laao
+async function loadSevenDayHistory() {
+  const container = document.getElementById('publicChatMessages');
+  container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading 7 days history...</div>';
+
+  try {
+    const response = await fetch(`${PB_URL}/api/collections/messages/records?sort=created&perPage=500`);
+    const data = await response.json();
+
+    container.innerHTML = '';
+
+    if (!data.items || data.items.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">No messages in last 7 days. Say Hi!</div>';
+      return;
+    }
+
+    data.items.forEach(msg => {
+      renderMessageOnScreen(msg.sender, msg.text, new Date(msg.created).getTime());
+    });
+    console.log(`✅ Loaded ${data.items.length} messages from PocketBase.`);
+  } catch (error) {
+    console.error('Error loading history:', error);
+    container.innerHTML = '<div style="text-align:center; padding:20px; color:#ef4444;">Failed to load history. Make sure PocketBase is running.</div>';
+  }
+}
+
+// 🖥️ Screen par message dikhane wala function (UI)
+function renderMessageOnScreen(sender, text, time) {
+  const container = document.getElementById('publicChatMessages');
+  const currentUser = localStorage.getItem('zyventra_app_user') || 'Explorer';
+  const isSent = sender === currentUser;
+  const isBanned = bannedUsers ? bannedUsers.some(b => b.name === sender && b.expires > Date.now()) : false;
+  const div = document.createElement('div');
+  div.className = `chat-msg ${isSent ? 'sent' : 'received'}`;
+  const isFounderSender = sender.toLowerCase() === FOUNDER_NAME.toLowerCase() || users?.find(u => u.name === sender)?.isFounder;
+  
+  div.innerHTML = `
+    <span class="msg-sender">${sender}${isFounderSender ? ' <span class="founder-badge">👑 Founder</span>' : ''}${isBanned ? ' <span class="banned-label">🚫 Banned</span>' : ''}</span>
+    ${text}
+    <span class="msg-time">${new Date(time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+  `;
+  if (isBanned) div.style.opacity = '0.5';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
 }
 
 function appendDMMessage(receiver, sender, text, time) {
