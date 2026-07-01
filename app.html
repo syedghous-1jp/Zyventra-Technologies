@@ -477,10 +477,7 @@
     .action-item:active { transform: scale(0.9); }
     .action-item.liked { color: #ef4444; }
     .action-item.delete-post:hover { color: #ef4444; }
-  /* =============================================
-   MOBILE FIXES (480px and below)
-   ============================================ */
-@media(max-width:480px){
+  @media(max-width:480px){
     .hero-title { font-size: 1.8rem; }
     .hero-ctas { flex-direction: column; width: 100%; gap: 10px; }
     .hero-ctas button, .hero-ctas .play-wrap { width: 100%; justify-content: center; }
@@ -490,17 +487,11 @@
     .mini-grid { grid-template-columns: 1fr; gap: 10px; }
     .sec-widget { padding: 15px; }
     .hero-slider { height: 200px; }
-
-    /* MOBILE FIX: Get App button and nav actions */
     .nav-actions .pill-btn { padding: 6px 10px; font-size: 10px; }
     #installBtn .btn-text { display: none; }
     #installBtn::before { content: "📲"; font-size: 14px; }
     .nav-actions { gap: 5px; }
-
-    /* MOBILE FIX: Hero text size */
     .hero-title { font-size: 1.4rem !important; }
-
-    /* MOBILE FIX: Header - Greeting + Language Toggle */
     .main-app-header {
         padding: 12px 12px 6px 12px !important;
         flex-wrap: wrap !important;
@@ -542,6 +533,7 @@
         right: -2px !important;
     }
 }
+
   </style>
 </head>
 <body>
