@@ -2633,36 +2633,40 @@ const SoundEngine = {
 
 // 2. 🔔 Permission & Notification Sender
 function requestNotificationPermission() {
+    // ✅ Sirf ek baar permission maango (LocalStorage check)
+    if (localStorage.getItem('zyventra_notif_asked') === 'true') {
+        if (Notification.permission === 'granted') {
+            showToast('✅', 'Notifications Already ON!');
+            SoundEngine.play('founder');
+        } else {
+            showToast('⚠️', 'Notifications blocked in browser.');
+        }
+        return;
+    }
+    
     if (Notification.permission === 'granted') {
+        localStorage.setItem('zyventra_notif_asked', 'true');
         showToast('✅', 'Notifications ON!');
         SoundEngine.play('founder');
-        new Notification('✅ Zyventra Ready!', {
-            body: 'Custom sounds & vibration active!',
-            icon: '🛡️',
-            vibrate: [200, 100, 200] 
-        });
         return;
     }
     if (Notification.permission === 'denied') {
+        localStorage.setItem('zyventra_notif_asked', 'true');
         showToast('❌', 'Enable from browser settings.');
         return;
     }
+    
     showToast('🔔', 'Please Allow notifications!');
     Notification.requestPermission().then(perm => {
+        localStorage.setItem('zyventra_notif_asked', 'true');
         if (perm === 'granted') {
             showToast('🎉', 'Enabled!');
             SoundEngine.play('founder');
-            new Notification('👑 Founder Test', {
-                body: 'Zyventra notifications are live!',
-                icon: '👑',
-                vibrate: [200, 100, 200]
-            });
         } else {
             showToast('⚠️', 'Blocked!');
         }
     });
 }
-
 // 3. 📨 Main Notification Sender (Sound + Vibration + Popup)
 function sendCustomNotification(sender, text, isFounder = false, isAlert = false) {
     // Sound bajao (Sirf app open hai tab)
@@ -2803,7 +2807,7 @@ async function loadFeedPosts() {
     if (!container) return;
     container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading feed...</div>';
     try {
-        const response = await fetch(`${PB_URL}/api/collections/posts/records?sort=-created&perPage=50`);
+       const response = await fetch(`${PB_URL}/api/collections/posts/records?sort=-created&perPage=100`);
         const data = await response.json();
         container.innerHTML = '';
         if (!data.items || data.items.length === 0) {
