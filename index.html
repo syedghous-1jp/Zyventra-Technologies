@@ -425,7 +425,7 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 <p style="font-size:14px;color:#52526a;line-height:1.75;max-width:390px;margin:14px 0 26px">Smart. Relentless. Secure. 32+ enterprise-grade security & infra tools — IAM, Secrets, JWT, OT/ICS, Supply Chain, Dark Web & more.</p>
 <div class="hero-ctas">
 <button class="pill-btn pill-btn-gold" style="padding:12px 28px;font-size:14px" onclick="document.getElementById('platform').scrollIntoView({behavior:'smooth'})">Explore Platform ▾</button>
-<button class="play-wrap"><span class="play-circle"><svg width="12" height="12" viewBox="0 0 12 12"><polygon points="2,1 11,6 2,11" fill="#C9A84C"/></svg></span>Watch Demo</button>
+<a href="https://www.youtube.com/watch?v=your-demo-id" target="_blank" class="play-wrap" style="text-decoration:none;"><span class="play-circle"><svg width="12" height="12" viewBox="0 0 12 12"><polygon points="2,1 11,6 2,11" fill="#C9A84C"/></svg></span>Watch Demo</a>
 </div>
 <div class="hero-trust">
 <div class="trust-item"><span class="trust-val">500+</span><span class="trust-lbl">Security Experts</span></div>
@@ -703,7 +703,11 @@ function handleLogin() {
     if (email && pass) { showToast('✅ Login successful! Welcome back.', 'success'); closeLoginModal(); }
     else { showToast('❌ Please fill in all fields.', 'error'); }
 }
-function socialLogin(provider) { showToast(`✅ Signed in with ${provider}!`, 'success'); closeLoginModal(); }
+async function socialLogin(provider) {
+    const { error } = await supabase.auth.signInWithOAuth({ provider: provider.toLowerCase() });
+    if (error) showToast('❌ ' + error.message, 'error');
+    else closeLoginModal();
+}
 document.getElementById('loginModal')?.addEventListener('click', function(e){ if(e.target===this) closeLoginModal(); });
 
 // ============================================================
