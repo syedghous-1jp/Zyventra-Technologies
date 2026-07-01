@@ -155,6 +155,34 @@
     .tool-card .icon { font-size:28px; display:block; margin-bottom:6px; }
     .tool-card .name { font-size:13px; font-weight:700; }
     .tool-card .desc { font-size:10px; color:var(--text-muted); margin-top:4px; }
+  /* =============================================
+   LANGUAGE TOGGLE (Global)
+   ============================================ */
+.lang-toggle-global {
+    display: flex;
+    gap: 6px;
+    background: var(--bg-soft);
+    border-radius: 30px;
+    padding: 4px;
+    border: var(--border-lux);
+}
+.lang-toggle-global button {
+    padding: 6px 14px;
+    border-radius: 30px;
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+}
+.lang-toggle-global button.active-lang {
+    background: var(--accent-gold);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(207,168,60,0.3);
+}
+.lang-toggle-global button:active { transform: scale(0.95); }
     /* STUDY */
     .lang-btn { transition:all 0.2s; padding:8px 14px; border-radius:30px; font-weight:700; font-size:12px; cursor:pointer; border:var(--border-lux); background:var(--bg-soft); color:var(--text-dark); display:inline-flex; align-items:center; gap:6px; }
     .lang-btn.active { background:var(--accent-gold); color:#fff; border:none; }
@@ -466,11 +494,18 @@
       <p id="greeting-time">Dashboard · Zyventra</p>
     </div>
     <div class="header-actions">
-      <button id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-download"></i> Get</button>
-      <button class="header-btn" onclick="showToast('🔔','3 new notifications!')"><i class="fa-solid fa-bell"></i><span class="badge">3</span></button>
-      <button class="header-btn" onclick="toggleTheme()" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
-      <div class="header-btn" onclick="navigateTo('profile')" style="background:var(--bg-soft); color:var(--accent-gold);"><i class="fa-solid fa-user"></i></div>
-    </div>
+  <div class="lang-toggle-global" id="globalLangToggle">
+    <button class="active-lang" data-lang="ur" onclick="setGlobalLanguage('ur')">🇵🇰</button>
+    <button data-lang="en" onclick="setGlobalLanguage('en')">🇬🇧</button>
+    <button data-lang="es" onclick="setGlobalLanguage('es')">🇪🇸</button>
+    <button data-lang="ar" onclick="setGlobalLanguage('ar')">🇸🇦</button>
+    <button data-lang="de" onclick="setGlobalLanguage('de')">🇩🇪</button>
+  </div>
+  <button id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-download"></i> Get</button>
+  <button class="header-btn" onclick="showToast('🔔','3 new notifications!')"><i class="fa-solid fa-bell"></i><span class="badge">3</span></button>
+  <button class="header-btn" onclick="toggleTheme()" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+  <div class="header-btn" onclick="navigateTo('profile')" style="background:var(--bg-soft); color:var(--accent-gold);"><i class="fa-solid fa-user"></i></div>
+</div>
   </header>
 
   <!-- PAGE HOME -->
@@ -2942,6 +2977,493 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof loadFeedPosts === 'function') loadFeedPosts();
     }, 700);
 });
+// =============================================
+// 🌍 FULL UI LANGUAGE (Translation System)
+// =============================================
+let globalUILang = localStorage.getItem('zyventra_ui_lang') || 'ur';
+
+const UI_TRANSLATIONS = {
+    ur: {
+        appName: 'زیوینٹرا',
+        dashboard: 'ڈیش بورڈ',
+        home: 'ہوم',
+        tools: 'ٹولز',
+        connect: 'کنیکٹ',
+        study: 'اسٹڈی',
+        feed: 'فیڈ',
+        profile: 'پروفائل',
+        hello: 'ہیلو',
+        securityScore: 'سیکیورٹی سکور',
+        scans: 'اسکینز',
+        vulnerabilities: 'خامیاں',
+        response: 'رسپانس',
+        uptime: 'اپ ٹائم',
+        startScan: 'اسکین شروع کریں',
+        scan: 'اسکین',
+        recentActivity: 'حالیہ سرگرمیاں',
+        viewAll: 'سب دیکھیں',
+        newScan: 'نیا اسکین',
+        report: 'رپورٹ',
+        logs: 'لاگز',
+        settings: 'سیٹنگز',
+        threatDistribution: 'خطرات کی تقسیم',
+        activity: 'سرگرمی',
+        quickScan: 'فوری اسکینر',
+        ready: 'تیار',
+        scanning: 'اسکین ہو رہا ہے...',
+        allClear: '✅ سب صاف',
+        threats: 'خطرات',
+        security: 'سیکیورٹی',
+        launch: 'لانچ ہو رہا ہے',
+        fullReport: 'مکمل سیکیورٹی رپورٹ',
+        scanAllModules: 'تمام ماڈیولز اسکین کریں اور پی ڈی ایف بنائیں',
+        welcome: 'خوش آمدید',
+        configureIdentity: 'اپنی شناخت ترتیب دیں',
+        enterName: 'اپنا پورا نام درج کریں',
+        enterAge: 'اپنی عمر درج کریں',
+        initialize: 'ڈیش بورڈ شروع کریں',
+        founderWarning: '⚠️ بانی کے نام کے لیے پاس ورڈ کی تصدیق درکار ہے',
+        adminPanel: '👑 ایڈمن پینل',
+        banUser: '🚫 صارف کو بین کریں',
+        unbanUser: '✅ صارف کا بین ختم کریں',
+        public: '💬 پبلک',
+        dms: '✉️ پرائیویٹ',
+        searchUsers: '🔍 صارفین تلاش کریں...',
+        typeMessage: 'پیغام لکھیں...',
+        messagesRetained: '📅 پیغامات 30 دن تک محفوظ رہتے ہیں',
+        darkWeb: '🌑 ڈارک ویب',
+        breachCheck: 'لیک چیک (لائیو)',
+        check: 'چیک کریں',
+        close: 'بند کریں',
+        scanningDarkWeb: 'ڈارک ویب اسکین ہو رہا ہے...',
+        noBreaches: '✅ اس ای میل کے لیے کوئی لیک نہیں ملی',
+        breachesFound: 'لیک مل گئے!',
+        networkError: '❌ نیٹ ورک کی خرابی۔ براہ کرم اپنا انٹرنیٹ کنیکشن چیک کریں',
+        contactUs: '📬 ہم سے رابطہ کریں',
+        resetLogout: 'ری سیٹ اور لاگ آؤٹ',
+        areYouSure: 'کیا آپ کو یقین ہے؟',
+        memberSince: 'رکنیت از',
+        totalScans: 'کل اسکینز',
+        toolsCount: 'ٹولز',
+        dayStreak: 'روز کا سلسلہ',
+        noPosts: 'ابھی کوئی پوسٹ نہیں۔ پہلے بنیں! 🚀',
+        share: 'شیئر کریں',
+        imageUrl: 'تصویر کا URL (اختیاری)',
+        kyaNayaSeekha: 'کیا نیا سیکھا آج؟ شیئر کریں...',
+        loading: 'لوڈ ہو رہا ہے...',
+        failedToLoad: 'لوڈ کرنے میں ناکام۔ کیا PocketBase چل رہا ہے؟',
+        postShared: 'پوسٹ شیئر ہو گئی!',
+        enterSomething: 'کچھ لکھیں!',
+        youAreBanned: '🚫 آپ کو بین کر دیا گیا ہے!',
+        deleted: '🗑️ حذف ہو گیا!',
+        copy: '📋 کاپی ہو گیا!',
+        shareComingSoon: '📋 شیئر جلد آرہا ہے!',
+        onlyFounder: '🚫 صرف بانی!',
+        dailyQuote: '📜 آج کا سیکیورٹی قول',
+    },
+    en: {
+        appName: 'Zyventra',
+        dashboard: 'Dashboard',
+        home: 'Home',
+        tools: 'Tools',
+        connect: 'Connect',
+        study: 'Study',
+        feed: 'Feed',
+        profile: 'Profile',
+        hello: 'Hello',
+        securityScore: 'Security Score',
+        scans: 'Scans',
+        vulnerabilities: 'Vulnerabilities',
+        response: 'Response',
+        uptime: 'Uptime',
+        startScan: 'Start Scan',
+        scan: 'Scan',
+        recentActivity: 'Recent Activity',
+        viewAll: 'View All',
+        newScan: 'New Scan',
+        report: 'Report',
+        logs: 'Logs',
+        settings: 'Settings',
+        threatDistribution: 'Threat Distribution',
+        activity: 'Activity',
+        quickScan: 'Quick Scanner',
+        ready: 'Ready',
+        scanning: 'Scanning...',
+        allClear: '✅ All Clear',
+        threats: 'Threats',
+        security: 'Security',
+        launch: 'Launching',
+        fullReport: 'Full Security Report',
+        scanAllModules: 'Scan all modules & generate PDF',
+        welcome: 'Welcome',
+        configureIdentity: 'Configure your workspace identity',
+        enterName: 'Enter full name',
+        enterAge: 'Enter age',
+        initialize: 'Initialize Dashboard',
+        founderWarning: '⚠️ Founder name requires password verification',
+        adminPanel: '👑 Admin Panel',
+        banUser: '🚫 Ban User',
+        unbanUser: '✅ Unban User',
+        public: '💬 Public',
+        dms: '✉️ DMs',
+        searchUsers: '🔍 Search users...',
+        typeMessage: 'Type a message...',
+        messagesRetained: '📅 Messages retained for 30 days',
+        darkWeb: '🌑 Dark Web',
+        breachCheck: 'Breach check (Live)',
+        check: 'Check',
+        close: 'Close',
+        scanningDarkWeb: 'Scanning dark web...',
+        noBreaches: '✅ No breaches found for this email',
+        breachesFound: 'breaches found!',
+        networkError: '❌ Network error. Please check your internet connection',
+        contactUs: '📬 Contact Zyventra',
+        resetLogout: 'Reset & Logout',
+        areYouSure: 'Are you sure?',
+        memberSince: 'Member since',
+        totalScans: 'Total Scans',
+        toolsCount: 'Tools',
+        dayStreak: 'Day Streak',
+        noPosts: 'No posts yet. Be the first! 🚀',
+        share: 'Share',
+        imageUrl: 'Image URL (Optional)',
+        kyaNayaSeekha: 'What new did you learn today? Share...',
+        loading: 'Loading...',
+        failedToLoad: 'Failed to load. Is PocketBase running?',
+        postShared: 'Post shared!',
+        enterSomething: 'Write something!',
+        youAreBanned: '🚫 You are banned!',
+        deleted: '🗑️ Deleted!',
+        copy: '📋 Copied!',
+        shareComingSoon: '📋 Share coming soon!',
+        onlyFounder: '🚫 Only Founder!',
+        dailyQuote: '📜 Today\'s Security Quote',
+    },
+    es: {
+        appName: 'Zyventra',
+        dashboard: 'Panel',
+        home: 'Inicio',
+        tools: 'Herramientas',
+        connect: 'Conectar',
+        study: 'Estudiar',
+        feed: 'Feed',
+        profile: 'Perfil',
+        hello: 'Hola',
+        securityScore: 'Puntuación de Seguridad',
+        scans: 'Escaneos',
+        vulnerabilities: 'Vulnerabilidades',
+        response: 'Respuesta',
+        uptime: 'Tiempo Activo',
+        startScan: 'Iniciar Escaneo',
+        scan: 'Escaneo',
+        recentActivity: 'Actividad Reciente',
+        viewAll: 'Ver Todo',
+        newScan: 'Nuevo Escaneo',
+        report: 'Informe',
+        logs: 'Registros',
+        settings: 'Ajustes',
+        threatDistribution: 'Distribución de Amenazas',
+        activity: 'Actividad',
+        quickScan: 'Escáner Rápido',
+        ready: 'Listo',
+        scanning: 'Escaneando...',
+        allClear: '✅ Todo Limpio',
+        threats: 'Amenazas',
+        security: 'Seguridad',
+        launch: 'Lanzando',
+        fullReport: 'Informe Completo de Seguridad',
+        scanAllModules: 'Escanea todos los módulos y genera PDF',
+        welcome: 'Bienvenido',
+        configureIdentity: 'Configura tu identidad',
+        enterName: 'Nombre completo',
+        enterAge: 'Edad',
+        initialize: 'Iniciar Panel',
+        founderWarning: '⚠️ Se requiere verificación de contraseña',
+        adminPanel: '👑 Panel Admin',
+        banUser: '🚫 Banear Usuario',
+        unbanUser: '✅ Desbanear Usuario',
+        public: '💬 Público',
+        dms: '✉️ MDs',
+        searchUsers: '🔍 Buscar usuarios...',
+        typeMessage: 'Escribe un mensaje...',
+        messagesRetained: '📅 Mensajes retenidos 30 días',
+        darkWeb: '🌑 Dark Web',
+        breachCheck: 'Verificar filtración (Live)',
+        check: 'Verificar',
+        close: 'Cerrar',
+        scanningDarkWeb: 'Escaneando dark web...',
+        noBreaches: '✅ No se encontraron filtraciones',
+        breachesFound: '¡filtraciones encontradas!',
+        networkError: '❌ Error de red. Verifica tu conexión',
+        contactUs: '📬 Contáctanos',
+        resetLogout: 'Reiniciar y Cerrar Sesión',
+        areYouSure: '¿Estás seguro?',
+        memberSince: 'Miembro desde',
+        totalScans: 'Escaneos Totales',
+        toolsCount: 'Herramientas',
+        dayStreak: 'Racha',
+        noPosts: '¡Sin publicaciones. Sé el primero! 🚀',
+        share: 'Compartir',
+        imageUrl: 'URL de imagen (Opcional)',
+        kyaNayaSeekha: '¿Qué aprendiste hoy? Comparte...',
+        loading: 'Cargando...',
+        failedToLoad: 'Error al cargar. ¿PocketBase está corriendo?',
+        postShared: '¡Publicación compartida!',
+        enterSomething: '¡Escribe algo!',
+        youAreBanned: '🚫 ¡Estás baneado!',
+        deleted: '🗑️ ¡Eliminado!',
+        copy: '📋 ¡Copiado!',
+        shareComingSoon: '📋 Compartir pronto!',
+        onlyFounder: '🚫 ¡Solo Fundador!',
+        dailyQuote: '📜 Cita de Seguridad de Hoy',
+    },
+    ar: {
+        appName: 'زيونترا',
+        dashboard: 'لوحة التحكم',
+        home: 'الرئيسية',
+        tools: 'الأدوات',
+        connect: 'تواصل',
+        study: 'دراسة',
+        feed: 'المنشورات',
+        profile: 'الملف الشخصي',
+        hello: 'مرحباً',
+        securityScore: 'درجة الأمان',
+        scans: 'عمليات المسح',
+        vulnerabilities: 'الثغرات',
+        response: 'الاستجابة',
+        uptime: 'وقت التشغيل',
+        startScan: 'بدء المسح',
+        scan: 'مسح',
+        recentActivity: 'النشاط الأخير',
+        viewAll: 'عرض الكل',
+        newScan: 'مسح جديد',
+        report: 'تقرير',
+        logs: 'السجلات',
+        settings: 'الإعدادات',
+        threatDistribution: 'توزيع التهديدات',
+        activity: 'النشاط',
+        quickScan: 'الماسح السريع',
+        ready: 'جاهز',
+        scanning: 'جاري المسح...',
+        allClear: '✅ كل شيء آمن',
+        threats: 'التهديدات',
+        security: 'الأمان',
+        launch: 'جاري التشغيل',
+        fullReport: 'تقرير الأمان الكامل',
+        scanAllModules: 'مسح جميع الوحدات وإنشاء PDF',
+        welcome: 'أهلاً بك',
+        configureIdentity: 'تكوين هويتك',
+        enterName: 'أدخل الاسم الكامل',
+        enterAge: 'أدخل العمر',
+        initialize: 'بدء لوحة التحكم',
+        founderWarning: '⚠️ اسم المؤسس يتطلب التحقق من كلمة المرور',
+        adminPanel: '👑 لوحة المشرف',
+        banUser: '🚫 حظر المستخدم',
+        unbanUser: '✅ إلغاء حظر المستخدم',
+        public: '💬 عام',
+        dms: '✉️ رسائل خاصة',
+        searchUsers: '🔍 بحث عن مستخدمين...',
+        typeMessage: 'اكتب رسالة...',
+        messagesRetained: '📅 يتم الاحتفاظ بالرسائل لمدة 30 يوماً',
+        darkWeb: '🌑 الويب المظلم',
+        breachCheck: 'التحقق من الاختراق (مباشر)',
+        check: 'تحقق',
+        close: 'إغلاق',
+        scanningDarkWeb: 'جاري مسح الويب المظلم...',
+        noBreaches: '✅ لم يتم العثور على اختراقات لهذا البريد الإلكتروني',
+        breachesFound: 'اختراقات موجودة!',
+        networkError: '❌ خطأ في الشبكة. تحقق من اتصالك بالإنترنت',
+        contactUs: '📬 اتصل بنا',
+        resetLogout: 'إعادة تعيين وتسجيل الخروج',
+        areYouSure: 'هل أنت متأكد؟',
+        memberSince: 'عضو منذ',
+        totalScans: 'إجمالي عمليات المسح',
+        toolsCount: 'الأدوات',
+        dayStreak: 'السلسلة اليومية',
+        noPosts: 'لا توجد منشورات بعد. كن الأول! 🚀',
+        share: 'مشاركة',
+        imageUrl: 'رابط الصورة (اختياري)',
+        kyaNayaSeekha: 'ماذا تعلمت اليوم؟ شارك...',
+        loading: 'جاري التحميل...',
+        failedToLoad: 'فشل التحميل. هل PocketBase يعمل؟',
+        postShared: 'تمت المشاركة!',
+        enterSomething: 'اكتب شيئاً!',
+        youAreBanned: '🚫 تم حظرك!',
+        deleted: '🗑️ تم الحذف!',
+        copy: '📋 تم النسخ!',
+        shareComingSoon: '📋 قريباً!',
+        onlyFounder: '🚫 فقط المؤسس!',
+        dailyQuote: '📜 مقولة اليوم الأمنية',
+    },
+    de: {
+        appName: 'Zyventra',
+        dashboard: 'Dashboard',
+        home: 'Start',
+        tools: 'Werkzeuge',
+        connect: 'Verbinden',
+        study: 'Lernen',
+        feed: 'Feed',
+        profile: 'Profil',
+        hello: 'Hallo',
+        securityScore: 'Sicherheitspunktzahl',
+        scans: 'Scans',
+        vulnerabilities: 'Schwachstellen',
+        response: 'Antwort',
+        uptime: 'Betriebszeit',
+        startScan: 'Scan starten',
+        scan: 'Scan',
+        recentActivity: 'Letzte Aktivität',
+        viewAll: 'Alle anzeigen',
+        newScan: 'Neuer Scan',
+        report: 'Bericht',
+        logs: 'Protokolle',
+        settings: 'Einstellungen',
+        threatDistribution: 'Bedrohungsverteilung',
+        activity: 'Aktivität',
+        quickScan: 'Schnell-Scanner',
+        ready: 'Bereit',
+        scanning: 'Scan läuft...',
+        allClear: '✅ Alles sauber',
+        threats: 'Bedrohungen',
+        security: 'Sicherheit',
+        launch: 'Starte',
+        fullReport: 'Vollständiger Sicherheitsbericht',
+        scanAllModules: 'Alle Module scannen und PDF erstellen',
+        welcome: 'Willkommen',
+        configureIdentity: 'Identität konfigurieren',
+        enterName: 'Vollständiger Name',
+        enterAge: 'Alter',
+        initialize: 'Dashboard starten',
+        founderWarning: '⚠️ Gründername erfordert Passwortverifizierung',
+        adminPanel: '👑 Admin-Panel',
+        banUser: '🚫 Benutzer sperren',
+        unbanUser: '✅ Benutzer entsperren',
+        public: '💬 Öffentlich',
+        dms: '✉️ PN',
+        searchUsers: '🔍 Benutzer suchen...',
+        typeMessage: 'Nachricht schreiben...',
+        messagesRetained: '📅 Nachrichten 30 Tage gespeichert',
+        darkWeb: '🌑 Dark Web',
+        breachCheck: 'Datenleck prüfen (Live)',
+        check: 'Prüfen',
+        close: 'Schließen',
+        scanningDarkWeb: 'Dark Web wird gescannt...',
+        noBreaches: '✅ Keine Datenlecks gefunden',
+        breachesFound: 'Datenlecks gefunden!',
+        networkError: '❌ Netzwerkfehler. Bitte Internetverbindung prüfen',
+        contactUs: '📬 Kontaktiere Zyventra',
+        resetLogout: 'Zurücksetzen & Abmelden',
+        areYouSure: 'Bist du sicher?',
+        memberSince: 'Mitglied seit',
+        totalScans: 'Gesamte Scans',
+        toolsCount: 'Werkzeuge',
+        dayStreak: 'Tägliche Serie',
+        noPosts: 'Noch keine Beiträge. Sei der Erste! 🚀',
+        share: 'Teilen',
+        imageUrl: 'Bild-URL (Optional)',
+        kyaNayaSeekha: 'Was hast du heute gelernt? Teile...',
+        loading: 'Lädt...',
+        failedToLoad: 'Laden fehlgeschlagen. Läuft PocketBase?',
+        postShared: 'Beitrag geteilt!',
+        enterSomething: 'Schreib etwas!',
+        youAreBanned: '🚫 Du bist gesperrt!',
+        deleted: '🗑️ Gelöscht!',
+        copy: '📋 Kopiert!',
+        shareComingSoon: '📋 Teilen bald verfügbar!',
+        onlyFounder: '🚫 Nur Gründer!',
+        dailyQuote: '📜 Heutiges Sicherheitszitat',
+    }
+};
+
+// Global language apply function
+function setGlobalLanguage(lang) {
+    globalUILang = lang;
+    localStorage.setItem('zyventra_ui_lang', lang);
+    
+    // Update all buttons in the global toggle
+    document.querySelectorAll('#globalLangToggle button').forEach(btn => {
+        btn.classList.toggle('active-lang', btn.dataset.lang === lang);
+    });
+    
+    // Apply translations to all elements with data-i18n attribute
+    applyUILanguage(lang);
+    
+    showToast('🌍', UI_TRANSLATIONS[lang]?.appName || 'Language changed');
+}
+
+function applyUILanguage(lang) {
+    const t = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.ur;
+    
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) {
+            if (el.hasAttribute('placeholder')) {
+                el.placeholder = t[key];
+            } else {
+                el.textContent = t[key];
+            }
+        }
+    });
+    
+    // Update greeting separately with dynamic name
+    const userName = localStorage.getItem('zyventra_app_user') || 'Explorer';
+    const greetingEl = document.getElementById('user-greeting-label');
+    if (greetingEl) {
+        greetingEl.textContent = `${t.hello || 'Hello'}, ${userName}!`;
+    }
+    
+    // Update page titles dynamically
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        if (t[key] !== undefined) {
+            el.textContent = t[key];
+        }
+    });
+    
+    // Update quick actions
+    document.querySelectorAll('.quick-action .label[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+    });
+    
+    // Update tool cards
+    document.querySelectorAll('.tool-card .name[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+    });
+    document.querySelectorAll('.tool-card .desc[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+    });
+}
+
+// Initialize UI language when app loads
+function initUILanguage() {
+    const savedLang = localStorage.getItem('zyventra_ui_lang') || 'ur';
+    globalUILang = savedLang;
+    
+    document.querySelectorAll('#globalLangToggle button').forEach(btn => {
+        btn.classList.toggle('active-lang', btn.dataset.lang === savedLang);
+    });
+    
+    applyUILanguage(savedLang);
+}
+// =============================================
+// 🚀 FINAL INIT: Language + Feed
+// =============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Apply saved language to UI
+    initUILanguage();
+    
+    // 2. Load community feed
+    setTimeout(() => {
+        if (typeof loadFeedPosts === 'function') {
+            loadFeedPosts();
+        }
+    }, 500);
+});
+  
 </script>
 </body>
 </html>
