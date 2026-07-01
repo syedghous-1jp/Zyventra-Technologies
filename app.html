@@ -533,6 +533,71 @@
         right: -2px !important;
     }
 }
+/* =============================================
+   MOBILE FIXES (480px and below)
+   ============================================ */
+@media(max-width:480px){
+    .hero-title { font-size: 1.8rem; }
+    .hero-ctas { flex-direction: column; width: 100%; gap: 10px; }
+    .hero-ctas button, .hero-ctas .play-wrap { width: 100%; justify-content: center; }
+    .recon-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .team-grid-org { grid-template-columns: 1fr; gap: 30px; }
+    .mini-grid { grid-template-columns: 1fr; gap: 10px; }
+    .sec-widget { padding: 15px; }
+    .hero-slider { height: 200px; }
+
+    /* MOBILE FIX: Get App button and nav actions */
+    .nav-actions .pill-btn { padding: 6px 10px; font-size: 10px; }
+    #installBtn .btn-text { display: none; }
+    #installBtn::before { content: "📲"; font-size: 14px; }
+    .nav-actions { gap: 5px; }
+
+    /* MOBILE FIX: Hero text size */
+    .hero-title { font-size: 1.4rem !important; }
+
+    /* MOBILE FIX: Header - Greeting + Language Toggle */
+    .main-app-header {
+        padding: 12px 12px 6px 12px !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+    .identity-greeting h1 {
+        font-size: 16px !important;
+    }
+    .identity-greeting p {
+        font-size: 10px !important;
+    }
+    .header-actions {
+        gap: 4px !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-end !important;
+    }
+    .lang-toggle-global {
+        gap: 3px !important;
+        padding: 3px !important;
+    }
+    .lang-toggle-global button {
+        padding: 4px 8px !important;
+        font-size: 9px !important;
+    }
+    #installAppBtn {
+        padding: 4px 8px !important;
+        font-size: 9px !important;
+    }
+    .header-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 13px !important;
+    }
+    .header-btn .badge {
+        width: 14px !important;
+        height: 14px !important;
+        font-size: 8px !important;
+        top: -2px !important;
+        right: -2px !important;
+    }
+}
 
   </style>
 </head>
@@ -3520,71 +3585,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
 });
-/* =============================================
-   MOBILE FIXES (480px and below)
-   ============================================ */
-@media(max-width:480px){
-    .hero-title { font-size: 1.8rem; }
-    .hero-ctas { flex-direction: column; width: 100%; gap: 10px; }
-    .hero-ctas button, .hero-ctas .play-wrap { width: 100%; justify-content: center; }
-    .recon-grid { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: 1fr; }
-    .team-grid-org { grid-template-columns: 1fr; gap: 30px; }
-    .mini-grid { grid-template-columns: 1fr; gap: 10px; }
-    .sec-widget { padding: 15px; }
-    .hero-slider { height: 200px; }
 
-    /* MOBILE FIX: Get App button and nav actions */
-    .nav-actions .pill-btn { padding: 6px 10px; font-size: 10px; }
-    #installBtn .btn-text { display: none; }
-    #installBtn::before { content: "📲"; font-size: 14px; }
-    .nav-actions { gap: 5px; }
-
-    /* MOBILE FIX: Hero text size */
-    .hero-title { font-size: 1.4rem !important; }
-
-    /* MOBILE FIX: Header - Greeting + Language Toggle */
-    .main-app-header {
-        padding: 12px 12px 6px 12px !important;
-        flex-wrap: wrap !important;
-        gap: 6px !important;
-    }
-    .identity-greeting h1 {
-        font-size: 16px !important;
-    }
-    .identity-greeting p {
-        font-size: 10px !important;
-    }
-    .header-actions {
-        gap: 4px !important;
-        flex-wrap: wrap !important;
-        justify-content: flex-end !important;
-    }
-    .lang-toggle-global {
-        gap: 3px !important;
-        padding: 3px !important;
-    }
-    .lang-toggle-global button {
-        padding: 4px 8px !important;
-        font-size: 9px !important;
-    }
-    #installAppBtn {
-        padding: 4px 8px !important;
-        font-size: 9px !important;
-    }
-    .header-btn {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 13px !important;
-    }
-    .header-btn .badge {
-        width: 14px !important;
-        height: 14px !important;
-        font-size: 8px !important;
-        top: -2px !important;
-        right: -2px !important;
-    }
-}
   
 </script>
 </body>
