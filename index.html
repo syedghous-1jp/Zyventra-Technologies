@@ -362,8 +362,8 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 @media(max-width:480px){.hero-title{font-size:1.8rem}.hero-ctas{flex-direction:column;width:100%;gap:10px}.hero-ctas button,.hero-ctas .play-wrap{width:100%;justify-content:center}.recon-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr}.team-grid-org{grid-template-columns:1fr;gap:30px}.mini-grid{grid-template-columns:1fr;gap:10px}.sec-widget{padding:15px}.hero-slider{height:200px}
 /* MOBILE FIX: Get App button and nav actions */
 .nav-actions .pill-btn { padding: 6px 10px; font-size: 10px; }
-#installBtn { padding: 6px 8px; font-size: 10px; }
-.nav-actions .pill-btn-gold#installBtn { font-size: 9px; padding: 4px 6px; }
+#installBtn .btn-text { display: none; }
+#installBtn::before { content: "📲"; font-size: 14px; }
 .nav-actions { gap: 5px; }
 }
 </style>
@@ -389,7 +389,7 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 <button class="pill-btn pill-btn-outline" onclick="openLoginModal()">Login</button>
 <div class="signin-dropdown"><button class="pill-btn pill-btn-gold" onclick="toggleSignIn(event)">Sign In ▾</button><div class="signin-menu"><a href="#" onclick="openLoginModal();return false">🔑 Sign In</a><a href="#" onclick="openLoginModal();return false">📝 Register</a><a href="#" onclick="openLoginModal();return false">🔄 Reset Password</a></div></div>
 <!-- PWA Install Button (Gold) - NOW VISIBLE & MOBILE FIXED -->
-<button class="pill-btn pill-btn-gold" id="installBtn">📲 Get App</button>
+<button class="pill-btn pill-btn-gold" id="installBtn"><span class="btn-text">Get App</span></button>
 </div>
 <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
 </nav>
@@ -710,7 +710,7 @@ document.getElementById('loginModal')?.addEventListener('click', function(e){ if
 // ============================================================
 // SIGN IN
 // ============================================================
-function toggleSignIn(e) { e.stopPropagation(); document.querySelector('.signin-dropdown').classList.toggle('active'); }
+function toggleSignIn(e) { e.preventDefault(); document.querySelector('.signin-dropdown').classList.toggle('active'); }
 document.addEventListener('click', function(e){ if(!e.target.closest('.signin-dropdown')) document.querySelector('.signin-dropdown')?.classList.remove('active'); });
 
 // ============================================================
