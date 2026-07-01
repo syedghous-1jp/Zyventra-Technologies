@@ -856,9 +856,8 @@
 // =============================================
 // 🔥 ABLY API KEY - YAHAN APNI KEY DAALO
 // =============================================
-const ABLY_API_KEY = 'hyh5eg.alxDVw:bniQaJen9pCR_T_ytbiqJJHghA_F6UrNqBW6HkD8Qgk'; //
-const PB_URL = 'http://192.168.10.122:8090';// PocketBase URL (Computer par test)
-
+const ABLY_API_KEY = 'hyh5eg.alxDVw:bniQaJen9pCR_T_ytbiqJJHghA_F6UrNqBW6HkD8Qgk'; 
+const PB_URL = 'https://YOUR_POCKETBASE_URL_HERE'; 
 // =============================================
 // 1. TOAST SYSTEM
 // =============================================
@@ -2351,7 +2350,7 @@ async function loadSevenDayHistory() {
   container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading 7 days history...</div>';
 
   try {
-    const response = await fetch(`${PB_URL}/api/collections/messages/records?sort=created&perPage=500`);
+const response = await fetch(`${PB_URL}/api/collections/messages/records?sort=created&perPage=1000`);
     const data = await response.json();
 
     container.innerHTML = '';
@@ -2541,13 +2540,13 @@ function executeUnban() {
   // =============================================
   // 15. PWA INSTALL LOGIC
   // =============================================
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => { console.log('SW Registered!', reg); reg.update(); reg.onupdatefound = () => { const installingWorker = reg.installing; installingWorker.onstatechange = () => { if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) { console.log('New version detected! Reloading app...'); window.location.reload(); } } }; })
-        .catch(err => console.log('SW Error:', err));
-    });
-  }
+ if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => { console.log('SW Registered!', reg); reg.update(); reg.onupdatefound = () => { const installingWorker = reg.installing; installingWorker.onstatechange = () => { if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) { console.log('New version detected! Reloading app...'); window.location.reload(); } } }; })
+      .catch(err => console.log('SW Error:', err));
+  });
+}
 
   let deferredPrompt;
   const installBtn = document.getElementById('installAppBtn');
