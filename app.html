@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.0/dist/pocketbase.umd.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
@@ -4280,333 +4280,250 @@ document.addEventListener('DOMContentLoaded', function() {
  // =============================================
 // 📡 POCKETBASE FEED - WITH YOUR THEME
 // =============================================
-
-const pb = new PocketBase('http://127.0.0.1:8090');
-let currentUser = null;
-
 // =============================================
-// 🔐 AUTHENTICATION
+// SUPABASE FEED - COMPLETE
 // =============================================
 
-async function loginWithPocketBase(email, password) {
+// 🔥 YAHAN APNA SUPABASE URL AUR KEY DAALO
+// Settings → API se copy karo
+const SUPABASE_URL = 'https://your-project-id.supabase.co';
+const SUPABASE_ANON_KEY = 'your-anon-key-here';
+
+// =============================================
+// 1. INITIALIZE
+// =============================================
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// =============================================
+// 2. AUTH FUNCTIONS
+// =============================================
+
+// LOGIN
+async function login() {
+    const email = prompt('📧 Email:');
+    if (!email) return;
+    const password = prompt('🔑 Password:');
+    if (!password) return;
+    
     try {
-        const authData = await pb.collection('users').authWithPassword(email, password);
-        currentUser = pb.authStore.model;
-        updateAuthUI();
-        showToast('Welcome back! 👋', 'success');
-        return authData;
-    } catch (error) {
-        showToast('Login failed: ' + error.message, 'error');
-        throw error;
-    }
-}
-
-function logoutFromPocketBase() {
-    pb.authStore.clear();
-    currentUser = null;
-    updateAuthUI();
-    loadFeedPosts();
-    showToast('Logged out', 'info');
-}
-
-function isAuthenticated() {
-    return pb.authStore.isValid;
-}
-
-function getCurrentUser() {
-    return pb.authStore.model;
-}
-
-// =============================================
-// 📝 FEED FUNCTIONS
-// =============================================
-
-async function getFeedPosts(page = 1, perPage = 20) {
-    try {
-        const result = await pb.collection('posts').getList(page, perPage, {
-            sort: '-created',
-            expand: 'author',
-            filter: 'status = "published"'
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
         });
-        return result;
-    } catch (error) {
-        console.error('Error fetching feed:', error);
-        throw error;
-    }
-}
-
-async function createNewPost(content, mediaFiles = []) {
-    try {
-        if (!isAuthenticated()) {
-            throw new Error('Please login first');
-        }
-
-        const formData = new FormData();
-        formData.append('content', content);
-        formData.append('author', pb.authStore.model.id);
-        formData.append('status', 'published');
         
-        mediaFiles.forEach((file, index) => {
-            formData.append(`media`, file);
-        });
-
-        const record = await pb.collection('posts').create(formData);
-        return record;
-    } catch (error) {
-        console.error('Error creating post:', error);
-        throw error;
-    }
-}
-
-async function toggleLike(postId) {
-    try {
-        if (!isAuthenticated()) {
-            showToast('Please login to like', 'warning');
-            return;
-        }
-
-        const existingLike = await pb.collection('likes').getList(1, 1, {
-            filter: `post = "${postId}" && user = "${pb.authStore.model.id}"`
-        });
-
-        if (existingLike.totalItems > 0) {
-            await pb.collection('likes').delete(existingLike.items[0].id);
-            return { action: 'unliked' };
-        } else {
-            await pb.collection('likes').create({
-                post: postId,
-                user: pb.authStore.model.id
-            });
-            return { action: 'liked' };
-        }
-    } catch (error) {
-        console.error('Error toggling like:', error);
-        throw error;
-    }
-}
-
-async function getPostLikes(postId) {
-    try {
-        const result = await pb.collection('likes').getList(1, 1, {
-            filter: `post = "${postId}"`,
-            count: true
-        });
-        return result.totalItems;
-    } catch (error) {
-        return 0;
-    }
-}
-
-async function deletePost(postId) {
-    try {
-        if (!isAuthenticated()) {
-            showToast('Please login first', 'warning');
-            return;
-        }
+        if (error) throw error;
         
-        const post = await pb.collection('posts').getOne(postId);
-        if (post.author !== pb.authStore.model.id) {
-            showToast('You can only delete your own posts', 'error');
-            return;
-        }
-        
-        await pb.collection('posts').delete(postId);
-        showToast('Post deleted', 'success');
-        loadFeedPosts();
+        alert('✅ Login successful!');
+        updateUI(data.user);
+        loadFeed();
     } catch (error) {
-        showToast('Failed to delete: ' + error.message, 'error');
+        alert('❌ Login failed: ' + error.message);
     }
+}
+
+// SIGNUP
+async function signup() {
+    const email = prompt('📧 Email:');
+    if (!email) return;
+    const password = prompt('🔑 Password (min 6 chars):');
+    if (!password || password.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+    }
+    const name = prompt('👤 Your name:');
+    
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: { name: name || email.split('@')[0] }
+            }
+        });
+        
+        if (error) throw error;
+        
+        alert('✅ Account created! Please login now.');
+    } catch (error) {
+        alert('❌ Signup failed: ' + error.message);
+    }
+}
+
+// LOGOUT
+async function logout() {
+    await supabase.auth.signOut();
+    alert('✅ Logged out!');
+    updateUI(null);
+    loadFeed();
+}
+
+// CHECK AUTH
+async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+        console.log('✅ Logged in:', session.user.email);
+        updateUI(session.user);
+    }
+    return session;
 }
 
 // =============================================
-// 🎨 UI RENDERING
+// 3. FEED FUNCTIONS
 // =============================================
 
-async function loadFeedPosts() {
-    const feedContainer = document.getElementById('community-feed-posts');
-    if (!feedContainer) return;
-
+// LOAD FEED
+async function loadFeed() {
+    const container = document.getElementById('community-feed-posts');
+    if (!container) {
+        console.warn('Feed container nahi mila');
+        return;
+    }
+    
     try {
-        feedContainer.innerHTML = `
-            <div class="feed-loading">
-                <div class="loader"></div>
-                <p style="color:var(--text-muted); font-weight:500;">Loading feed...</p>
+        container.innerHTML = `
+            <div style="text-align:center;padding:40px;">
+                <div style="width:40px;height:40px;border:4px solid #f0f0f0;border-top:4px solid #d4a843;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+                <p style="color:var(--text-muted);">Loading feed...</p>
             </div>
         `;
-
-        const result = await getFeedPosts(1, 20);
         
-        if (result.items.length === 0) {
-            feedContainer.innerHTML = `
-                <div class="empty-feed">
-                    <span class="empty-icon">📝</span>
-                    <h3>No posts yet</h3>
-                    <p>Be the first to share something with the community!</p>
-                    ${isAuthenticated() ? 
-                        '<button class="btn-primary" onclick="openCreatePost()">Create Post</button>' : 
-                        '<button class="btn-primary" onclick="showLoginModal()">Login to Post</button>'
+        const { data: posts, error } = await supabase
+            .from('posts')
+            .select(`
+                *,
+                author:users(email, raw_user_meta_data)
+            `)
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        if (!posts || posts.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center;padding:60px 20px;background:var(--bg-white);border:var(--border-lux);border-radius:var(--card-radius);box-shadow:var(--shadow-lux);">
+                    <span style="font-size:48px;display:block;margin-bottom:12px;">📝</span>
+                    <h3 style="font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:6px;">No posts yet</h3>
+                    <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">Be the first to share something!</p>
+                    ${session ? 
+                        `<button onclick="createPost()" style="padding:12px 32px;background:var(--accent-gold);color:#fff;border:none;border-radius:16px;font-weight:700;cursor:pointer;">Create Post</button>` :
+                        `<button onclick="login()" style="padding:12px 32px;background:var(--accent-gold);color:#fff;border:none;border-radius:16px;font-weight:700;cursor:pointer;">Login to Post</button>`
                     }
                 </div>
             `;
             return;
         }
-
-        let postsHTML = '';
-        for (const post of result.items) {
-            const author = post.expand?.author || {};
-            const likes = await getPostLikes(post.id);
-            const isAuthor = isAuthenticated() && post.author === pb.authStore.model.id;
-            const isLiked = await checkIfLiked(post.id);
+        
+        let html = '';
+        for (const post of posts) {
+            const author = post.author || {};
+            const name = author.raw_user_meta_data?.name || author.email || 'Unknown';
             
-            postsHTML += `
-                <div class="feed-post" id="post-${post.id}" data-post-id="${post.id}">
-                    <div class="post-header">
-                        <div class="post-author">
-                            <img src="${getAvatarUrl(author)}" alt="${author.name || 'User'}" class="post-avatar">
-                            <div class="author-info">
-                                <span class="author-name">${author.name || author.username || 'Unknown User'}</span>
-                                <span class="post-time">${formatTime(post.created)}</span>
+            // Get likes count
+            const { count, error: likeError } = await supabase
+                .from('likes')
+                .select('*', { count: 'exact', head: true })
+                .eq('post_id', post.id);
+            
+            html += `
+                <div style="background:var(--bg-white);border:var(--border-lux);border-radius:var(--card-radius);padding:18px 16px;margin-bottom:16px;box-shadow:var(--shadow-lux);transition:all 0.2s ease;animation:fadeSlideIn 0.35s ease forwards;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div style="width:44px;height:44px;border-radius:50%;background:var(--accent-gold);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;flex-shrink:0;border:2px solid var(--accent-gold);">
+                                ${name[0].toUpperCase()}
+                            </div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--text-dark);">${name}</div>
+                                <div style="font-size:11px;color:var(--text-muted);font-weight:500;">${post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Recently'}</div>
                             </div>
                         </div>
-                        ${isAuthor ? `
-                            <div class="post-actions-dropdown">
-                                <button class="dropdown-toggle" onclick="toggleDropdown('dropdown-${post.id}')">⋯</button>
-                                <div class="dropdown-menu" id="dropdown-${post.id}">
-                                    <button onclick="deletePost('${post.id}')" class="danger">🗑️ Delete</button>
-                                </div>
-                            </div>
-                        ` : ''}
                     </div>
                     
-                    <div class="post-content">${escapeHtml(post.content)}</div>
+                    <div style="font-size:15px;line-height:1.7;color:var(--text-dark);margin-bottom:14px;word-wrap:break-word;">${post.content}</div>
                     
-                    ${post.media && post.media.length > 0 ? `
-                        <div class="post-media">
-                            ${post.media.map(file => `
-                                <div class="media-item">
-                                    <img src="${getFileUrl(post, file)}" alt="Post media" loading="lazy">
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                    
-                    <div class="post-stats">
-                        <span class="likes-count">❤️ ${likes}</span>
-                        <span class="comments-count">💬 ${post.comments || 0}</span>
-                        <span class="shares-count">🔁 ${post.shares || 0}</span>
+                    <div style="display:flex;gap:20px;padding:10px 0;border-top:1px solid var(--border-lux);border-bottom:1px solid var(--border-lux);margin-bottom:12px;font-size:13px;color:var(--text-muted);">
+                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">❤️ ${count || 0}</span>
+                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">💬 ${post.comments || 0}</span>
                     </div>
                     
-                    <div class="post-actions">
-                        <button class="action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="handleLike('${post.id}')">
-                            ❤️ <span>${isLiked ? 'Liked' : 'Like'}</span>
+                    <div style="display:flex;gap:8px;">
+                        <button onclick="likePost('${post.id}')" style="flex:1;padding:8px 12px;border:var(--border-lux);background:var(--bg-soft);border-radius:12px;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:6px;">
+                            ❤️ Like
                         </button>
-                        <button class="action-btn comment-btn" onclick="handleComment('${post.id}')">
-                            💬 Comment
-                        </button>
-                        <button class="action-btn share-btn" onclick="handleShare('${post.id}')">
+                        <button onclick="sharePost('${post.id}')" style="flex:1;padding:8px 12px;border:var(--border-lux);background:var(--bg-soft);border-radius:12px;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:6px;">
                             🔁 Share
                         </button>
                     </div>
                 </div>
             `;
         }
+        container.innerHTML = html;
         
-        feedContainer.innerHTML = postsHTML;
-        setupRealtimeFeed();
-
     } catch (error) {
-        console.error('Failed to load feed:', error);
-        feedContainer.innerHTML = `
-            <div class="empty-feed" style="border-color:#ef4444;">
-                <span class="empty-icon">⚠️</span>
-                <h3>Failed to load feed</h3>
-                <p style="color:#ef4444;">${error.message || 'Please try again later'}</p>
-                <button class="btn-primary" onclick="loadFeedPosts()" style="margin-top:12px;">Retry</button>
+        console.error('❌ Error loading feed:', error);
+        container.innerHTML = `
+            <div style="text-align:center;padding:40px;color:#ef4444;background:var(--bg-white);border-radius:var(--card-radius);border:1px solid #fecaca;">
+                <h3>⚠️ Error</h3>
+                <p>${error.message}</p>
+                <button onclick="loadFeed()" style="padding:12px 24px;background:var(--accent-gold);color:#fff;border:none;border-radius:12px;cursor:pointer;margin-top:10px;">Retry</button>
             </div>
         `;
     }
 }
 
-async function checkIfLiked(postId) {
-    if (!isAuthenticated()) return false;
+// CREATE POST
+async function createPost() {
+    const session = await checkAuth();
+    if (!session) {
+        alert('❌ Pehle login karo!');
+        return;
+    }
+    
+    const content = prompt('📝 Kya likhna hai?');
+    if (!content) return;
+    
     try {
-        const result = await pb.collection('likes').getList(1, 1, {
-            filter: `post = "${postId}" && user = "${pb.authStore.model.id}"`
-        });
-        return result.totalItems > 0;
-    } catch {
-        return false;
+        const { error } = await supabase
+            .from('posts')
+            .insert({
+                content: content,
+                author_id: session.user.id
+            });
+        
+        if (error) throw error;
+        
+        alert('✅ Post create ho gaya! 🎉');
+        loadFeed();
+    } catch (error) {
+        alert('❌ Error: ' + error.message);
     }
 }
 
-// =============================================
-// 🔄 REAL-TIME
-// =============================================
-
-function setupRealtimeFeed() {
-    pb.collection('posts').unsubscribe('*');
-    pb.collection('posts').subscribe('*', (data) => {
-        if (data.action === 'create' || data.action === 'update') {
-            loadFeedPosts();
-        } else if (data.action === 'delete') {
-            const postElement = document.getElementById(`post-${data.record.id}`);
-            if (postElement) {
-                postElement.style.opacity = '0';
-                postElement.style.transform = 'scale(0.9)';
-                setTimeout(() => postElement.remove(), 300);
-            }
-        }
-    });
-}
-
-// =============================================
-// 🎯 INTERACTIONS
-// =============================================
-
-async function handleLike(postId) {
-    if (!isAuthenticated()) {
-        showToast('Please login to like posts', 'warning');
+// LIKE POST
+async function likePost(postId) {
+    const session = await checkAuth();
+    if (!session) {
+        alert('❌ Pehle login karo!');
         return;
     }
     
     try {
-        const result = await toggleLike(postId);
-        const postElement = document.getElementById(`post-${postId}`);
-        if (postElement) {
-            const likesCount = postElement.querySelector('.likes-count');
-            const likeBtn = postElement.querySelector('.like-btn');
-            
-            if (likesCount) {
-                const currentLikes = parseInt(likesCount.textContent.match(/\d+/)?.[0] || 0);
-                const newLikes = result.action === 'liked' ? currentLikes + 1 : currentLikes - 1;
-                likesCount.textContent = `❤️ ${newLikes}`;
-            }
-            
-            if (likeBtn) {
-                if (result.action === 'liked') {
-                    likeBtn.classList.add('liked');
-                    likeBtn.innerHTML = '❤️ <span>Liked</span>';
-                } else {
-                    likeBtn.classList.remove('liked');
-                    likeBtn.innerHTML = '❤️ <span>Like</span>';
-                }
-            }
-        }
+        const { error } = await supabase
+            .from('likes')
+            .insert({
+                post_id: postId,
+                user_id: session.user.id
+            });
+        
+        if (error) throw error;
+        loadFeed();
     } catch (error) {
-        showToast(error.message, 'error');
+        alert('❌ Error: ' + error.message);
     }
 }
 
-function handleComment(postId) {
-    if (!isAuthenticated()) {
-        showToast('Please login to comment', 'warning');
-        return;
-    }
-    showToast('Comment feature coming soon! 💬', 'info');
-}
-
-function handleShare(postId) {
-    const url = `${window.location.origin}?post=${postId}`;
+// SHARE POST
+function sharePost(postId) {
+    const url = window.location.href + '?post=' + postId;
     if (navigator.share) {
         navigator.share({
             title: 'Check out this post',
@@ -4615,7 +4532,7 @@ function handleShare(postId) {
         }).catch(() => {});
     } else {
         navigator.clipboard.writeText(url).then(() => {
-            showToast('Link copied to clipboard! 📋', 'success');
+            alert('✅ Link copy ho gaya!');
         }).catch(() => {
             prompt('Copy this link:', url);
         });
@@ -4623,205 +4540,112 @@ function handleShare(postId) {
 }
 
 // =============================================
-// 📝 CREATE POST MODAL
+// 4. UI UPDATE
 // =============================================
 
-function openCreatePost() {
-    if (!isAuthenticated()) {
-        showToast('Please login first', 'warning');
-        return;
-    }
-    
-    const modal = document.getElementById('createPostModal');
-    if (modal) {
-        modal.classList.add('active');
-        modal.style.display = 'flex';
-    }
-}
-
-function closeCreatePost() {
-    const modal = document.getElementById('createPostModal');
-    if (modal) {
-        modal.classList.remove('active');
-        modal.style.display = 'none';
-        document.getElementById('postContentInput').value = '';
-        document.getElementById('postMediaInput').value = '';
-        document.getElementById('mediaPreviewContainer').innerHTML = '';
-    }
-}
-
-async function submitNewPost(event) {
-    event.preventDefault();
-    
-    const content = document.getElementById('postContentInput').value;
-    const mediaInput = document.getElementById('postMediaInput');
-    const mediaFiles = mediaInput.files;
-    
-    if (!content.trim() && mediaFiles.length === 0) {
-        showToast('Please add some content or media', 'warning');
-        return;
-    }
-    
-    const submitBtn = event.target.querySelector('.btn-primary');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Posting...';
-    
-    try {
-        const post = await createNewPost(content, Array.from(mediaFiles));
-        closeCreatePost();
-        showToast('Post created successfully! ✨', 'success');
-        loadFeedPosts();
-    } catch (error) {
-        showToast(error.message || 'Failed to create post', 'error');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Post';
-    }
-}
-
-// =============================================
-// 📦 UTILITY FUNCTIONS
-// =============================================
-
-function getFileUrl(record, filename) {
-    if (!filename) return null;
-    return pb.getFileUrl(record, filename);
-}
-
-function getAvatarUrl(user) {
-    if (!user) return 'https://ui-avatars.com/api/?name=User&background=random';
-    if (user.avatar) {
-        return pb.getFileUrl(user, user.avatar);
-    }
-    const name = user.name || user.username || 'User';
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
-}
-
-function formatTime(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = Math.floor((now - date) / 1000);
-    
-    if (diff < 60) return 'just now';
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-    if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
-    return date.toLocaleDateString();
-}
-
-function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function toggleDropdown(id) {
-    const dropdown = document.getElementById(id);
-    if (dropdown) {
-        dropdown.classList.toggle('show');
-        document.querySelectorAll('.dropdown-menu.show').forEach(el => {
-            if (el.id !== id) el.classList.remove('show');
-        });
-    }
-}
-
-function showToast(message, type = 'info') {
-    // Remove existing toast
-    const existing = document.querySelector('.toast');
-    if (existing) existing.remove();
-    
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('fade-out');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-function updateAuthUI() {
-    const isAuth = isAuthenticated();
-    const user = getCurrentUser();
-    
-    // Update header greeting
+function updateUI(user) {
     const greeting = document.querySelector('.identity-greeting h1');
     if (greeting) {
-        if (isAuth && user) {
-            greeting.textContent = `Hi, ${user.name || user.username || 'User'} 👋`;
+        if (user) {
+            const name = user.raw_user_meta_data?.name || user.email;
+            greeting.textContent = `Hi, ${name} 👋`;
         } else {
             greeting.textContent = 'Welcome 👋';
         }
     }
     
-    // Update user avatar in header
-    const avatarContainer = document.querySelector('.header-actions .header-btn:first-child');
-    if (avatarContainer && isAuth && user) {
-        avatarContainer.innerHTML = `
-            <img src="${getAvatarUrl(user)}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
-        `;
-    }
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    
+    if (loginBtn) loginBtn.style.display = user ? 'none' : 'block';
+    if (logoutBtn) logoutBtn.style.display = user ? 'block' : 'none';
+    if (signupBtn) signupBtn.style.display = user ? 'none' : 'block';
 }
 
 // =============================================
-// 🚀 INITIALIZATION
+// 5. INITIALIZATION
 // =============================================
+
+let session = null;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Load feed
-    loadFeedPosts();
-    updateAuthUI();
+    console.log('🚀 Supabase connecting...');
+    console.log('📡 URL:', SUPABASE_URL);
     
-    // Auto-refresh every 30 seconds
-    setInterval(() => {
-        loadFeedPosts();
-    }, 30000);
-    
-    // Close dropdowns on click outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.post-actions-dropdown')) {
-            document.querySelectorAll('.dropdown-menu.show').forEach(el => {
-                el.classList.remove('show');
-            });
-        }
+    // Check auth
+    checkAuth().then(s => {
+        session = s;
+        loadFeed();
     });
+    
+    // Add buttons to header
+    const actions = document.querySelector('.header-actions');
+    if (actions) {
+        // Signup button
+        const signupBtn = document.createElement('button');
+        signupBtn.className = 'header-btn';
+        signupBtn.id = 'signupBtn';
+        signupBtn.innerHTML = '📝';
+        signupBtn.onclick = signup;
+        signupBtn.title = 'Signup';
+        
+        // Login button
+        const loginBtn = document.createElement('button');
+        loginBtn.className = 'header-btn';
+        loginBtn.id = 'loginBtn';
+        loginBtn.innerHTML = '🔑';
+        loginBtn.onclick = login;
+        loginBtn.title = 'Login';
+        
+        // Logout button
+        const logoutBtn = document.createElement('button');
+        logoutBtn.className = 'header-btn';
+        logoutBtn.id = 'logoutBtn';
+        logoutBtn.innerHTML = '🚪';
+        logoutBtn.onclick = logout;
+        logoutBtn.title = 'Logout';
+        logoutBtn.style.display = 'none';
+        
+        actions.appendChild(signupBtn);
+        actions.appendChild(loginBtn);
+        actions.appendChild(logoutBtn);
+    }
 });
 
-// Expose globally
-window.loadFeedPosts = loadFeedPosts;
-window.openCreatePost = openCreatePost;
-window.closeCreatePost = closeCreatePost;
-window.submitNewPost = submitNewPost;
-window.handleLike = handleLike;
-window.handleComment = handleComment;
-window.handleShare = handleShare;
-window.deletePost = deletePost;
-window.toggleDropdown = toggleDropdown;
-window.loginWithPocketBase = loginWithPocketBase;
-window.logoutFromPocketBase = logoutFromPocketBase;
-window.showToast = showToast;
-window.showLoginModal = function() {
-    showToast('Login feature coming soon! 🔐', 'info');
-};
-  function showPage(pageId) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    // Show selected page
-    const page = document.getElementById(pageId);
-    if (page) page.classList.add('active');
-    
-    // Update nav active state
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const navItems = document.querySelectorAll('.nav-item');
-    const pages = ['page-home', 'page-feed', 'page-tools', 'page-study'];
-    const index = pages.indexOf(pageId);
-    if (navItems[index]) navItems[index].classList.add('active');
-}
+// =============================================
+// 6. EXPOSE GLOBALLY
+// =============================================
 
-// Expose globally
-window.showPage = showPage;
+window.loadFeed = loadFeed;
+window.createPost = createPost;
+window.likePost = likePost;
+window.sharePost = sharePost;
+window.login = login;
+window.logout = logout;
+window.signup = signup;
+
+console.log('✅ Script loaded!');
+console.log('📝 Commands:');
+console.log('  login() - Login karo');
+console.log('  signup() - Account banao');
+console.log('  logout() - Logout karo');
+console.log('  createPost() - Post create karo');
+console.log('  loadFeed() - Feed refresh karo');
+  // Add spin animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    @keyframes fadeSlideIn {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+`;
+document.head.appendChild(style);
+
   
 </script>
 </body>
