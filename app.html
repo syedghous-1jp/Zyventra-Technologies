@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
@@ -4278,37 +4277,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 500);
 });
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 // =============================================
-// 🔥 SUPABASE CONFIG - YAHAN APNA URL AUR KEY DAALO
+// 🔥 SUPABASE - COMPLETE FIXED CODE
 // =============================================
-const SUPABASE_URL = 'https://your-project-id.supabase.co';  // ← CHANGE KARO
-const SUPABASE_ANON_KEY = 'your-anon-key-here';  // ← CHANGE KARO
 
-// =============================================
-// 1. SUPABASE INITIALIZE
-// =============================================
+// 🔥 APNA SUPABASE URL AUR KEY YAHAN DAALO
+const SUPABASE_URL = 'https://your-project-id.supabase.co';
+const SUPABASE_ANON_KEY = 'your-anon-key-here';
+
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let session = null;
 
 // =============================================
-// 2. AUTH FUNCTIONS
+// TOAST SYSTEM
 // =============================================
+function showToast(icon, message) {
+    const toast = document.getElementById('appToast');
+    if (!toast) return;
+    document.getElementById('toastIcon').textContent = icon || '✅';
+    document.getElementById('toastMessage').textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
 
-// LOGIN
+// =============================================
+// AUTH FUNCTIONS
+// =============================================
 async function login() {
     const email = prompt('📧 Email:');
     if (!email) return;
     const password = prompt('🔑 Password:');
     if (!password) return;
-    
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-        
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        
         session = data.session;
         alert('✅ Login successful!');
         updateUI(data.user);
@@ -4318,7 +4322,6 @@ async function login() {
     }
 }
 
-// SIGNUP
 async function signup() {
     const email = prompt('📧 Email:');
     if (!email) return;
@@ -4328,25 +4331,19 @@ async function signup() {
         return;
     }
     const name = prompt('👤 Your name:');
-    
     try {
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: { name: name || email.split('@')[0] }
-            }
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: { data: { name: name || email.split('@')[0] } }
         });
-        
         if (error) throw error;
-        
         alert('✅ Account created! Please login now.');
     } catch (error) {
         alert('❌ Signup failed: ' + error.message);
     }
 }
 
-// LOGOUT
 async function logout() {
     await supabase.auth.signOut();
     session = null;
@@ -4355,11 +4352,9 @@ async function logout() {
     loadFeed();
 }
 
-// CHECK AUTH
 async function checkAuth() {
     const { data: { session: s } } = await supabase.auth.getSession();
     if (s) {
-        console.log('✅ Logged in:', s.user.email);
         session = s;
         updateUI(s.user);
     }
@@ -4367,16 +4362,11 @@ async function checkAuth() {
 }
 
 // =============================================
-// 3. FEED FUNCTIONS
+// FEED FUNCTIONS
 // =============================================
-
-// LOAD FEED
 async function loadFeed() {
     const container = document.getElementById('community-feed-posts');
-    if (!container) {
-        console.warn('Feed container nahi mila');
-        return;
-    }
+    if (!container) return;
     
     try {
         container.innerHTML = `
@@ -4388,10 +4378,7 @@ async function loadFeed() {
         
         const { data: posts, error } = await supabase
             .from('posts')
-            .select(`
-                *,
-                author:users(email, raw_user_meta_data)
-            `)
+            .select('*, author:users(email, raw_user_meta_data)')
             .order('created_at', { ascending: false });
         
         if (error) throw error;
@@ -4416,8 +4403,7 @@ async function loadFeed() {
             const author = post.author || {};
             const name = author.raw_user_meta_data?.name || author.email || 'Unknown';
             
-            // Get likes count
-            const { count, error: likeError } = await supabase
+            const { count } = await supabase
                 .from('likes')
                 .select('*', { count: 'exact', head: true })
                 .eq('post_id', post.id);
@@ -4440,7 +4426,7 @@ async function loadFeed() {
                     
                     <div style="display:flex;gap:20px;padding:10px 0;border-top:1px solid var(--border-lux);border-bottom:1px solid var(--border-lux);margin-bottom:12px;font-size:13px;color:var(--text-muted);">
                         <span style="display:flex;align-items:center;gap:4px;font-weight:600;">❤️ ${count || 0}</span>
-                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">💬 ${post.comments || 0}</span>
+                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">💬 0</span>
                     </div>
                     
                     <div style="display:flex;gap:8px;">
@@ -4457,7 +4443,7 @@ async function loadFeed() {
         container.innerHTML = html;
         
     } catch (error) {
-        console.error('❌ Error loading feed:', error);
+        console.error('Error:', error);
         container.innerHTML = `
             <div style="text-align:center;padding:40px;color:#ef4444;background:var(--bg-white);border-radius:var(--card-radius);border:1px solid #fecaca;">
                 <h3>⚠️ Error</h3>
@@ -4468,27 +4454,19 @@ async function loadFeed() {
     }
 }
 
-// CREATE POST
 async function createPost() {
     const s = await checkAuth();
     if (!s) {
         alert('❌ Pehle login karo!');
         return;
     }
-    
     const content = prompt('📝 Kya likhna hai?');
     if (!content) return;
-    
     try {
         const { error } = await supabase
             .from('posts')
-            .insert({
-                content: content,
-                author_id: s.user.id
-            });
-        
+            .insert({ content, author_id: s.user.id });
         if (error) throw error;
-        
         alert('✅ Post create ho gaya! 🎉');
         loadFeed();
     } catch (error) {
@@ -4496,22 +4474,16 @@ async function createPost() {
     }
 }
 
-// LIKE POST
 async function likePost(postId) {
     const s = await checkAuth();
     if (!s) {
         alert('❌ Pehle login karo!');
         return;
     }
-    
     try {
         const { error } = await supabase
             .from('likes')
-            .insert({
-                post_id: postId,
-                user_id: s.user.id
-            });
-        
+            .insert({ post_id: postId, user_id: s.user.id });
         if (error) throw error;
         loadFeed();
     } catch (error) {
@@ -4519,15 +4491,10 @@ async function likePost(postId) {
     }
 }
 
-// SHARE POST
 function sharePost(postId) {
     const url = window.location.href + '?post=' + postId;
     if (navigator.share) {
-        navigator.share({
-            title: 'Check out this post',
-            text: 'Check out this post from the community!',
-            url: url
-        }).catch(() => {});
+        navigator.share({ title: 'Check out this post', url });
     } else {
         navigator.clipboard.writeText(url).then(() => {
             alert('✅ Link copy ho gaya!');
@@ -4538,9 +4505,8 @@ function sharePost(postId) {
 }
 
 // =============================================
-// 4. UI UPDATE
+// UI UPDATE
 // =============================================
-
 function updateUI(user) {
     const greeting = document.querySelector('.identity-greeting h1');
     if (greeting) {
@@ -4555,30 +4521,25 @@ function updateUI(user) {
     const loginBtn = document.getElementById('loginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const signupBtn = document.getElementById('signupBtn');
-    
     if (loginBtn) loginBtn.style.display = user ? 'none' : 'block';
     if (logoutBtn) logoutBtn.style.display = user ? 'block' : 'none';
     if (signupBtn) signupBtn.style.display = user ? 'none' : 'block';
 }
 
 // =============================================
-// 5. INITIALIZATION
+// INITIALIZATION
 // =============================================
-
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Supabase connecting...');
-    console.log('📡 URL:', SUPABASE_URL);
     
-    // Check auth
     checkAuth().then(s => {
         session = s;
         loadFeed();
     });
     
-    // Add buttons to header
+    // Add header buttons
     const actions = document.querySelector('.header-actions');
     if (actions) {
-        // Signup button
         const signupBtn = document.createElement('button');
         signupBtn.className = 'header-btn';
         signupBtn.id = 'signupBtn';
@@ -4586,7 +4547,6 @@ document.addEventListener('DOMContentLoaded', function() {
         signupBtn.onclick = signup;
         signupBtn.title = 'Signup';
         
-        // Login button
         const loginBtn = document.createElement('button');
         loginBtn.className = 'header-btn';
         loginBtn.id = 'loginBtn';
@@ -4594,7 +4554,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loginBtn.onclick = login;
         loginBtn.title = 'Login';
         
-        // Logout button
         const logoutBtn = document.createElement('button');
         logoutBtn.className = 'header-btn';
         logoutBtn.id = 'logoutBtn';
@@ -4610,9 +4569,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // =============================================
-// 6. EXPOSE GLOBALLY
+// EXPOSE GLOBALLY
 // =============================================
-
 window.loadFeed = loadFeed;
 window.createPost = createPost;
 window.likePost = likePost;
@@ -4622,26 +4580,6 @@ window.logout = logout;
 window.signup = signup;
 
 console.log('✅ Script loaded!');
-console.log('📝 Commands:');
-console.log('  login() - Login karo');
-console.log('  signup() - Account banao');
-console.log('  logout() - Logout karo');
-console.log('  createPost() - Post create karo');
-console.log('  loadFeed() - Feed refresh karo');
-
-// Add spin animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    @keyframes fadeSlideIn {
-        from { opacity: 0; transform: translateY(16px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-`;
-document.head.appendChild(style);
   
 </script>
 </body>
