@@ -599,6 +599,645 @@
         right: -2px !important;
     }
 }
+  /* =============================================
+   FEED SECTION - Matching Your Theme
+   ============================================ */
+
+/* Feed Container */
+#community-feed-posts {
+    padding: 8px 0 20px 0;
+}
+
+/* Individual Post Card */
+.feed-post {
+    background: var(--bg-white);
+    border: var(--border-lux);
+    border-radius: var(--card-radius);
+    padding: 18px 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-lux);
+    transition: all 0.2s ease;
+    animation: fadeSlideIn 0.35s ease forwards;
+}
+
+.feed-post:active {
+    transform: scale(0.98);
+}
+
+/* Post Header */
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent-gold);
+    flex-shrink: 0;
+}
+
+.author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.post-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Post Content */
+.post-content {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-dark);
+    margin-bottom: 14px;
+    word-wrap: break-word;
+}
+
+/* Post Media Grid */
+.post-media {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.media-item {
+    position: relative;
+    padding-top: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--bg-soft);
+}
+
+.media-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.media-item img:hover {
+    transform: scale(1.02);
+}
+
+/* Post Stats */
+.post-stats {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    border-top: 1px solid var(--border-lux);
+    border-bottom: 1px solid var(--border-lux);
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.post-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+/* Post Actions */
+.post-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: var(--border-lux);
+    background: var(--bg-soft);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.action-btn:active {
+    transform: scale(0.94);
+}
+
+.action-btn.like-btn:hover {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.action-btn.comment-btn:hover {
+    background: rgba(59, 130, 246, 0.08);
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.action-btn.share-btn:hover {
+    background: rgba(16, 185, 129, 0.08);
+    color: #10b981;
+    border-color: #10b981;
+}
+
+.action-btn.liked {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+/* Post Dropdown (Three dots) */
+.post-actions-dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    width: 32px;
+    height: 32px;
+    border: var(--border-lux);
+    background: var(--bg-soft);
+    border-radius: 50%;
+    font-size: 18px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.dropdown-toggle:active {
+    transform: scale(0.9);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: var(--bg-white);
+    border: var(--border-lux);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    min-width: 160px;
+    z-index: 100;
+    padding: 6px 0;
+    animation: fadeSlideIn 0.2s ease;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    transition: background 0.2s;
+}
+
+.dropdown-menu button:hover {
+    background: var(--bg-soft);
+}
+
+.dropdown-menu button.danger {
+    color: #ef4444;
+}
+
+.dropdown-menu button.danger:hover {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/* Create Post Button - Floating */
+.create-post-fab {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background: var(--accent-gold);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 28px;
+    box-shadow: 0 8px 24px rgba(207, 168, 60, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-post-fab:active {
+    transform: scale(0.9);
+}
+
+/* Modal - Matching Your Theme */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(18, 18, 19, 0.5);
+    backdrop-filter: blur(12px);
+    z-index: 9999;
+    padding: 24px;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-white);
+    width: 100%;
+    max-width: 420px;
+    border-radius: 28px;
+    padding: 28px 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    border: var(--border-lux);
+    animation: modalSlideUp 0.35s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    border: var(--border-lux);
+    background: var(--bg-soft);
+    border-radius: 50%;
+    font-size: 22px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.modal-close:active {
+    transform: scale(0.9);
+}
+
+/* Form Elements - Matching Theme */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--bg-frame);
+    border: var(--border-lux);
+    border-radius: 16px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--text-dark);
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    transition: all 0.25s ease;
+    font-weight: 500;
+}
+
+.form-group textarea:focus {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 4px rgba(207, 168, 60, 0.1);
+}
+
+.file-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--bg-soft);
+    border: var(--border-lux);
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-upload-btn:active {
+    transform: scale(0.95);
+}
+
+.file-upload-btn:hover {
+    background: var(--bg-frame);
+}
+
+.media-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.preview-item {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: var(--border-lux);
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    background: #ef4444;
+    color: #fff;
+    border-radius: 50%;
+    border: 2px solid var(--bg-white);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.form-actions .btn-primary {
+    flex: 1;
+    padding: 14px;
+    background: var(--accent-gold);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(207, 168, 60, 0.3);
+}
+
+.form-actions .btn-primary:active {
+    transform: scale(0.96);
+}
+
+.form-actions .btn-secondary {
+    padding: 14px 24px;
+    background: var(--bg-soft);
+    border: var(--border-lux);
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.form-actions .btn-secondary:active {
+    transform: scale(0.96);
+}
+
+/* Empty State */
+.empty-feed {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--bg-white);
+    border: var(--border-lux);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-lux);
+}
+
+.empty-feed .empty-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.empty-feed h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.empty-feed p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.empty-feed .btn-primary {
+    padding: 12px 32px;
+    background: var(--accent-gold);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.empty-feed .btn-primary:active {
+    transform: scale(0.95);
+}
+
+/* Loading State */
+.feed-loading {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--bg-soft);
+    border-top: 4px solid var(--accent-gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Toast Notifications - Matching Theme */
+.toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 24px;
+    background: var(--bg-white);
+    border: var(--border-lux);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dark);
+    z-index: 10000;
+    animation: toastSlideUp 0.35s ease;
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.success {
+    border-left: 4px solid #10b981;
+}
+
+.toast.error {
+    border-left: 4px solid #ef4444;
+}
+
+.toast.warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.toast.info {
+    border-left: 4px solid #3b82f6;
+}
+
+.toast.fade-out {
+    animation: toastFadeOut 0.3s ease forwards;
+}
+
+@keyframes toastSlideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes toastFadeOut {
+    from { opacity: 1; transform: translateX(-50%) translateY(0); }
+    to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
+/* Post Author Badge */
+.author-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: var(--accent-gold);
+    color: #fff;
+    margin-left: 6px;
+}
+
+/* Responsive for Feed */
+@media (max-width: 480px) {
+    .post-media {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+    
+    .post-actions {
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        flex: 1;
+        min-width: 60px;
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    
+    .modal-content {
+        padding: 20px 16px;
+    }
+    
+    .create-post-fab {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+        bottom: 90px;
+        right: 16px;
+    }
+}
+
+/* Dark Mode Compatibility */
+@media (prefers-color-scheme: dark) {
+    .feed-post {
+        background: var(--bg-frame);
+    }
+    
+    .dropdown-menu {
+        background: var(--bg-frame);
+    }
+    
+    .modal-content {
+        background: var(--bg-frame);
+    }
+    
+    .toast {
+        background: var(--bg-frame);
+    }
+}
 
   </style>
 </head>
@@ -917,26 +1556,78 @@
     </div>
   </div>
 
-  <!-- PAGE FEED (Community) -->
-  <div id="page-feed" class="page">
-    <div class="feed-container">
-        
-        <!-- Create Post Box -->
-        <div class="create-post-box">
-            <textarea id="post-text-input" placeholder="Kya naya seekha aaj? Share karein..."></textarea>
-            <div class="post-actions">
-                <input type="text" id="post-image-input" placeholder="Image URL (Optional)">
-                <button onclick="createNewPost()" class="post-btn"><i class="fa-solid fa-pen"></i> Share</button>
-            </div>
-        </div>
+  <!-- =============================================
+     FEED PAGE - Inside Your Mobile Frame
+     ============================================ -->
 
-        <!-- Feed Posts -->
-        <div id="community-feed-posts">
-            <!-- Dynamic Posts yahan JavaScript se aayengi -->
+<!-- Feed Page -->
+<div id="page-feed" class="page active">
+    <!-- Feed Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0 16px 0;">
+        <div>
+            <h2 style="font-size:20px; font-weight:800;">Community Feed</h2>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Stay connected with your community</p>
         </div>
-
+        <button class="header-btn" onclick="openCreatePost()" style="background:var(--accent-gold); color:#fff; border:none; width:44px; height:44px; border-radius:14px; font-size:20px; box-shadow:0 4px 15px rgba(207,168,60,0.3);">
+            ✏️
+        </button>
     </div>
-  </div>
+
+    <!-- Feed Posts -->
+    <div id="community-feed-posts">
+        <!-- Dynamic Posts yahan JavaScript se aayengi -->
+    </div>
+</div>
+
+<!-- Create Post Modal -->
+<div id="createPostModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Create Post</h2>
+            <button class="modal-close" onclick="closeCreatePost()">✕</button>
+        </div>
+        <form id="createPostForm" onsubmit="submitNewPost(event)">
+            <div class="form-group">
+                <textarea id="postContentInput" placeholder="kya sikhna hai aj? community kae sath share karo..." rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="file-upload-btn">
+                    📎 Add Media
+                    <input type="file" id="postMediaInput" multiple accept="image/*,video/*" style="display:none">
+                </label>
+                <div id="mediaPreviewContainer" class="media-preview"></div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeCreatePost()">Cancel</button>
+                <button type="submit" class="btn-primary">Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Floating Action Button for Create Post -->
+<button class="create-post-fab" onclick="openCreatePost()" title="Create Post">
+    +
+</button>
+  <!-- Add feed to your bottom navigation -->
+<div class="bottom-nav">
+    <button onclick="showPage('page-home')" class="nav-item active">
+        <span>🏠</span>
+        <span class="nav-label">Home</span>
+    </button>
+    <button onclick="showPage('page-feed')" class="nav-item">
+        <span>📰</span>
+        <span class="nav-label">Feed</span>
+    </button>
+    <button onclick="showPage('page-tools')" class="nav-item">
+        <span>🛠️</span>
+        <span class="nav-label">Tools</span>
+    </button>
+    <button onclick="showPage('page-study')" class="nav-item">
+        <span>📚</span>
+        <span class="nav-label">Study</span>
+    </button>
+</div>
 
   <!-- DARK WEB MODAL -->
   <div class="darkweb-modal-overlay" id="darkwebModal">
@@ -3586,22 +4277,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
 });
-  // pocketbase-feed.js
+ // =============================================
+// 📡 POCKETBASE FEED - WITH YOUR THEME
 // =============================================
-// 📡 POCKETBASE FEED CONFIGURATION
-// =============================================
 
-// Initialize PocketBase
-const PB_URL = 'http://127.0.0.1:8090'; // Local development
-// const PB_URL = 'https://your-pocketbase.onrender.com'; // Production
-
-const pb = new PocketBase(PB_URL);
-
-// Current user state
+const pb = new PocketBase('http://127.0.0.1:8090');
 let currentUser = null;
 
 // =============================================
-// 🔐 AUTHENTICATION FUNCTIONS
+// 🔐 AUTHENTICATION
 // =============================================
 
 async function loginWithPocketBase(email, password) {
@@ -3609,9 +4293,10 @@ async function loginWithPocketBase(email, password) {
         const authData = await pb.collection('users').authWithPassword(email, password);
         currentUser = pb.authStore.model;
         updateAuthUI();
+        showToast('Welcome back! 👋', 'success');
         return authData;
     } catch (error) {
-        console.error('Login error:', error);
+        showToast('Login failed: ' + error.message, 'error');
         throw error;
     }
 }
@@ -3620,7 +4305,8 @@ function logoutFromPocketBase() {
     pb.authStore.clear();
     currentUser = null;
     updateAuthUI();
-    loadFeedPosts(); // Refresh feed
+    loadFeedPosts();
+    showToast('Logged out', 'info');
 }
 
 function isAuthenticated() {
@@ -3632,7 +4318,7 @@ function getCurrentUser() {
 }
 
 // =============================================
-// 📝 FEED POST FUNCTIONS
+// 📝 FEED FUNCTIONS
 // =============================================
 
 async function getFeedPosts(page = 1, perPage = 20) {
@@ -3660,7 +4346,6 @@ async function createNewPost(content, mediaFiles = []) {
         formData.append('author', pb.authStore.model.id);
         formData.append('status', 'published');
         
-        // Add media files
         mediaFiles.forEach((file, index) => {
             formData.append(`media`, file);
         });
@@ -3676,20 +4361,18 @@ async function createNewPost(content, mediaFiles = []) {
 async function toggleLike(postId) {
     try {
         if (!isAuthenticated()) {
-            throw new Error('Please login first');
+            showToast('Please login to like', 'warning');
+            return;
         }
 
-        // Check if already liked
         const existingLike = await pb.collection('likes').getList(1, 1, {
             filter: `post = "${postId}" && user = "${pb.authStore.model.id}"`
         });
 
         if (existingLike.totalItems > 0) {
-            // Unlike
             await pb.collection('likes').delete(existingLike.items[0].id);
             return { action: 'unliked' };
         } else {
-            // Like
             await pb.collection('likes').create({
                 post: postId,
                 user: pb.authStore.model.id
@@ -3710,7 +4393,6 @@ async function getPostLikes(postId) {
         });
         return result.totalItems;
     } catch (error) {
-        console.error('Error getting likes:', error);
         return 0;
     }
 }
@@ -3718,39 +4400,37 @@ async function getPostLikes(postId) {
 async function deletePost(postId) {
     try {
         if (!isAuthenticated()) {
-            throw new Error('Please login first');
+            showToast('Please login first', 'warning');
+            return;
         }
         
         const post = await pb.collection('posts').getOne(postId);
-        if (post.author !== pb.authStore.model.id && !pb.authStore.model.isAdmin) {
-            throw new Error('You can only delete your own posts');
+        if (post.author !== pb.authStore.model.id) {
+            showToast('You can only delete your own posts', 'error');
+            return;
         }
         
         await pb.collection('posts').delete(postId);
-        return true;
+        showToast('Post deleted', 'success');
+        loadFeedPosts();
     } catch (error) {
-        console.error('Error deleting post:', error);
-        throw error;
+        showToast('Failed to delete: ' + error.message, 'error');
     }
 }
 
 // =============================================
-// 🎨 UI RENDERING FUNCTIONS
+// 🎨 UI RENDERING
 // =============================================
 
 async function loadFeedPosts() {
     const feedContainer = document.getElementById('community-feed-posts');
-    if (!feedContainer) {
-        console.warn('Feed container not found');
-        return;
-    }
+    if (!feedContainer) return;
 
     try {
-        // Show loading state
         feedContainer.innerHTML = `
             <div class="feed-loading">
                 <div class="loader"></div>
-                <p>Loading posts...</p>
+                <p style="color:var(--text-muted); font-weight:500;">Loading feed...</p>
             </div>
         `;
 
@@ -3759,7 +4439,7 @@ async function loadFeedPosts() {
         if (result.items.length === 0) {
             feedContainer.innerHTML = `
                 <div class="empty-feed">
-                    <div class="empty-icon">📝</div>
+                    <span class="empty-icon">📝</span>
                     <h3>No posts yet</h3>
                     <p>Be the first to share something with the community!</p>
                     ${isAuthenticated() ? 
@@ -3771,12 +4451,12 @@ async function loadFeedPosts() {
             return;
         }
 
-        // Render posts
         let postsHTML = '';
         for (const post of result.items) {
             const author = post.expand?.author || {};
             const likes = await getPostLikes(post.id);
             const isAuthor = isAuthenticated() && post.author === pb.authStore.model.id;
+            const isLiked = await checkIfLiked(post.id);
             
             postsHTML += `
                 <div class="feed-post" id="post-${post.id}" data-post-id="${post.id}">
@@ -3792,16 +4472,13 @@ async function loadFeedPosts() {
                             <div class="post-actions-dropdown">
                                 <button class="dropdown-toggle" onclick="toggleDropdown('dropdown-${post.id}')">⋯</button>
                                 <div class="dropdown-menu" id="dropdown-${post.id}">
-                                    <button onclick="editPost('${post.id}')">✏️ Edit</button>
                                     <button onclick="deletePost('${post.id}')" class="danger">🗑️ Delete</button>
                                 </div>
                             </div>
                         ` : ''}
                     </div>
                     
-                    <div class="post-content">
-                        ${escapeHtml(post.content)}
-                    </div>
+                    <div class="post-content">${escapeHtml(post.content)}</div>
                     
                     ${post.media && post.media.length > 0 ? `
                         <div class="post-media">
@@ -3820,8 +4497,8 @@ async function loadFeedPosts() {
                     </div>
                     
                     <div class="post-actions">
-                        <button class="action-btn like-btn" onclick="handleLike('${post.id}')">
-                            ❤️ <span class="like-label">Like</span>
+                        <button class="action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="handleLike('${post.id}')">
+                            ❤️ <span>${isLiked ? 'Liked' : 'Like'}</span>
                         </button>
                         <button class="action-btn comment-btn" onclick="handleComment('${post.id}')">
                             💬 Comment
@@ -3835,64 +4512,55 @@ async function loadFeedPosts() {
         }
         
         feedContainer.innerHTML = postsHTML;
-
-        // Setup real-time subscriptions
         setupRealtimeFeed();
 
     } catch (error) {
         console.error('Failed to load feed:', error);
         feedContainer.innerHTML = `
-            <div class="feed-error">
-                <div class="error-icon">⚠️</div>
+            <div class="empty-feed" style="border-color:#ef4444;">
+                <span class="empty-icon">⚠️</span>
                 <h3>Failed to load feed</h3>
-                <p>${error.message || 'Please try again later'}</p>
-                <button class="btn-primary" onclick="loadFeedPosts()">Retry</button>
+                <p style="color:#ef4444;">${error.message || 'Please try again later'}</p>
+                <button class="btn-primary" onclick="loadFeedPosts()" style="margin-top:12px;">Retry</button>
             </div>
         `;
     }
 }
 
+async function checkIfLiked(postId) {
+    if (!isAuthenticated()) return false;
+    try {
+        const result = await pb.collection('likes').getList(1, 1, {
+            filter: `post = "${postId}" && user = "${pb.authStore.model.id}"`
+        });
+        return result.totalItems > 0;
+    } catch {
+        return false;
+    }
+}
+
 // =============================================
-// 🔄 REAL-TIME SUBSCRIPTIONS
+// 🔄 REAL-TIME
 // =============================================
 
 function setupRealtimeFeed() {
-    // Unsubscribe previous
     pb.collection('posts').unsubscribe('*');
-    
     pb.collection('posts').subscribe('*', (data) => {
-        if (data.action === 'create') {
-            // New post - reload feed
+        if (data.action === 'create' || data.action === 'update') {
             loadFeedPosts();
-        } else if (data.action === 'update') {
-            // Update specific post
-            updatePostInUI(data.record);
         } else if (data.action === 'delete') {
-            // Remove post from UI
             const postElement = document.getElementById(`post-${data.record.id}`);
             if (postElement) {
-                postElement.style.animation = 'fadeOut 0.3s ease';
+                postElement.style.opacity = '0';
+                postElement.style.transform = 'scale(0.9)';
                 setTimeout(() => postElement.remove(), 300);
             }
         }
     });
 }
 
-function updatePostInUI(record) {
-    const postElement = document.getElementById(`post-${record.id}`);
-    if (postElement) {
-        // Update likes count if changed
-        const likesCount = postElement.querySelector('.likes-count');
-        if (likesCount) {
-            getPostLikes(record.id).then(count => {
-                likesCount.textContent = `❤️ ${count}`;
-            });
-        }
-    }
-}
-
 // =============================================
-// 🎯 POST INTERACTIONS
+// 🎯 INTERACTIONS
 // =============================================
 
 async function handleLike(postId) {
@@ -3903,14 +4571,25 @@ async function handleLike(postId) {
     
     try {
         const result = await toggleLike(postId);
-        // Update UI
         const postElement = document.getElementById(`post-${postId}`);
         if (postElement) {
             const likesCount = postElement.querySelector('.likes-count');
+            const likeBtn = postElement.querySelector('.like-btn');
+            
             if (likesCount) {
                 const currentLikes = parseInt(likesCount.textContent.match(/\d+/)?.[0] || 0);
                 const newLikes = result.action === 'liked' ? currentLikes + 1 : currentLikes - 1;
                 likesCount.textContent = `❤️ ${newLikes}`;
+            }
+            
+            if (likeBtn) {
+                if (result.action === 'liked') {
+                    likeBtn.classList.add('liked');
+                    likeBtn.innerHTML = '❤️ <span>Liked</span>';
+                } else {
+                    likeBtn.classList.remove('liked');
+                    likeBtn.innerHTML = '❤️ <span>Like</span>';
+                }
             }
         }
     } catch (error) {
@@ -3923,8 +4602,7 @@ function handleComment(postId) {
         showToast('Please login to comment', 'warning');
         return;
     }
-    // Open comment modal
-    openCommentModal(postId);
+    showToast('Comment feature coming soon! 💬', 'info');
 }
 
 function handleShare(postId) {
@@ -3937,16 +4615,15 @@ function handleShare(postId) {
         }).catch(() => {});
     } else {
         navigator.clipboard.writeText(url).then(() => {
-            showToast('Link copied to clipboard!', 'success');
+            showToast('Link copied to clipboard! 📋', 'success');
         }).catch(() => {
-            // Fallback
             prompt('Copy this link:', url);
         });
     }
 }
 
 // =============================================
-// 🖼️ CREATE POST MODAL
+// 📝 CREATE POST MODAL
 // =============================================
 
 function openCreatePost() {
@@ -3955,64 +4632,17 @@ function openCreatePost() {
         return;
     }
     
-    const modal = document.getElementById('createPostModal') || createPostModal();
-    modal.style.display = 'block';
-}
-
-function createPostModal() {
-    const modalHTML = `
-        <div id="createPostModal" class="modal-overlay">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Create New Post</h2>
-                    <button class="modal-close" onclick="closeCreatePost()">&times;</button>
-                </div>
-                <form id="createPostForm" onsubmit="submitNewPost(event)">
-                    <div class="form-group">
-                        <textarea id="postContentInput" placeholder="What's on your mind?" rows="4"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label class="file-upload-btn">
-                            📎 Add Media
-                            <input type="file" id="postMediaInput" multiple accept="image/*,video/*" style="display:none">
-                        </label>
-                        <div id="mediaPreviewContainer" class="media-preview"></div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="closeCreatePost()">Cancel</button>
-                        <button type="submit" class="btn-primary">Post</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Media preview
-    document.getElementById('postMediaInput').addEventListener('change', function(e) {
-        const previewContainer = document.getElementById('mediaPreviewContainer');
-        previewContainer.innerHTML = '';
-        for (const file of this.files) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.createElement('div');
-                preview.className = 'preview-item';
-                preview.innerHTML = `
-                    <img src="${e.target.result}" alt="Preview">
-                    <span class="preview-remove" onclick="this.parentElement.remove()">&times;</span>
-                `;
-                previewContainer.appendChild(preview);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-    
-    return document.getElementById('createPostModal');
+    const modal = document.getElementById('createPostModal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+    }
 }
 
 function closeCreatePost() {
     const modal = document.getElementById('createPostModal');
     if (modal) {
+        modal.classList.remove('active');
         modal.style.display = 'none';
         document.getElementById('postContentInput').value = '';
         document.getElementById('postMediaInput').value = '';
@@ -4032,13 +4662,20 @@ async function submitNewPost(event) {
         return;
     }
     
+    const submitBtn = event.target.querySelector('.btn-primary');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting...';
+    
     try {
         const post = await createNewPost(content, Array.from(mediaFiles));
         closeCreatePost();
-        showToast('Post created successfully!', 'success');
-        loadFeedPosts(); // Refresh feed
+        showToast('Post created successfully! ✨', 'success');
+        loadFeedPosts();
     } catch (error) {
-        showToast(error.message, 'error');
+        showToast(error.message || 'Failed to create post', 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Post';
     }
 }
 
@@ -4052,11 +4689,12 @@ function getFileUrl(record, filename) {
 }
 
 function getAvatarUrl(user) {
-    if (!user) return '/images/default-avatar.png';
+    if (!user) return 'https://ui-avatars.com/api/?name=User&background=random';
     if (user.avatar) {
         return pb.getFileUrl(user, user.avatar);
     }
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.username || 'User')}&background=random`;
+    const name = user.name || user.username || 'User';
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 }
 
 function formatTime(dateString) {
@@ -4078,50 +4716,52 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => {
-        toast.classList.add('fade-out');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
 function toggleDropdown(id) {
     const dropdown = document.getElementById(id);
     if (dropdown) {
         dropdown.classList.toggle('show');
-        // Close other dropdowns
         document.querySelectorAll('.dropdown-menu.show').forEach(el => {
             if (el.id !== id) el.classList.remove('show');
         });
     }
 }
 
+function showToast(message, type = 'info') {
+    // Remove existing toast
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
 function updateAuthUI() {
     const isAuth = isAuthenticated();
     const user = getCurrentUser();
     
-    // Update login/logout buttons
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const userAvatar = document.getElementById('userAvatar');
-    
-    if (isAuth && user) {
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'block';
-        if (userAvatar) {
-            userAvatar.innerHTML = `
-                <img src="${getAvatarUrl(user)}" alt="${user.name}" class="nav-avatar">
-                <span class="username">${user.name || user.username}</span>
-            `;
+    // Update header greeting
+    const greeting = document.querySelector('.identity-greeting h1');
+    if (greeting) {
+        if (isAuth && user) {
+            greeting.textContent = `Hi, ${user.name || user.username || 'User'} 👋`;
+        } else {
+            greeting.textContent = 'Welcome 👋';
         }
-    } else {
-        if (loginBtn) loginBtn.style.display = 'block';
-        if (logoutBtn) logoutBtn.style.display = 'none';
-        if (userAvatar) userAvatar.innerHTML = '';
+    }
+    
+    // Update user avatar in header
+    const avatarContainer = document.querySelector('.header-actions .header-btn:first-child');
+    if (avatarContainer && isAuth && user) {
+        avatarContainer.innerHTML = `
+            <img src="${getAvatarUrl(user)}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+        `;
     }
 }
 
@@ -4132,17 +4772,24 @@ function updateAuthUI() {
 document.addEventListener('DOMContentLoaded', function() {
     // Load feed
     loadFeedPosts();
-    
-    // Update auth UI
     updateAuthUI();
     
     // Auto-refresh every 30 seconds
     setInterval(() => {
         loadFeedPosts();
     }, 30000);
+    
+    // Close dropdowns on click outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.post-actions-dropdown')) {
+            document.querySelectorAll('.dropdown-menu.show').forEach(el => {
+                el.classList.remove('show');
+            });
+        }
+    });
 });
 
-// Expose functions globally
+// Expose globally
 window.loadFeedPosts = loadFeedPosts;
 window.openCreatePost = openCreatePost;
 window.closeCreatePost = closeCreatePost;
@@ -4155,7 +4802,26 @@ window.toggleDropdown = toggleDropdown;
 window.loginWithPocketBase = loginWithPocketBase;
 window.logoutFromPocketBase = logoutFromPocketBase;
 window.showToast = showToast;
+window.showLoginModal = function() {
+    showToast('Login feature coming soon! 🔐', 'info');
+};
+  function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Show selected page
+    const page = document.getElementById(pageId);
+    if (page) page.classList.add('active');
+    
+    // Update nav active state
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = ['page-home', 'page-feed', 'page-tools', 'page-study'];
+    const index = pages.indexOf(pageId);
+    if (navItems[index]) navItems[index].classList.add('active');
+}
 
+// Expose globally
+window.showPage = showPage;
   
 </script>
 </body>
