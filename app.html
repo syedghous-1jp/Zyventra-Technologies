@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.0/dist/pocketbase.umd.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
@@ -3585,6 +3586,575 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
 });
+  // pocketbase-feed.js
+// =============================================
+// 📡 POCKETBASE FEED CONFIGURATION
+// =============================================
+
+// Initialize PocketBase
+const PB_URL = 'http://127.0.0.1:8090'; // Local development
+// const PB_URL = 'https://your-pocketbase.onrender.com'; // Production
+
+const pb = new PocketBase(PB_URL);
+
+// Current user state
+let currentUser = null;
+
+// =============================================
+// 🔐 AUTHENTICATION FUNCTIONS
+// =============================================
+
+async function loginWithPocketBase(email, password) {
+    try {
+        const authData = await pb.collection('users').authWithPassword(email, password);
+        currentUser = pb.authStore.model;
+        updateAuthUI();
+        return authData;
+    } catch (error) {
+        console.error('Login error:', error);
+        throw error;
+    }
+}
+
+function logoutFromPocketBase() {
+    pb.authStore.clear();
+    currentUser = null;
+    updateAuthUI();
+    loadFeedPosts(); // Refresh feed
+}
+
+function isAuthenticated() {
+    return pb.authStore.isValid;
+}
+
+function getCurrentUser() {
+    return pb.authStore.model;
+}
+
+// =============================================
+// 📝 FEED POST FUNCTIONS
+// =============================================
+
+async function getFeedPosts(page = 1, perPage = 20) {
+    try {
+        const result = await pb.collection('posts').getList(page, perPage, {
+            sort: '-created',
+            expand: 'author',
+            filter: 'status = "published"'
+        });
+        return result;
+    } catch (error) {
+        console.error('Error fetching feed:', error);
+        throw error;
+    }
+}
+
+async function createNewPost(content, mediaFiles = []) {
+    try {
+        if (!isAuthenticated()) {
+            throw new Error('Please login first');
+        }
+
+        const formData = new FormData();
+        formData.append('content', content);
+        formData.append('author', pb.authStore.model.id);
+        formData.append('status', 'published');
+        
+        // Add media files
+        mediaFiles.forEach((file, index) => {
+            formData.append(`media`, file);
+        });
+
+        const record = await pb.collection('posts').create(formData);
+        return record;
+    } catch (error) {
+        console.error('Error creating post:', error);
+        throw error;
+    }
+}
+
+async function toggleLike(postId) {
+    try {
+        if (!isAuthenticated()) {
+            throw new Error('Please login first');
+        }
+
+        // Check if already liked
+        const existingLike = await pb.collection('likes').getList(1, 1, {
+            filter: `post = "${postId}" && user = "${pb.authStore.model.id}"`
+        });
+
+        if (existingLike.totalItems > 0) {
+            // Unlike
+            await pb.collection('likes').delete(existingLike.items[0].id);
+            return { action: 'unliked' };
+        } else {
+            // Like
+            await pb.collection('likes').create({
+                post: postId,
+                user: pb.authStore.model.id
+            });
+            return { action: 'liked' };
+        }
+    } catch (error) {
+        console.error('Error toggling like:', error);
+        throw error;
+    }
+}
+
+async function getPostLikes(postId) {
+    try {
+        const result = await pb.collection('likes').getList(1, 1, {
+            filter: `post = "${postId}"`,
+            count: true
+        });
+        return result.totalItems;
+    } catch (error) {
+        console.error('Error getting likes:', error);
+        return 0;
+    }
+}
+
+async function deletePost(postId) {
+    try {
+        if (!isAuthenticated()) {
+            throw new Error('Please login first');
+        }
+        
+        const post = await pb.collection('posts').getOne(postId);
+        if (post.author !== pb.authStore.model.id && !pb.authStore.model.isAdmin) {
+            throw new Error('You can only delete your own posts');
+        }
+        
+        await pb.collection('posts').delete(postId);
+        return true;
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        throw error;
+    }
+}
+
+// =============================================
+// 🎨 UI RENDERING FUNCTIONS
+// =============================================
+
+async function loadFeedPosts() {
+    const feedContainer = document.getElementById('community-feed-posts');
+    if (!feedContainer) {
+        console.warn('Feed container not found');
+        return;
+    }
+
+    try {
+        // Show loading state
+        feedContainer.innerHTML = `
+            <div class="feed-loading">
+                <div class="loader"></div>
+                <p>Loading posts...</p>
+            </div>
+        `;
+
+        const result = await getFeedPosts(1, 20);
+        
+        if (result.items.length === 0) {
+            feedContainer.innerHTML = `
+                <div class="empty-feed">
+                    <div class="empty-icon">📝</div>
+                    <h3>No posts yet</h3>
+                    <p>Be the first to share something with the community!</p>
+                    ${isAuthenticated() ? 
+                        '<button class="btn-primary" onclick="openCreatePost()">Create Post</button>' : 
+                        '<button class="btn-primary" onclick="showLoginModal()">Login to Post</button>'
+                    }
+                </div>
+            `;
+            return;
+        }
+
+        // Render posts
+        let postsHTML = '';
+        for (const post of result.items) {
+            const author = post.expand?.author || {};
+            const likes = await getPostLikes(post.id);
+            const isAuthor = isAuthenticated() && post.author === pb.authStore.model.id;
+            
+            postsHTML += `
+                <div class="feed-post" id="post-${post.id}" data-post-id="${post.id}">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <img src="${getAvatarUrl(author)}" alt="${author.name || 'User'}" class="post-avatar">
+                            <div class="author-info">
+                                <span class="author-name">${author.name || author.username || 'Unknown User'}</span>
+                                <span class="post-time">${formatTime(post.created)}</span>
+                            </div>
+                        </div>
+                        ${isAuthor ? `
+                            <div class="post-actions-dropdown">
+                                <button class="dropdown-toggle" onclick="toggleDropdown('dropdown-${post.id}')">⋯</button>
+                                <div class="dropdown-menu" id="dropdown-${post.id}">
+                                    <button onclick="editPost('${post.id}')">✏️ Edit</button>
+                                    <button onclick="deletePost('${post.id}')" class="danger">🗑️ Delete</button>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="post-content">
+                        ${escapeHtml(post.content)}
+                    </div>
+                    
+                    ${post.media && post.media.length > 0 ? `
+                        <div class="post-media">
+                            ${post.media.map(file => `
+                                <div class="media-item">
+                                    <img src="${getFileUrl(post, file)}" alt="Post media" loading="lazy">
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="post-stats">
+                        <span class="likes-count">❤️ ${likes}</span>
+                        <span class="comments-count">💬 ${post.comments || 0}</span>
+                        <span class="shares-count">🔁 ${post.shares || 0}</span>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn like-btn" onclick="handleLike('${post.id}')">
+                            ❤️ <span class="like-label">Like</span>
+                        </button>
+                        <button class="action-btn comment-btn" onclick="handleComment('${post.id}')">
+                            💬 Comment
+                        </button>
+                        <button class="action-btn share-btn" onclick="handleShare('${post.id}')">
+                            🔁 Share
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        feedContainer.innerHTML = postsHTML;
+
+        // Setup real-time subscriptions
+        setupRealtimeFeed();
+
+    } catch (error) {
+        console.error('Failed to load feed:', error);
+        feedContainer.innerHTML = `
+            <div class="feed-error">
+                <div class="error-icon">⚠️</div>
+                <h3>Failed to load feed</h3>
+                <p>${error.message || 'Please try again later'}</p>
+                <button class="btn-primary" onclick="loadFeedPosts()">Retry</button>
+            </div>
+        `;
+    }
+}
+
+// =============================================
+// 🔄 REAL-TIME SUBSCRIPTIONS
+// =============================================
+
+function setupRealtimeFeed() {
+    // Unsubscribe previous
+    pb.collection('posts').unsubscribe('*');
+    
+    pb.collection('posts').subscribe('*', (data) => {
+        if (data.action === 'create') {
+            // New post - reload feed
+            loadFeedPosts();
+        } else if (data.action === 'update') {
+            // Update specific post
+            updatePostInUI(data.record);
+        } else if (data.action === 'delete') {
+            // Remove post from UI
+            const postElement = document.getElementById(`post-${data.record.id}`);
+            if (postElement) {
+                postElement.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => postElement.remove(), 300);
+            }
+        }
+    });
+}
+
+function updatePostInUI(record) {
+    const postElement = document.getElementById(`post-${record.id}`);
+    if (postElement) {
+        // Update likes count if changed
+        const likesCount = postElement.querySelector('.likes-count');
+        if (likesCount) {
+            getPostLikes(record.id).then(count => {
+                likesCount.textContent = `❤️ ${count}`;
+            });
+        }
+    }
+}
+
+// =============================================
+// 🎯 POST INTERACTIONS
+// =============================================
+
+async function handleLike(postId) {
+    if (!isAuthenticated()) {
+        showToast('Please login to like posts', 'warning');
+        return;
+    }
+    
+    try {
+        const result = await toggleLike(postId);
+        // Update UI
+        const postElement = document.getElementById(`post-${postId}`);
+        if (postElement) {
+            const likesCount = postElement.querySelector('.likes-count');
+            if (likesCount) {
+                const currentLikes = parseInt(likesCount.textContent.match(/\d+/)?.[0] || 0);
+                const newLikes = result.action === 'liked' ? currentLikes + 1 : currentLikes - 1;
+                likesCount.textContent = `❤️ ${newLikes}`;
+            }
+        }
+    } catch (error) {
+        showToast(error.message, 'error');
+    }
+}
+
+function handleComment(postId) {
+    if (!isAuthenticated()) {
+        showToast('Please login to comment', 'warning');
+        return;
+    }
+    // Open comment modal
+    openCommentModal(postId);
+}
+
+function handleShare(postId) {
+    const url = `${window.location.origin}?post=${postId}`;
+    if (navigator.share) {
+        navigator.share({
+            title: 'Check out this post',
+            text: 'Check out this post from the community!',
+            url: url
+        }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('Link copied to clipboard!', 'success');
+        }).catch(() => {
+            // Fallback
+            prompt('Copy this link:', url);
+        });
+    }
+}
+
+// =============================================
+// 🖼️ CREATE POST MODAL
+// =============================================
+
+function openCreatePost() {
+    if (!isAuthenticated()) {
+        showToast('Please login first', 'warning');
+        return;
+    }
+    
+    const modal = document.getElementById('createPostModal') || createPostModal();
+    modal.style.display = 'block';
+}
+
+function createPostModal() {
+    const modalHTML = `
+        <div id="createPostModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Create New Post</h2>
+                    <button class="modal-close" onclick="closeCreatePost()">&times;</button>
+                </div>
+                <form id="createPostForm" onsubmit="submitNewPost(event)">
+                    <div class="form-group">
+                        <textarea id="postContentInput" placeholder="What's on your mind?" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="file-upload-btn">
+                            📎 Add Media
+                            <input type="file" id="postMediaInput" multiple accept="image/*,video/*" style="display:none">
+                        </label>
+                        <div id="mediaPreviewContainer" class="media-preview"></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeCreatePost()">Cancel</button>
+                        <button type="submit" class="btn-primary">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Media preview
+    document.getElementById('postMediaInput').addEventListener('change', function(e) {
+        const previewContainer = document.getElementById('mediaPreviewContainer');
+        previewContainer.innerHTML = '';
+        for (const file of this.files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.createElement('div');
+                preview.className = 'preview-item';
+                preview.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <span class="preview-remove" onclick="this.parentElement.remove()">&times;</span>
+                `;
+                previewContainer.appendChild(preview);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    return document.getElementById('createPostModal');
+}
+
+function closeCreatePost() {
+    const modal = document.getElementById('createPostModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.getElementById('postContentInput').value = '';
+        document.getElementById('postMediaInput').value = '';
+        document.getElementById('mediaPreviewContainer').innerHTML = '';
+    }
+}
+
+async function submitNewPost(event) {
+    event.preventDefault();
+    
+    const content = document.getElementById('postContentInput').value;
+    const mediaInput = document.getElementById('postMediaInput');
+    const mediaFiles = mediaInput.files;
+    
+    if (!content.trim() && mediaFiles.length === 0) {
+        showToast('Please add some content or media', 'warning');
+        return;
+    }
+    
+    try {
+        const post = await createNewPost(content, Array.from(mediaFiles));
+        closeCreatePost();
+        showToast('Post created successfully!', 'success');
+        loadFeedPosts(); // Refresh feed
+    } catch (error) {
+        showToast(error.message, 'error');
+    }
+}
+
+// =============================================
+// 📦 UTILITY FUNCTIONS
+// =============================================
+
+function getFileUrl(record, filename) {
+    if (!filename) return null;
+    return pb.getFileUrl(record, filename);
+}
+
+function getAvatarUrl(user) {
+    if (!user) return '/images/default-avatar.png';
+    if (user.avatar) {
+        return pb.getFileUrl(user, user.avatar);
+    }
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.username || 'User')}&background=random`;
+}
+
+function formatTime(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((now - date) / 1000);
+    
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
+    return date.toLocaleDateString();
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function toggleDropdown(id) {
+    const dropdown = document.getElementById(id);
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+        // Close other dropdowns
+        document.querySelectorAll('.dropdown-menu.show').forEach(el => {
+            if (el.id !== id) el.classList.remove('show');
+        });
+    }
+}
+
+function updateAuthUI() {
+    const isAuth = isAuthenticated();
+    const user = getCurrentUser();
+    
+    // Update login/logout buttons
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userAvatar = document.getElementById('userAvatar');
+    
+    if (isAuth && user) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block';
+        if (userAvatar) {
+            userAvatar.innerHTML = `
+                <img src="${getAvatarUrl(user)}" alt="${user.name}" class="nav-avatar">
+                <span class="username">${user.name || user.username}</span>
+            `;
+        }
+    } else {
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (userAvatar) userAvatar.innerHTML = '';
+    }
+}
+
+// =============================================
+// 🚀 INITIALIZATION
+// =============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Load feed
+    loadFeedPosts();
+    
+    // Update auth UI
+    updateAuthUI();
+    
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        loadFeedPosts();
+    }, 30000);
+});
+
+// Expose functions globally
+window.loadFeedPosts = loadFeedPosts;
+window.openCreatePost = openCreatePost;
+window.closeCreatePost = closeCreatePost;
+window.submitNewPost = submitNewPost;
+window.handleLike = handleLike;
+window.handleComment = handleComment;
+window.handleShare = handleShare;
+window.deletePost = deletePost;
+window.toggleDropdown = toggleDropdown;
+window.loginWithPocketBase = loginWithPocketBase;
+window.logoutFromPocketBase = logoutFromPocketBase;
+window.showToast = showToast;
 
   
 </script>
