@@ -4277,23 +4277,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
 });
- // =============================================
-// 📡 POCKETBASE FEED - WITH YOUR THEME
-// =============================================
-// =============================================
-// SUPABASE FEED - COMPLETE
-// =============================================
-
-// 🔥 YAHAN APNA SUPABASE URL AUR KEY DAALO
-// Settings → API se copy karo
-const SUPABASE_URL = 'https://your-project-id.supabase.co';
-const SUPABASE_ANON_KEY = 'your-anon-key-here';
 
 // =============================================
-// 1. INITIALIZE
+// 🔥 SUPABASE CONFIG - YAHAN APNA URL AUR KEY DAALO
 // =============================================
+const SUPABASE_URL = 'https://your-project-id.supabase.co';  // ← CHANGE KARO
+const SUPABASE_ANON_KEY = 'your-anon-key-here';  // ← CHANGE KARO
 
+// =============================================
+// 1. SUPABASE INITIALIZE
+// =============================================
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let session = null;
 
 // =============================================
 // 2. AUTH FUNCTIONS
@@ -4314,6 +4309,7 @@ async function login() {
         
         if (error) throw error;
         
+        session = data.session;
         alert('✅ Login successful!');
         updateUI(data.user);
         loadFeed();
@@ -4353,6 +4349,7 @@ async function signup() {
 // LOGOUT
 async function logout() {
     await supabase.auth.signOut();
+    session = null;
     alert('✅ Logged out!');
     updateUI(null);
     loadFeed();
@@ -4360,12 +4357,13 @@ async function logout() {
 
 // CHECK AUTH
 async function checkAuth() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        console.log('✅ Logged in:', session.user.email);
-        updateUI(session.user);
+    const { data: { session: s } } = await supabase.auth.getSession();
+    if (s) {
+        console.log('✅ Logged in:', s.user.email);
+        session = s;
+        updateUI(s.user);
     }
-    return session;
+    return s;
 }
 
 // =============================================
@@ -4472,8 +4470,8 @@ async function loadFeed() {
 
 // CREATE POST
 async function createPost() {
-    const session = await checkAuth();
-    if (!session) {
+    const s = await checkAuth();
+    if (!s) {
         alert('❌ Pehle login karo!');
         return;
     }
@@ -4486,7 +4484,7 @@ async function createPost() {
             .from('posts')
             .insert({
                 content: content,
-                author_id: session.user.id
+                author_id: s.user.id
             });
         
         if (error) throw error;
@@ -4500,8 +4498,8 @@ async function createPost() {
 
 // LIKE POST
 async function likePost(postId) {
-    const session = await checkAuth();
-    if (!session) {
+    const s = await checkAuth();
+    if (!s) {
         alert('❌ Pehle login karo!');
         return;
     }
@@ -4511,7 +4509,7 @@ async function likePost(postId) {
             .from('likes')
             .insert({
                 post_id: postId,
-                user_id: session.user.id
+                user_id: s.user.id
             });
         
         if (error) throw error;
@@ -4566,8 +4564,6 @@ function updateUI(user) {
 // =============================================
 // 5. INITIALIZATION
 // =============================================
-
-let session = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Supabase connecting...');
@@ -4632,7 +4628,8 @@ console.log('  signup() - Account banao');
 console.log('  logout() - Logout karo');
 console.log('  createPost() - Post create karo');
 console.log('  loadFeed() - Feed refresh karo');
-  // Add spin animation
+
+// Add spin animation
 const style = document.createElement('style');
 style.textContent = `
     @keyframes spin {
@@ -4645,7 +4642,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
   
 </script>
 </body>
