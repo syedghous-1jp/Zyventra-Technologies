@@ -3,3 +3,15 @@
 *.log
 .DS_Store
 dist/
+# PocketBase
+pb_data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment
+.env
+.env.local
+
+# Node modules (agar frontend hai)
+node_modules/
