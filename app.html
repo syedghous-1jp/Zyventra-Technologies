@@ -3627,103 +3627,47 @@ console.log('💬 Normal = Soft Pling + Short Vibration');
 // 🔥 SUPABASE FEED - ONLY FEED
 // =============================================
 
-// 🔥 APNA URL AUR KEY YAHAN DAALO
-const SUPABASE_URL = 'https://ocdcuqlkgawlyvrzisjv.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_nbTVVp0_NjwloIu_0yYVxQ_wbK25vpp';
-
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let session = null;
-
-// =============================================
-// CHECK AUTH
-// =============================================
-async function checkAuth() {
-    const { data: { session: s } } = await supabase.auth.getSession();
-    if (s) {
-        session = s;
-        console.log('✅ Logged in:', s.user.email);
-    }
-    return s;
-}
-
-// =============================================
-// LOAD FEED
-// =============================================
-async function loadFeed() {
+const PB_URL = 'http://127.0.0.1:8090';
+const pb = new PocketBase(PB_URL);
+  async function loadFeed() {
     const container = document.getElementById('community-feed-posts');
     if (!container) return;
     
     try {
-        container.innerHTML = `
-            <div style="text-align:center;padding:40px;">
-                <div style="width:40px;height:40px;border:4px solid #f0f0f0;border-top:4px solid #d4a843;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
-                <p style="color:var(--text-muted);">Loading feed...</p>
-            </div>
-        `;
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted);">Loading...</div>`;
         
-        const { data: posts, error } = await supabase
-            .from('posts')
-            .select(`
-                *,
-                author:users(email, raw_user_meta_data)
-            `)
-            .order('created_at', { ascending: false });
+        const records = await pb.collection('posts').getFullList({
+            sort: '-created',
+        });
         
-        if (error) throw error;
-        
-        if (!posts || posts.length === 0) {
+        if (records.length === 0) {
             container.innerHTML = `
-                <div style="text-align:center;padding:60px 20px;background:var(--bg-white);border:var(--border-lux);border-radius:var(--card-radius);box-shadow:var(--shadow-lux);">
+                <div style="text-align:center;padding:60px 20px;background:var(--bg-white);border:var(--border-lux);border-radius:var(--card-radius);">
                     <span style="font-size:48px;display:block;margin-bottom:12px;">📝</span>
-                    <h3 style="font-size:18px;font-weight:700;color:var(--text-dark);margin-bottom:6px;">No posts yet</h3>
-                    <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">Be the first to share something!</p>
-                    ${session ? 
-                        `<button onclick="createPost()" style="padding:12px 32px;background:var(--accent-gold);color:#fff;border:none;border-radius:16px;font-weight:700;cursor:pointer;">Create Post</button>` :
-                        `<button onclick="login()" style="padding:12px 32px;background:var(--accent-gold);color:#fff;border:none;border-radius:16px;font-weight:700;cursor:pointer;">Login to Post</button>`
-                    }
+                    <h3 style="font-size:18px;font-weight:700;">No posts yet</h3>
+                    <p style="color:var(--text-muted);">Be the first to share!</p>
                 </div>
             `;
             return;
         }
         
         let html = '';
-        for (const post of posts) {
-            const author = post.author || {};
-            const name = author.raw_user_meta_data?.name || author.email || 'Unknown';
-            
-            const { count } = await supabase
-                .from('likes')
-                .select('*', { count: 'exact', head: true })
-                .eq('post_id', post.id);
-            
+        for (const post of records) {
             html += `
-                <div style="background:var(--bg-white);border:var(--border-lux);border-radius:var(--card-radius);padding:18px 16px;margin-bottom:16px;box-shadow:var(--shadow-lux);transition:all 0.2s ease;animation:fadeSlideIn 0.35s ease forwards;">
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
-                        <div style="display:flex;align-items:center;gap:12px;">
-                            <div style="width:44px;height:44px;border-radius:50%;background:var(--accent-gold);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;flex-shrink:0;border:2px solid var(--accent-gold);">
-                                ${name[0].toUpperCase()}
-                            </div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--text-dark);">${name}</div>
-                                <div style="font-size:11px;color:var(--text-muted);font-weight:500;">${post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Recently'}</div>
-                            </div>
+                <div style="background:var(--bg-white);border:var(--border-lux);border-radius:var(--card-radius);padding:18px 16px;margin-bottom:16px;box-shadow:var(--shadow-lux);">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                        <div style="width:40px;height:40px;border-radius:50%;background:var(--accent-gold);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;">
+                            ${(post.author_id || 'G')[0].toUpperCase()}
+                        </div>
+                        <div>
+                            <div style="font-weight:700;font-size:14px;">${post.author_id || 'Guest'}</div>
+                            <div style="font-size:11px;color:var(--text-muted);">${new Date(post.created).toLocaleDateString()}</div>
                         </div>
                     </div>
-                    
-                    <div style="font-size:15px;line-height:1.7;color:var(--text-dark);margin-bottom:14px;word-wrap:break-word;">${post.content}</div>
-                    
-                    <div style="display:flex;gap:20px;padding:10px 0;border-top:1px solid var(--border-lux);border-bottom:1px solid var(--border-lux);margin-bottom:12px;font-size:13px;color:var(--text-muted);">
-                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">❤️ ${count || 0}</span>
-                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">💬 0</span>
-                    </div>
-                    
-                    <div style="display:flex;gap:8px;">
-                        <button onclick="likePost('${post.id}')" style="flex:1;padding:8px 12px;border:var(--border-lux);background:var(--bg-soft);border-radius:12px;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:6px;">
-                            ❤️ Like
-                        </button>
-                        <button onclick="sharePost('${post.id}')" style="flex:1;padding:8px 12px;border:var(--border-lux);background:var(--bg-soft);border-radius:12px;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:6px;">
-                            🔁 Share
-                        </button>
+                    <div style="font-size:15px;line-height:1.6;margin-bottom:12px;">${post.content}</div>
+                    <div style="display:flex;gap:16px;padding-top:10px;border-top:1px solid var(--border-lux);">
+                        <button onclick="likePost('${post.id}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px;">❤️ Like</button>
+                        <button onclick="deletePost('${post.id}')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;">🗑️ Delete</button>
                     </div>
                 </div>
             `;
@@ -3731,140 +3675,58 @@ async function loadFeed() {
         container.innerHTML = html;
         
     } catch (error) {
-        console.error('❌ Error loading feed:', error);
+        console.error('Error:', error);
         container.innerHTML = `
-            <div style="text-align:center;padding:40px;color:#ef4444;background:var(--bg-white);border-radius:var(--card-radius);border:1px solid #fecaca;">
-                <h3>⚠️ Error</h3>
-                <p>${error.message}</p>
-                <button onclick="loadFeed()" style="padding:12px 24px;background:var(--accent-gold);color:#fff;border:none;border-radius:12px;cursor:pointer;margin-top:10px;">Retry</button>
+            <div style="text-align:center;padding:40px;color:#ef4444;">
+                ❌ Error: ${error.message}
+                <br><button onclick="loadFeed()" style="padding:10px 20px;background:var(--accent-gold);color:#fff;border:none;border-radius:12px;cursor:pointer;margin-top:10px;">Retry</button>
             </div>
         `;
     }
 }
-
-// =============================================
-// CREATE POST
-// =============================================
-async function createPost() {
-    const content = prompt('📝 Kya likhna hai?');
-    if (!content) return;
-    
-    try {
-        const { error } = await supabase
-            .from('posts')
-            .insert({ 
-                content, 
-                author_id: '00000000-0000-0000-0000-000000000001' 
-            });
-        if (error) throw error;
-        alert('✅ Post create ho gaya! 🎉');
-        loadFeed();
-    } catch (error) {
-        alert('❌ Error: ' + error.message);
-    }
-}
-
-// =============================================
-// LIKE POST
-// =============================================
-async function likePost(postId) {
-    const s = await checkAuth();
-    if (!s) {
-        alert('❌ Pehle login karo!');
+  async function submitNewPost() {
+    const content = document.getElementById('postContentInput').value.trim();
+    if (!content) {
+        showToast('⚠️', 'Kuch likho!');
         return;
     }
+    
     try {
-        const { error } = await supabase
-            .from('likes')
-            .insert({ post_id: postId, user_id: s.user.id });
-        if (error) throw error;
-        loadFeed();
-    } catch (error) {
-        alert('❌ Error: ' + error.message);
-    }
-}
-
-// =============================================
-// SHARE POST
-// =============================================
-function sharePost(postId) {
-    const url = window.location.href + '?post=' + postId;
-    if (navigator.share) {
-        navigator.share({
-            title: 'Check out this post',
-            text: 'Check out this post from the community!',
-            url: url
-        }).catch(() => {});
-    } else {
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Link copy ho gaya!');
-        }).catch(() => {
-            prompt('Copy this link:', url);
+        await pb.collection('posts').create({
+            content: content,
+            author_id: localStorage.getItem('zyventra_app_user') || 'Guest'
         });
+        
+        document.getElementById('postContentInput').value = '';
+        showToast('✅', 'Post share ho gayi! 🎉');
+        loadFeed();
+        
+    } catch (error) {
+        showToast('❌', 'Error: ' + error.message);
+    }
+}
+  async function likePost(postId) {
+    try {
+        await pb.collection('likes').create({
+            post_id: postId,
+            user_id: localStorage.getItem('zyventra_app_user') || 'Guest'
+        });
+        showToast('❤️', 'Liked!');
+    } catch (error) {
+        showToast('❌', 'Already liked!');
     }
 }
 
-// =============================================
-// LOGIN / LOGOUT (Minimal)
-// =============================================
-async function login() {
-    const email = prompt('📧 Email:');
-    if (!email) return;
-    const password = prompt('🔑 Password:');
-    if (!password) return;
+async function deletePost(postId) {
+    if (!confirm('Delete this post?')) return;
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        session = data.session;
-        alert('✅ Login successful!');
+        await pb.collection('posts').delete(postId);
+        showToast('🗑️', 'Deleted!');
         loadFeed();
     } catch (error) {
-        alert('❌ Login failed: ' + error.message);
+        showToast('❌', 'Error: ' + error.message);
     }
 }
-
-async function logout() {
-    await supabase.auth.signOut();
-    session = null;
-    alert('✅ Logged out!');
-    loadFeed();
-}
-
-// =============================================
-// INIT - SIRF FEED
-// =============================================
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Feed loading...');
-    checkAuth().then(() => {
-        loadFeed();
-    });
-});
-
-// =============================================
-// EXPOSE
-// =============================================
-window.loadFeed = loadFeed;
-window.createPost = createPost;
-window.likePost = likePost;
-window.sharePost = sharePost;
-window.login = login;
-window.logout = logout;
-
-// Add spin animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    @keyframes fadeSlideIn {
-        from { opacity: 0; transform: translateY(16px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-`;
-document.head.appendChild(style);
-
-console.log('✅ Feed script loaded!');
 
 // =============================================
 // 🌍 FULL UI LANGUAGE (Translation System)
