@@ -1558,7 +1558,6 @@
   <!-- =============================================
      FEED PAGE - Inside Your Mobile Frame
      ============================================ -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- Feed Page -->
 <div id="page-feed" class="page active">
     <!-- Feed Header -->
@@ -3643,115 +3642,35 @@ console.log('💬 Normal = Soft Pling + Short Vibration');
 // =============================================
 // 🔥 SUPABASE - COMPLETE CODE
 // =============================================
+// =============================================
+// 🔥 SUPABASE FEED - ONLY FEED
+// =============================================
 
-// 🔥 YAHAN APNA URL AUR ANON KEY DAALO
-const SUPABASE_URL = 'https://ocdcuqlkgawlyvrzisjv.supabase.co';  // ← CHANGE
-const SUPABASE_ANON_KEY = 'sb_publishable_nbTVVp0_NjwloIu_0yYVxQ_wbK25vpp';  // ← CHANGE
+// 🔥 APNA URL AUR KEY YAHAN DAALO
+const SUPABASE_URL = 'https://ocdcuqlkgawlyvrzisjv.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_nbTVVp0_NjwloIu_0yYVxQ_wbK25vpp';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let session = null;
 
 // =============================================
-// 1. TOAST SYSTEM
-// =============================================
-let toastTimer = null;
-
-function showToast(icon, message) {
-    const toast = document.getElementById('appToast');
-    if (!toast) return;
-    document.getElementById('toastIcon').textContent = icon || '✅';
-    document.getElementById('toastMessage').textContent = message;
-    toast.classList.add('show');
-    if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
-}
-// =============================================
-// 2. AUTH FUNCTIONS
-// =============================================
-
-// LOGIN
-async function login() {
-    const email = prompt('📧 Email:');
-    if (!email) return;
-    const password = prompt('🔑 Password:');
-    if (!password) return;
-    
-    try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-        
-        if (error) throw error;
-        
-        session = data.session;
-        alert('✅ Login successful!');
-        updateUI(data.user);
-        loadFeed();
-    } catch (error) {
-        alert('❌ Login failed: ' + error.message);
-    }
-}
-
-// SIGNUP
-async function signup() {
-    const email = prompt('📧 Email:');
-    if (!email) return;
-    const password = prompt('🔑 Password (min 6 chars):');
-    if (!password || password.length < 6) {
-        alert('Password must be at least 6 characters');
-        return;
-    }
-    const name = prompt('👤 Your name:');
-    
-    try {
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: { name: name || email.split('@')[0] }
-            }
-        });
-        
-        if (error) throw error;
-        
-        alert('✅ Account created! Please login now.');
-    } catch (error) {
-        alert('❌ Signup failed: ' + error.message);
-    }
-}
-
-// LOGOUT
-async function logout() {
-    await supabase.auth.signOut();
-    session = null;
-    alert('✅ Logged out!');
-    updateUI(null);
-    loadFeed();
-}
-
 // CHECK AUTH
+// =============================================
 async function checkAuth() {
     const { data: { session: s } } = await supabase.auth.getSession();
     if (s) {
-        console.log('✅ Logged in:', s.user.email);
         session = s;
-        updateUI(s.user);
+        console.log('✅ Logged in:', s.user.email);
     }
     return s;
 }
 
 // =============================================
-// 3. FEED FUNCTIONS
-// =============================================
-
 // LOAD FEED
+// =============================================
 async function loadFeed() {
     const container = document.getElementById('community-feed-posts');
-    if (!container) {
-        console.warn('Feed container nahi mila');
-        return;
-    }
+    if (!container) return;
     
     try {
         container.innerHTML = `
@@ -3791,7 +3710,6 @@ async function loadFeed() {
             const author = post.author || {};
             const name = author.raw_user_meta_data?.name || author.email || 'Unknown';
             
-            // Get likes count
             const { count } = await supabase
                 .from('likes')
                 .select('*', { count: 'exact', head: true })
@@ -3815,7 +3733,7 @@ async function loadFeed() {
                     
                     <div style="display:flex;gap:20px;padding:10px 0;border-top:1px solid var(--border-lux);border-bottom:1px solid var(--border-lux);margin-bottom:12px;font-size:13px;color:var(--text-muted);">
                         <span style="display:flex;align-items:center;gap:4px;font-weight:600;">❤️ ${count || 0}</span>
-                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">💬 ${post.comments || 0}</span>
+                        <span style="display:flex;align-items:center;gap:4px;font-weight:600;">💬 0</span>
                     </div>
                     
                     <div style="display:flex;gap:8px;">
@@ -3843,27 +3761,22 @@ async function loadFeed() {
     }
 }
 
+// =============================================
 // CREATE POST
+// =============================================
 async function createPost() {
     const s = await checkAuth();
     if (!s) {
         alert('❌ Pehle login karo!');
         return;
     }
-    
     const content = prompt('📝 Kya likhna hai?');
     if (!content) return;
-    
     try {
         const { error } = await supabase
             .from('posts')
-            .insert({
-                content: content,
-                author_id: s.user.id
-            });
-        
+            .insert({ content, author_id: s.user.id });
         if (error) throw error;
-        
         alert('✅ Post create ho gaya! 🎉');
         loadFeed();
     } catch (error) {
@@ -3871,22 +3784,19 @@ async function createPost() {
     }
 }
 
+// =============================================
 // LIKE POST
+// =============================================
 async function likePost(postId) {
     const s = await checkAuth();
     if (!s) {
         alert('❌ Pehle login karo!');
         return;
     }
-    
     try {
         const { error } = await supabase
             .from('likes')
-            .insert({
-                post_id: postId,
-                user_id: s.user.id
-            });
-        
+            .insert({ post_id: postId, user_id: s.user.id });
         if (error) throw error;
         loadFeed();
     } catch (error) {
@@ -3894,7 +3804,9 @@ async function likePost(postId) {
     }
 }
 
+// =============================================
 // SHARE POST
+// =============================================
 function sharePost(postId) {
     const url = window.location.href + '?post=' + postId;
     if (navigator.share) {
@@ -3913,96 +3825,50 @@ function sharePost(postId) {
 }
 
 // =============================================
-// 4. UI UPDATE
+// LOGIN / LOGOUT (Minimal)
 // =============================================
-
-function updateUI(user) {
-    const greeting = document.querySelector('.identity-greeting h1');
-    if (greeting) {
-        if (user) {
-            const name = user.raw_user_meta_data?.name || user.email;
-            greeting.textContent = `Hi, ${name} 👋`;
-        } else {
-            greeting.textContent = 'Welcome 👋';
-        }
+async function login() {
+    const email = prompt('📧 Email:');
+    if (!email) return;
+    const password = prompt('🔑 Password:');
+    if (!password) return;
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        session = data.session;
+        alert('✅ Login successful!');
+        loadFeed();
+    } catch (error) {
+        alert('❌ Login failed: ' + error.message);
     }
-    
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const signupBtn = document.getElementById('signupBtn');
-    
-    if (loginBtn) loginBtn.style.display = user ? 'none' : 'block';
-    if (logoutBtn) logoutBtn.style.display = user ? 'block' : 'none';
-    if (signupBtn) signupBtn.style.display = user ? 'none' : 'block';
+}
+
+async function logout() {
+    await supabase.auth.signOut();
+    session = null;
+    alert('✅ Logged out!');
+    loadFeed();
 }
 
 // =============================================
-// 5. INITIALIZATION
+// INIT - SIRF FEED
 // =============================================
-
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Supabase connecting...');
-    console.log('📡 URL:', SUPABASE_URL);
-    
-    // Check auth
-    checkAuth().then(s => {
-        session = s;
+    console.log('🚀 Feed loading...');
+    checkAuth().then(() => {
         loadFeed();
     });
-    
-    // Add buttons to header
-    const actions = document.querySelector('.header-actions');
-    if (actions) {
-        // Signup button
-        const signupBtn = document.createElement('button');
-        signupBtn.className = 'header-btn';
-        signupBtn.id = 'signupBtn';
-        signupBtn.innerHTML = '📝';
-        signupBtn.onclick = signup;
-        signupBtn.title = 'Signup';
-        
-        // Login button
-        const loginBtn = document.createElement('button');
-        loginBtn.className = 'header-btn';
-        loginBtn.id = 'loginBtn';
-        loginBtn.innerHTML = '🔑';
-        loginBtn.onclick = login;
-        loginBtn.title = 'Login';
-        
-        // Logout button
-        const logoutBtn = document.createElement('button');
-        logoutBtn.className = 'header-btn';
-        logoutBtn.id = 'logoutBtn';
-        logoutBtn.innerHTML = '🚪';
-        logoutBtn.onclick = logout;
-        logoutBtn.title = 'Logout';
-        logoutBtn.style.display = 'none';
-        
-        actions.appendChild(signupBtn);
-        actions.appendChild(loginBtn);
-        actions.appendChild(logoutBtn);
-    }
 });
 
 // =============================================
-// 6. EXPOSE GLOBALLY
+// EXPOSE
 // =============================================
-
 window.loadFeed = loadFeed;
 window.createPost = createPost;
 window.likePost = likePost;
 window.sharePost = sharePost;
 window.login = login;
 window.logout = logout;
-window.signup = signup;
-
-console.log('✅ Script loaded!');
-console.log('📝 Commands:');
-console.log('  login() - Login karo');
-console.log('  signup() - Account banao');
-console.log('  logout() - Logout karo');
-console.log('  createPost() - Post create karo');
-console.log('  loadFeed() - Feed refresh karo');
 
 // Add spin animation
 const style = document.createElement('style');
@@ -4017,7 +3883,9 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
- 
+
+console.log('✅ Feed script loaded!');
+
 // =============================================
 // 🌍 FULL UI LANGUAGE (Translation System)
 // =============================================
