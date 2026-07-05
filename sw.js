@@ -1,7 +1,6 @@
 const CACHE_NAME = 'zyventra-cache-v3';
 const ASSETS_TO_CACHE = [
   '/',
-  '/index.html',
   '/app.html',
   '/manifest.json',
   '/zyventra-icon-logo.png'
