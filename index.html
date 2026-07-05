@@ -382,7 +382,7 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 }
    /* ===== INSTALL BUTTON ===== */
 #installBtn {
-  display: none;
+  display: flex !important;
   align-items: center;
   gap: 6px;
 }
@@ -424,7 +424,8 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 <div class="signin-dropdown"><button class="pill-btn pill-btn-gold" onclick="toggleSignIn(event)">Sign In ▾</button><div class="signin-menu"><a href="#" onclick="openLoginModal();return false">🔑 Sign In</a><a href="#" onclick="openLoginModal();return false">📝 Register</a><a href="#" onclick="openLoginModal();return false">🔄 Reset Password</a></div></div>
 <!-- PWA Install Button - Always Visible -->
 <button class="pill-btn pill-btn-gold" id="installBtn">
-  <span class="btn-text">Get App</span>
+  <span class="btn-text">📲 Get App</span>
+</button>
 </button>
 </button>
 </div>
@@ -2161,6 +2162,16 @@ window.cancelInstall = cancelInstall;
       resultContent.textContent = '❌ ' + error.message;
     }
   });
+  // ============================================================
+// BUTTON FORCE SHOW
+// ============================================================
+const installBtn = document.getElementById('installBtn');
+if (installBtn) {
+  installBtn.style.display = 'flex';
+  installBtn.style.visibility = 'visible';
+  installBtn.style.opacity = '1';
+  console.log('✅ Install button forced visible');
+}
 </script>
 </body>
 </html>
