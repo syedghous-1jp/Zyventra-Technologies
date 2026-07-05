@@ -4219,6 +4219,187 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
 });
+  // =============================================
+// 🔥 FIX: LANGUAGE CONNECT - EXISTING CODE KE SAATH
+// =============================================
+
+// 1️⃣ Override karo existing setGlobalLanguage function ko
+const originalSetGlobalLanguage = window.setGlobalLanguage || function(){};
+
+window.setGlobalLanguage = function(lang) {
+    // Original functionality call karo agar hai
+    if (typeof originalSetGlobalLanguage === 'function') {
+        originalSetGlobalLanguage(lang);
+    }
+    
+    // 🔥 FIX: Sab elements ko translate karo
+    globalUILang = lang;
+    localStorage.setItem('zyventra_ui_lang', lang);
+    
+    // Toggle buttons update
+    document.querySelectorAll('#globalLangToggle button').forEach(btn => {
+        btn.classList.toggle('active-lang', btn.dataset.lang === lang);
+    });
+    
+    // 🔥 MAIN FIX: Translate all visible elements
+    translateVisibleElements(lang);
+    
+    // 🔥 FIX: Study content reload
+    if (typeof renderStudy === 'function') {
+        renderStudy();
+    }
+    
+    // Toast show
+    if (typeof showToast === 'function') {
+        showToast('🌍', 'Language: ' + lang.toUpperCase());
+    }
+};
+
+// 2️⃣ Translate function - Sirf visible elements ko target karega
+function translateVisibleElements(lang) {
+    const t = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.ur;
+    
+    // === HEADER ===
+    const greeting = document.getElementById('user-greeting-label');
+    if (greeting) {
+        const name = localStorage.getItem('zyventra_app_user') || 'Explorer';
+        greeting.textContent = `${t.hello || 'Hello'}, ${name}!`;
+    }
+    
+    // === SCANNER ===
+    const badge = document.getElementById('scanStatusBadge');
+    if (badge && !badge.classList.contains('scanning')) {
+        badge.textContent = t.ready || 'Ready';
+    }
+    
+    const placeholder = document.getElementById('scanPlaceholder');
+    if (placeholder) {
+        placeholder.innerHTML = `<i class="fa-solid fa-shield-halved" style="color:var(--accent-gold);"></i> ${t.pressStartScan || 'Press "Start Scan" to check your system.'}`;
+    }
+    
+    const scanBtn = document.getElementById('mainScanBtn');
+    if (scanBtn && !scanBtn.disabled) {
+        scanBtn.innerHTML = `<i class="fa-solid fa-play"></i> ${t.startScan || 'Start Scan'}`;
+    }
+    
+    // === QUICK ACTIONS ===
+    const quickLabels = ['newScan', 'report', 'logs', 'tools', 'settings'];
+    document.querySelectorAll('.quick-action .label').forEach((el, i) => {
+        if (i < quickLabels.length) {
+            el.textContent = t[quickLabels[i]] || quickLabels[i];
+        }
+    });
+    
+    // === TOOLS ===
+    const toolNames = [
+        t.iamAnalyzer || 'IAM Analyzer',
+        t.jwtInspector || 'JWT Inspector',
+        t.s3Scanner || 'S3 Scanner',
+        t.portScanner || 'Port Scanner',
+        t.secretsScanner || 'Secrets Scanner',
+        t.firewallChecker || 'Firewall Checker',
+        t.emailHeader || 'Email Header',
+        t.darkWeb || 'Dark Web',
+        t.fullReport || 'Full Security Report'
+    ];
+    const toolDescs = [
+        t.iamDesc || 'Trust policies',
+        t.jwtDesc || 'Decode & verify',
+        t.s3Desc || 'Bucket exposure',
+        t.portDesc || 'Open ports',
+        t.secretsDesc || 'Hardcoded keys',
+        t.firewallDesc || 'Rule analysis',
+        t.emailDesc || 'SPF/DKIM',
+        t.darkwebDesc || 'Breach check (Live)',
+        t.scanAllModules || 'Scan all modules & generate PDF'
+    ];
+    
+    document.querySelectorAll('.tool-card').forEach((card, i) => {
+        if (i < toolNames.length) {
+            const nameEl = card.querySelector('.name');
+            const descEl = card.querySelector('.desc');
+            if (nameEl) nameEl.textContent = toolNames[i];
+            if (descEl) descEl.textContent = toolDescs[i];
+        }
+    });
+    
+    // === CONNECT ===
+    document.querySelectorAll('.chat-tab').forEach(tab => {
+        if (tab.dataset.tab === 'public') {
+            tab.innerHTML = t.public || '💬 Public';
+        } else if (tab.dataset.tab === 'dm') {
+            tab.innerHTML = t.dms || '✉️ DMs';
+        }
+    });
+    
+    const searchInput = document.getElementById('dmSearchInput');
+    if (searchInput) searchInput.placeholder = t.searchUsers || '🔍 Search users...';
+    
+    const chatInput = document.getElementById('chatInput');
+    if (chatInput) chatInput.placeholder = t.typeMessage || 'Type a message...';
+    
+    const retention = document.querySelector('.chat-retention-label');
+    if (retention) retention.textContent = t.messagesRetained || '📅 Messages retained for 30 days';
+    
+    // === PROFILE ===
+    const contactHeader = document.querySelector('.contact-header span');
+    if (contactHeader) contactHeader.textContent = t.contactUs || '📬 Contact Zyventra';
+    
+    const resetBtn = document.querySelector('.profile-card .action-submit');
+    if (resetBtn) {
+        resetBtn.innerHTML = `<i class="fa-solid fa-arrow-right-from-bracket"></i> ${t.resetLogout || 'Reset & Logout'}`;
+    }
+    
+    // === FEED ===
+    const feedHeading = document.querySelector('#page-feed h2');
+    if (feedHeading) feedHeading.textContent = t.feed || 'Community Feed';
+    
+    const postInput = document.getElementById('postContentInput');
+    if (postInput) postInput.placeholder = t.kyaNayaSeekha || 'kya sikhna hai aj? community kae sath share karo...';
+    
+    // === MODALS ===
+    const darkTitle = document.querySelector('.darkweb-modal-box h3');
+    if (darkTitle) darkTitle.textContent = t.darkWeb || '🌑 Dark Web Monitor';
+    
+    const darkInput = document.getElementById('darkwebEmail');
+    if (darkInput) darkInput.placeholder = t.enterEmail || 'Enter your email address';
+    
+    const darkCheck = document.getElementById('darkwebCheckBtn');
+    if (darkCheck) darkCheck.textContent = t.check || 'Check';
+    
+    // Ban Modal
+    const banTitle = document.querySelector('#banModal h2');
+    if (banTitle) banTitle.textContent = t.banUser || '🚫 Ban User';
+    
+    const banInput = document.getElementById('banUserName');
+    if (banInput) banInput.placeholder = t.banPlaceholder || 'Username to ban...';
+    
+    // Unban Modal
+    const unbanTitle = document.querySelector('#unbanModal h2');
+    if (unbanTitle) unbanTitle.textContent = t.unbanUser || '✅ Unban User';
+    
+    const unbanInput = document.getElementById('unbanUserName');
+    if (unbanInput) unbanInput.placeholder = t.unbanPlaceholder || 'Username to unban...';
+}
+
+// 3️⃣ DOM Ready - Init language
+document.addEventListener('DOMContentLoaded', function() {
+    // Existing init ko call karo agar hai
+    if (typeof initUILanguage === 'function') {
+        // Agar pehle se hai toh use karo
+        initUILanguage();
+    } else {
+        // Nahi toh yeh karo
+        const savedLang = localStorage.getItem('zyventra_ui_lang') || 'ur';
+        globalUILang = savedLang;
+        
+        document.querySelectorAll('#globalLangToggle button').forEach(btn => {
+            btn.classList.toggle('active-lang', btn.dataset.lang === savedLang);
+        });
+        
+        translateVisibleElements(savedLang);
+    }
+});
   
 </script>
 </body>
