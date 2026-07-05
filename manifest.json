@@ -21,5 +21,14 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "https://placehold.co/1280x720/F9F6F0/1a1a2e?text=Zyventra+Dashboard",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Zyventra Dashboard"
+    }
   ]
 }
