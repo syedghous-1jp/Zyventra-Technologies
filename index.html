@@ -701,6 +701,31 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 
 <div class="toast-container" id="toastContainer"></div>
 <div class="cursor-dot"></div><div class="cursor-orbit"></div>
+  <!-- ============================================================
+   INSTALL PROGRESS BAR
+   ============================================================ -->
+<div id="installProgressContainer" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999999; background:#111827; border:2px solid #C9A84C; border-radius:20px; padding:20px 30px; min-width:320px; max-width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.8);">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <span style="color:#C9A84C; font-weight:700; font-size:14px;">📲 Installing Zyventra</span>
+    <span id="installProgressPercent" style="color:#F5E199; font-weight:900; font-size:18px;">0%</span>
+  </div>
+  
+  <!-- Progress Bar -->
+  <div style="width:100%; height:8px; background:#1f2937; border-radius:999px; overflow:hidden; margin-bottom:8px;">
+    <div id="installProgressBar" style="width:0%; height:100%; background:linear-gradient(90deg,#C9A84C,#F5E199); border-radius:999px; transition:width 0.3s ease;"></div>
+  </div>
+  
+  <!-- Status Message -->
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <span id="installProgressStatus" style="color:#9ca3af; font-size:12px;">⏳ Downloading files...</span>
+    <span id="installProgressFiles" style="color:#6b7280; font-size:11px;">0/0</span>
+  </div>
+  
+  <!-- Cancel Button -->
+  <button onclick="cancelInstall()" style="margin-top:12px; background:transparent; border:1px solid #ef4444; color:#ef4444; border-radius:999px; padding:6px 16px; font-size:11px; cursor:pointer; width:100%;">
+    Cancel Installation
+  </button>
+</div>
 
 <!-- ============================================================
    JAVASCRIPT — FULL 32-TOOL LOGIC + UPDATED PWA HANDLING
@@ -1812,19 +1837,70 @@ function downloadAuditReportFile() { if (!globalCurrentReportData) return; const
 window.addEventListener('load', () => { setTimeout(hideLoader, 500); });
 
 // ============================================================
-// UNIVERSAL PWA INSTALL — Android + iOS
+// UNIVERSAL PWA INSTALL — WITH PROGRESS BAR
 // ============================================================
 
 let deferredPrompt;
 const installBtn = document.getElementById('installBtn');
+const progressContainer = document.getElementById('installProgressContainer');
+const progressBar = document.getElementById('installProgressBar');
+const progressPercent = document.getElementById('installProgressPercent');
+const progressStatus = document.getElementById('installProgressStatus');
+const progressFiles = document.getElementById('installProgressFiles');
 
-// Detect platform
+let isInstalling = false;
+
+// ============================================================
+// 1. PROGRESS BAR FUNCTIONS
+// ============================================================
+function showProgress() {
+  progressContainer.style.display = 'block';
+  progressBar.style.width = '0%';
+  progressPercent.textContent = '0%';
+  progressStatus.textContent = '⏳ Starting installation...';
+  progressFiles.textContent = '0/0';
+  isInstalling = true;
+}
+
+function updateProgress(progress, downloaded, total, status) {
+  progressBar.style.width = Math.min(progress, 100) + '%';
+  progressPercent.textContent = Math.min(progress, 100) + '%';
+  progressStatus.textContent = status || `📥 Downloaded ${downloaded}/${total} files`;
+  progressFiles.textContent = `${downloaded}/${total}`;
+  
+  if (progress >= 100) {
+    progressStatus.textContent = '✅ Installation complete!';
+    setTimeout(() => {
+      hideProgress();
+      showToast('🎉 Zyventra installed successfully!', 'success');
+    }, 1500);
+  }
+}
+
+function hideProgress() {
+  setTimeout(() => {
+    progressContainer.style.display = 'none';
+    isInstalling = false;
+  }, 500);
+}
+
+function cancelInstall() {
+  if (isInstalling) {
+    isInstalling = false;
+    hideProgress();
+    showToast('❌ Installation cancelled', 'warning');
+  }
+}
+
+// ============================================================
+// 2. DETECT PLATFORM
+// ============================================================
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 const isAndroid = /Android/.test(navigator.userAgent);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
 // ============================================================
-// 1. ANDROID — Chrome Install Prompt
+// 3. ANDROID — Install Prompt
 // ============================================================
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -1835,46 +1911,93 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 // ============================================================
-// 2. iOS — Manual Install Instructions
-// ============================================================
-if (isIOS && !isStandalone) {
-  // iOS me install button show karo with instructions
-  installBtn.style.display = 'flex';
-  installBtn.innerHTML = '<span class="btn-text">📲 Add to Home Screen</span>';
-  
-  installBtn.addEventListener('click', () => {
-    showToast('📱 Tap Share (📤) → "Add to Home Screen"', 'info');
-    
-    // Extra guidance for iOS
-    setTimeout(() => {
-      showToast('📍 Then tap "Add" in top right corner', 'info');
-    }, 2000);
-  });
-}
-
-// ============================================================
-// 3. INSTALL BUTTON — Android
+// 4. INSTALL BUTTON CLICK
 // ============================================================
 installBtn.addEventListener('click', async () => {
-  // Agar Android aur prompt available hai
+  // Android with prompt
   if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`Install outcome: ${outcome}`);
-    if (outcome === 'accepted') {
-      installBtn.style.display = 'none';
-      showToast('✅ App installed successfully!', 'success');
-    }
-    deferredPrompt = null;
+    showProgress();
+    updateProgress(10, 0, 0, '⏳ Preparing installation...');
+    
+    let progress = 10;
+    const interval = setInterval(() => {
+      progress += Math.random() * 15 + 5;
+      if (progress > 95) {
+        progress = 95;
+        clearInterval(interval);
+        updateProgress(95, 5, 5, '⏳ Almost done...');
+        
+        setTimeout(async () => {
+          try {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`Install outcome: ${outcome}`);
+            
+            if (outcome === 'accepted') {
+              updateProgress(100, 5, 5, '✅ Installing...');
+              setTimeout(() => {
+                installBtn.style.display = 'none';
+                hideProgress();
+                showToast('🎉 Zyventra installed successfully!', 'success');
+              }, 1000);
+            } else {
+              hideProgress();
+              showToast('❌ Installation cancelled', 'warning');
+            }
+            deferredPrompt = null;
+          } catch (err) {
+            hideProgress();
+            showToast('❌ Installation error: ' + err.message, 'error');
+          }
+        }, 500);
+      } else {
+        updateProgress(Math.round(progress), Math.round(progress/20), 5, `📥 Downloading... ${Math.round(progress)}%`);
+      }
+    }, 200);
   } 
-  // Agar Android me prompt nahi hai (already installed ya error)
+  // iOS
+  else if (isIOS && !isStandalone) {
+    showProgress();
+    updateProgress(30, 0, 0, '📱 Opening Safari share menu...');
+    setTimeout(() => {
+      updateProgress(60, 0, 0, '📍 Tap "Add to Home Screen"');
+      showToast('📱 Tap Share (📤) → "Add to Home Screen"', 'info');
+    }, 1000);
+    setTimeout(() => {
+      updateProgress(80, 0, 0, '📍 Then tap "Add" in top right');
+      showToast('📍 Then tap "Add" in top right corner', 'info');
+    }, 3000);
+    setTimeout(() => {
+      updateProgress(100, 0, 0, '✅ App added to Home Screen!');
+      showToast('🎉 Zyventra added to Home Screen!', 'success');
+      setTimeout(hideProgress, 2000);
+    }, 5000);
+  }
+  // Android without prompt
   else if (isAndroid && !isStandalone) {
     showToast('📱 Tap menu (⋮) → "Install App" or "Add to Home Screen"', 'info');
   }
 });
 
 // ============================================================
-// 4. CHECK IF ALREADY INSTALLED
+// 5. SERVICE WORKER PROGRESS
+// ============================================================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    const data = event.data;
+    if (data && data.type === 'INSTALL_PROGRESS') {
+      updateProgress(
+        data.progress,
+        data.downloaded,
+        data.total,
+        `📥 Downloading ${data.file || 'files'}...`
+      );
+    }
+  });
+}
+
+// ============================================================
+// 6. CHECK IF ALREADY INSTALLED
 // ============================================================
 if (isStandalone) {
   installBtn.style.display = 'none';
@@ -1882,15 +2005,19 @@ if (isStandalone) {
 }
 
 // ============================================================
-// 5. AFTER INSTALL
+// 7. AFTER INSTALL
 // ============================================================
 window.addEventListener('appinstalled', () => {
   installBtn.style.display = 'none';
-  showToast('🎉 Zyventra installed successfully!', 'success');
+  updateProgress(100, 0, 0, '✅ Installation complete!');
+  setTimeout(() => {
+    hideProgress();
+    showToast('🎉 Zyventra installed successfully!', 'success');
+  }, 1000);
 });
 
 // ============================================================
-// 6. SERVICE WORKER REGISTER
+// 8. SERVICE WORKER REGISTER
 // ============================================================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js')
@@ -1899,7 +2026,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // ============================================================
-// 7. TOAST FUNCTION (Already hai toh skip karo)
+// 9. TOAST FUNCTION
 // ============================================================
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
@@ -1919,16 +2046,11 @@ function showToast(message, type = 'info') {
   setTimeout(() => { if (toast.parentElement) toast.remove(); }, 6000);
 }
 
-// ============================================================
-// 8. DEBUG — Platform Info
-// ============================================================
 console.log('📱 Platform Info:');
 console.log('- iOS:', isIOS);
 console.log('- Android:', isAndroid);
 console.log('- Standalone:', isStandalone);
-console.log('- Install Button:', installBtn);
-console.log('- DeferredPrompt:', deferredPrompt);
-</script>
+
 <script>
   // ==========================================
   // SUPABASE SETUP
