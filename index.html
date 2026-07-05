@@ -1843,63 +1843,65 @@ window.addEventListener('load', () => { setTimeout(hideLoader, 500); });
 // ============================================================
 
 // ============================================================
-// PWA INSTALL — BUTTON + PROGRESS BAR + NOTIFICATION
+// PWA INSTALL — COMPLETE WORKING CODE
 // ============================================================
-
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
 
 // ============================================================
 // 1. BUTTON FORCE SHOW
 // ============================================================
+const installBtn = document.getElementById('installBtn');
 if (installBtn) {
   installBtn.style.display = 'flex';
-  installBtn.innerHTML = '<span class="btn-text">📲 Get App</span>';
+  installBtn.style.visibility = 'visible';
+  installBtn.style.opacity = '1';
   console.log('✅ Install button visible');
 }
 
-// Detect platform
+// ============================================================
+// 2. DETECT PLATFORM
+// ============================================================
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 const isAndroid = /Android/.test(navigator.userAgent);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
 // Agar app already installed hai toh button hide karo
 if (isStandalone) {
-  installBtn.style.display = 'none';
+  if (installBtn) installBtn.style.display = 'none';
   console.log('✅ App already installed');
 }
 
 // ============================================================
-// 2. PROGRESS BAR FUNCTIONS
+// 3. VARIABLES
 // ============================================================
+let deferredPrompt = null;
 const progressContainer = document.getElementById('installProgressContainer');
 const progressBar = document.getElementById('installProgressBar');
 const progressPercent = document.getElementById('installProgressPercent');
 const progressStatus = document.getElementById('installProgressStatus');
 const progressFiles = document.getElementById('installProgressFiles');
 
-let isInstalling = false;
-
+// ============================================================
+// 4. PROGRESS BAR FUNCTIONS
+// ============================================================
 function showProgress() {
   if (!progressContainer) return;
   progressContainer.style.display = 'block';
-  progressBar.style.width = '0%';
-  progressPercent.textContent = '0%';
-  progressStatus.textContent = '⏳ Starting installation...';
-  progressFiles.textContent = '0/0';
-  isInstalling = true;
+  if (progressBar) progressBar.style.width = '0%';
+  if (progressPercent) progressPercent.textContent = '0%';
+  if (progressStatus) progressStatus.textContent = '⏳ Starting installation...';
+  if (progressFiles) progressFiles.textContent = '0/0';
 }
 
 function updateProgress(progress, downloaded, total, status) {
   if (!progressContainer) return;
   const p = Math.min(progress, 100);
-  progressBar.style.width = p + '%';
-  progressPercent.textContent = p + '%';
-  progressStatus.textContent = status || `📥 Downloaded ${downloaded}/${total} files`;
-  progressFiles.textContent = `${downloaded}/${total}`;
+  if (progressBar) progressBar.style.width = p + '%';
+  if (progressPercent) progressPercent.textContent = p + '%';
+  if (progressStatus) progressStatus.textContent = status || `📥 Downloaded ${downloaded}/${total} files`;
+  if (progressFiles) progressFiles.textContent = `${downloaded}/${total}`;
   
   if (p >= 100) {
-    progressStatus.textContent = '✅ Installation complete!';
+    if (progressStatus) progressStatus.textContent = '✅ Installation complete!';
     setTimeout(() => {
       hideProgress();
       showToast('🎉 Zyventra installed successfully!', 'success');
@@ -1911,20 +1913,16 @@ function hideProgress() {
   if (!progressContainer) return;
   setTimeout(() => {
     progressContainer.style.display = 'none';
-    isInstalling = false;
   }, 500);
 }
 
 function cancelInstall() {
-  if (isInstalling) {
-    isInstalling = false;
-    hideProgress();
-    showToast('❌ Installation cancelled', 'warning');
-  }
+  hideProgress();
+  showToast('❌ Installation cancelled', 'warning');
 }
 
 // ============================================================
-// 3. ANDROID — Install Prompt
+// 5. ANDROID — Install Prompt
 // ============================================================
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -1937,13 +1935,16 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 // ============================================================
-// 4. INSTALL BUTTON CLICK
+// 6. INSTALL BUTTON CLICK — MAIN LOGIC
 // ============================================================
 if (installBtn) {
-  installBtn.addEventListener('click', async () => {
+  installBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    console.log('🔘 Install button clicked');
     
     // ===== ANDROID with Prompt =====
     if (deferredPrompt) {
+      console.log('📱 Android: Showing install prompt');
       showProgress();
       updateProgress(10, 0, 0, '⏳ Preparing installation...');
       
@@ -1983,9 +1984,9 @@ if (installBtn) {
         }
       }, 200);
     } 
-    
     // ===== iOS =====
     else if (isIOS && !isStandalone) {
+      console.log('📱 iOS: Showing instructions');
       showProgress();
       updateProgress(30, 0, 0, '📱 Opening Safari share menu...');
       setTimeout(() => {
@@ -2002,21 +2003,21 @@ if (installBtn) {
         setTimeout(hideProgress, 2000);
       }, 5000);
     }
-    
     // ===== Android without prompt =====
     else if (isAndroid && !isStandalone) {
+      console.log('📱 Android: No prompt, showing manual instructions');
       showToast('📱 Tap menu (⋮) → "Install App" or "Add to Home Screen"', 'info');
     }
-    
     // ===== Fallback =====
     else {
+      console.log('📱 Fallback: Showing general instructions');
       showToast('📱 Use browser\'s "Add to Home Screen" option', 'info');
     }
   });
 }
 
 // ============================================================
-// 5. SERVICE WORKER PROGRESS (Real-time)
+// 7. SERVICE WORKER PROGRESS
 // ============================================================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('message', (event) => {
@@ -2033,7 +2034,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // ============================================================
-// 6. AFTER INSTALL EVENT
+// 8. AFTER INSTALL EVENT
 // ============================================================
 window.addEventListener('appinstalled', () => {
   if (installBtn) installBtn.style.display = 'none';
@@ -2045,7 +2046,7 @@ window.addEventListener('appinstalled', () => {
 });
 
 // ============================================================
-// 7. SERVICE WORKER REGISTER
+// 9. SERVICE WORKER REGISTER
 // ============================================================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js')
@@ -2054,7 +2055,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // ============================================================
-// 8. TOAST FUNCTION
+// 10. TOAST FUNCTION
 // ============================================================
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
@@ -2074,18 +2075,22 @@ function showToast(message, type = 'info') {
   setTimeout(() => { if (toast.parentElement) toast.remove(); }, 6000);
 }
 
+// Make cancelInstall globally available
+window.cancelInstall = cancelInstall;
+
 // ============================================================
-// 9. DEBUG INFO
+// 11. DEBUG INFO
 // ============================================================
 console.log('📱 Platform Info:');
 console.log('- iOS:', isIOS);
 console.log('- Android:', isAndroid);
 console.log('- Standalone:', isStandalone);
 console.log('- Install Button:', installBtn);
+console.log('- DeferredPrompt:', deferredPrompt);
 console.log('- Progress Container:', progressContainer);
 
-// Make cancelInstall globally available
-window.cancelInstall = cancelInstall;
+// Check if button has click listener
+console.log('🔘 Install button click listeners:', installBtn ? 'Attached' : 'Not found');
 
 <script>
   // ==========================================
@@ -2162,16 +2167,7 @@ window.cancelInstall = cancelInstall;
       resultContent.textContent = '❌ ' + error.message;
     }
   });
-  // ============================================================
-// BUTTON FORCE SHOW
-// ============================================================
-const installBtn = document.getElementById('installBtn');
-if (installBtn) {
-  installBtn.style.display = 'flex';
-  installBtn.style.visibility = 'visible';
-  installBtn.style.opacity = '1';
-  console.log('✅ Install button forced visible');
-}
+  
 </script>
 </body>
 </html>
