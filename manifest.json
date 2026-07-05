@@ -2,7 +2,7 @@
   "name": "Zyventra Technologies",
   "short_name": "Zyventra",
   "description": "Infrastructure Intelligence Platform",
-  "start_url": "/",
+  "start_url": "/app.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F9F6F0",
