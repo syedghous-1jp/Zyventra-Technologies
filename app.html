@@ -4501,11 +4501,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initUILanguage();
     
     // 2. Load community feed
-    setTimeout(() => {
-        if (typeof loadFeedPosts === 'function') {
-            loadFeedPosts();
-        }
-    }, 500);
+   setTimeout(() => {
+    if (typeof loadFeed === 'function') {
+        loadFeed();
+    }
+}, 500);
 });
   
 </script>
