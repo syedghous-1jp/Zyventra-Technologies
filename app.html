@@ -3746,20 +3746,16 @@ async function loadFeed() {
 // CREATE POST
 // =============================================
 async function createPost() {
-    const s = await checkAuth();
-    if (!s) {
-        alert('❌ Pehle login karo!');
-        return;
-    }
     const content = prompt('📝 Kya likhna hai?');
     if (!content) return;
+    
     try {
         const { error } = await supabase
-    .from('posts')
-    .insert({ 
-        content, 
-        author_id: s.user.id || '00000000-0000-0000-0000-000000000001' 
-    });
+            .from('posts')
+            .insert({ 
+                content, 
+                author_id: '00000000-0000-0000-0000-000000000001' 
+            });
         if (error) throw error;
         alert('✅ Post create ho gaya! 🎉');
         loadFeed();
