@@ -3755,8 +3755,11 @@ async function createPost() {
     if (!content) return;
     try {
         const { error } = await supabase
-            .from('posts')
-            .insert({ content, author_id: s.user.id });
+    .from('posts')
+    .insert({ 
+        content, 
+        author_id: s.user.id || '00000000-0000-0000-0000-000000000001' 
+    });
         if (error) throw error;
         alert('✅ Post create ho gaya! 🎉');
         loadFeed();
