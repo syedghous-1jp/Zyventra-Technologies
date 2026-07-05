@@ -1,17 +1,25 @@
 {
+  "name": "Zyventra Technologies",
   "short_name": "Zyventra",
-  "name": "Zyventra Security Suite",
-  "description": "Zyventra Technologies Automated Cybersecurity Scanner and Tools",
+  "description": "Infrastructure Intelligence Platform",
+  "start_url": "/?utm_source=homescreen",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F9F6F0",
+  "theme_color": "#C9A84C",
+  "categories": ["security", "productivity", "developer-tools"],
   "icons": [
     {
-      "src": "/zyventra-icon-logo.png",
-      "type": "image/png",
-      "sizes": "192x192 512x512"
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23C9A84C'/%3E%3Ctext x='96' y='128' font-family='Arial' font-size='120' font-weight='900' text-anchor='middle' fill='%231a1a2e'%3E🛡%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23C9A84C'/%3E%3Ctext x='256' y='340' font-family='Arial' font-size='300' font-weight='900' text-anchor='middle' fill='%231a1a2e'%3E🛡%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
-  ],
-  "start_url": "/app.html",
-  "background_color": "#0c0c0d",
-  "theme_color": "#00ffcc",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }
