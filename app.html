@@ -3628,7 +3628,12 @@ console.log('💬 Normal = Soft Pling + Short Vibration');
 // =============================================
 
 const PB_URL = 'http://127.0.0.1:8090';
-const pb = new PocketBase(PB_URL);
+let pb;
+try {
+  pb = new PocketBase(PB_URL);
+} catch (e) {
+  console.warn('PocketBase not loaded:', e);
+}
   async function loadFeed() {
     const container = document.getElementById('community-feed-posts');
     if (!container) return;
