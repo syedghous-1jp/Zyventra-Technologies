@@ -2,12 +2,24 @@
 <html lang="en">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Zyventra Technologies — Infrastructure Intelligence Platform. Reconcile intent, state, and cloud reality.">
-<title>Zyventra — Infrastructure Intelligence Platform</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
-<link rel="manifest" href="/manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Zyventra Technologies — Infrastructure Intelligence Platform. Reconcile intent, state, and cloud reality.">
+  <title>Zyventra — Infrastructure Intelligence Platform</title>
+  
+  <!-- ===== PWA ===== -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  
+  <!-- ===== iOS Safari ===== -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Zyventra">
+  <link rel="apple-touch-icon" href="https://placehold.co/180x180/C9A84C/1a1a2e?text=Z">
+  
+  <!-- ===== Android Chrome ===== -->
+  <meta name="theme-color" content="#C9A84C">
+  <meta name="mobile-web-app-capable" content="yes">
 <style>
 /* ============================================================
    CSS RESET & VARIABLES
@@ -368,6 +380,26 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 /* MOBILE FIX: Hero text size */
 .hero-title { font-size: 1.4rem !important; }
 }
+   /* ===== INSTALL BUTTON ===== */
+#installBtn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+
+#installBtn .btn-text {
+  font-size: 12px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  #installBtn .btn-text {
+    font-size: 10px;
+  }
+  #installBtn {
+    padding: 6px 12px;
+  }
+}
 </style>
 </head>
 <body>
@@ -391,7 +423,9 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
 <button class="pill-btn pill-btn-outline" onclick="openLoginModal()">Login</button>
 <div class="signin-dropdown"><button class="pill-btn pill-btn-gold" onclick="toggleSignIn(event)">Sign In ▾</button><div class="signin-menu"><a href="#" onclick="openLoginModal();return false">🔑 Sign In</a><a href="#" onclick="openLoginModal();return false">📝 Register</a><a href="#" onclick="openLoginModal();return false">🔄 Reset Password</a></div></div>
 <!-- PWA Install Button (Gold) - NOW VISIBLE & MOBILE FIXED -->
-<button class="pill-btn pill-btn-gold" id="installBtn"><span class="btn-text">Get App</span></button>
+<button class="pill-btn pill-btn-gold" id="installBtn" style="display:none;">
+  <span class="btn-text">Get App</span>
+</button>
 </div>
 <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
 </nav>
@@ -1778,46 +1812,122 @@ function downloadAuditReportFile() { if (!globalCurrentReportData) return; const
 window.addEventListener('load', () => { setTimeout(hideLoader, 500); });
 
 // ============================================================
-// PWA INSTALL LOGIC — IMPROVED (NO ALERT, ONLY TOASTS)
+// UNIVERSAL PWA INSTALL — Android + iOS
 // ============================================================
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('Zyventra SW Registered!', reg))
-            .catch(err => console.log('SW Registration Failed:', err));
-    });
-}
 
 let deferredPrompt;
 const installBtn = document.getElementById('installBtn');
 
+// Detect platform
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+const isAndroid = /Android/.test(navigator.userAgent);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+// ============================================================
+// 1. ANDROID — Chrome Install Prompt
+// ============================================================
 window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Button already visible, so we don't change display
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'flex';
+  installBtn.innerHTML = '<span class="btn-text">📲 Install App</span>';
+  console.log('✅ Android: Install prompt available');
 });
 
+// ============================================================
+// 2. iOS — Manual Install Instructions
+// ============================================================
+if (isIOS && !isStandalone) {
+  // iOS me install button show karo with instructions
+  installBtn.style.display = 'flex';
+  installBtn.innerHTML = '<span class="btn-text">📲 Add to Home Screen</span>';
+  
+  installBtn.addEventListener('click', () => {
+    showToast('📱 Tap Share (📤) → "Add to Home Screen"', 'info');
+    
+    // Extra guidance for iOS
+    setTimeout(() => {
+      showToast('📍 Then tap "Add" in top right corner', 'info');
+    }, 2000);
+  });
+}
+
+// ============================================================
+// 3. INSTALL BUTTON — Android
+// ============================================================
 installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-        // Show the native install prompt
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`Install outcome: ${outcome}`);
-        deferredPrompt = null;
-    } else {
-        // Check if app is already installed
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            showToast('✅ App is already installed!', 'info');
-        } else {
-            showToast('ℹ️ Installation not available. Use the browser\'s install option (usually in the address bar).', 'info');
-        }
+  // Agar Android aur prompt available hai
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`Install outcome: ${outcome}`);
+    if (outcome === 'accepted') {
+      installBtn.style.display = 'none';
+      showToast('✅ App installed successfully!', 'success');
     }
+    deferredPrompt = null;
+  } 
+  // Agar Android me prompt nahi hai (already installed ya error)
+  else if (isAndroid && !isStandalone) {
+    showToast('📱 Tap menu (⋮) → "Install App" or "Add to Home Screen"', 'info');
+  }
 });
 
+// ============================================================
+// 4. CHECK IF ALREADY INSTALLED
+// ============================================================
+if (isStandalone) {
+  installBtn.style.display = 'none';
+  console.log('✅ App is already installed');
+}
+
+// ============================================================
+// 5. AFTER INSTALL
+// ============================================================
 window.addEventListener('appinstalled', () => {
-    console.log('Zyventra App Installed!');
-    showToast('✅ App installed successfully!', 'success');
+  installBtn.style.display = 'none';
+  showToast('🎉 Zyventra installed successfully!', 'success');
 });
+
+// ============================================================
+// 6. SERVICE WORKER REGISTER
+// ============================================================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(reg => console.log('✅ SW registered:', reg))
+    .catch(err => console.log('❌ SW error:', err));
+}
+
+// ============================================================
+// 7. TOAST FUNCTION (Already hai toh skip karo)
+// ============================================================
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  if (!container) {
+    alert(message);
+    return;
+  }
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `
+    <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+    <span class="toast-msg">${message}</span>
+    <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(toast);
+  setTimeout(() => { if (toast.parentElement) toast.remove(); }, 6000);
+}
+
+// ============================================================
+// 8. DEBUG — Platform Info
+// ============================================================
+console.log('📱 Platform Info:');
+console.log('- iOS:', isIOS);
+console.log('- Android:', isAndroid);
+console.log('- Standalone:', isStandalone);
+console.log('- Install Button:', installBtn);
+console.log('- DeferredPrompt:', deferredPrompt);
 </script>
 <script>
   // ==========================================
