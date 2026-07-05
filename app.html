@@ -4204,15 +4204,15 @@ function initUILanguage() {
 // 🚀 FINAL INIT: Language + Feed
 // =============================================
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Apply saved language to UI
+    // Language init
     initUILanguage();
     
-    // 2. Load community feed
-   setTimeout(() => {
-    if (typeof loadFeed === 'function') {
-        loadFeed();
-    }
-}, 500);
+    // Feed load with timeout
+    setTimeout(() => {
+        if (typeof loadFeed === 'function') {
+            loadFeed();
+        }
+    }, 500);
 });
   
 </script>
