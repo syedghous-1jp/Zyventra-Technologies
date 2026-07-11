@@ -4400,7 +4400,83 @@ document.addEventListener('DOMContentLoaded', function() {
         translateVisibleElements(savedLang);
     }
 });
-  
+// =============================================
+// 🔥 FIREWALL BYPASS ENGINE (Auto - No Card Changes)
+// =============================================
+
+const bypassEngine = {
+  techniques: [
+    { name: 'IP Fragmentation', icon: '🧩', rate: 65 },
+    { name: 'Protocol Tunneling', icon: '🚇', rate: 70 },
+    { name: 'Port Hopping', icon: '🔄', rate: 55 },
+    { name: 'Payload Encoding', icon: '🔐', rate: 75 },
+    { name: 'Source Spoofing', icon: '🎭', rate: 60 },
+    { name: 'HTTP Smuggling', icon: '📨', rate: 50 },
+    { name: 'DNS Tunneling', icon: '📡', rate: 68 }
+  ],
+
+  attempt: function(target) {
+    let passed = 0;
+    const results = [];
+    this.techniques.forEach(t => {
+      const success = Math.random() * 100 < t.rate;
+      if (success) passed++;
+      results.push(`${t.icon} ${t.name}: ${success ? '✅' : '❌'}`);
+    });
+    return { passed, total: this.techniques.length, results, details: results.join(' | ') };
+  },
+
+  show: function(result, tool) {
+    const icon = result.passed > 4 ? '🔥' : '⚠️';
+    const msg = `${icon} Firewall Bypass: ${result.passed}/${result.total} techniques passed`;
+    showToast(icon, msg);
+    console.log(`🛡️ ${tool} Bypass:`, result.details);
+    return result;
+  }
+};
+
+// =============================================
+// 🎯 Sabhi Tool Cards Mein Auto Bypass Add Ho Jayega
+// =============================================
+
+// 🔥 Har tool card ke click mein bypass add karein (cards nahi badlenge)
+document.addEventListener('DOMContentLoaded', function() {
+  // Sabhi tool cards dhoondho
+  document.querySelectorAll('.tool-card').forEach(card => {
+    const originalOnclick = card.getAttribute('onclick');
+    
+    if (originalOnclick) {
+      // Purana onclick hatayein
+      card.removeAttribute('onclick');
+      
+      // Naya click listener lagayein
+      card.addEventListener('click', function(e) {
+        // 🔥 Pehle bypass run karo
+        const toolName = card.querySelector('.name')?.textContent || 'Tool';
+        const bypass = bypassEngine.attempt('target.system');
+        bypassEngine.show(bypass, toolName);
+        
+        // Phir original kaam karo
+        eval(originalOnclick);
+      });
+    }
+  });
+
+  // 🔥 Quick Actions mein bhi bypass add karein
+  document.querySelectorAll('.quick-action').forEach(action => {
+    const originalOnclick = action.getAttribute('onclick');
+    
+    if (originalOnclick) {
+      action.removeAttribute('onclick');
+      action.addEventListener('click', function(e) {
+        const bypass = bypassEngine.attempt('system.local');
+        bypassEngine.show(bypass, 'Quick Action');
+        eval(originalOnclick);
+      });
+    }
+  });
+});
+
 </script>
 </body>
 </html>
