@@ -192,28 +192,6 @@ html{scroll-behavior:smooth}
 .stat-lbl{color:var(--muted);font-size:12px;font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
 
 /* ============================================================
-   TEAM
-   ============================================================ */
-.team-org{background:#fff;padding:80px 20px;text-align:center}
-.team-title{font-size:32px;font-weight:900;color:#1a1a2e;margin-bottom:40px}
-.team-subtext{display:block;margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a2e}
-.team-line{display:block;width:300px;height:1px;background:#1a1a2e;margin:0 auto 10px;opacity:.8}
-.top-node{display:flex;flex-direction:column;align-items:center;margin-bottom:30px}
-.top-node .avatar{width:130px;height:130px;border-radius:50%;overflow:hidden;border:3px solid #C9A84C}
-.top-node .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-.top-node h3{font-size:16px;font-weight:900;color:#000;margin-top:10px}
-.top-node p{font-size:12px;color:#444}
-.team-grid-org{display:grid;grid-template-columns:repeat(5,1fr);justify-items:center;margin-top:-55px;position:relative}
-.team-grid-org .member{width:140px;display:flex;flex-direction:column;align-items:center}
-.member .avatar{width:90px;height:90px;border-radius:50%;overflow:hidden;border:2px solid #C9A84C}
-.member .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-.member h3{font-size:13px;font-weight:800;color:#000;margin-top:6px}
-.member p{font-size:11px;color:#444}
-.services-svg,.team-svg{width:100%;height:auto;display:block;margin-bottom:20px}
-.flow-line{stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1000;stroke-dashoffset:1000;opacity:1}
-.flow-line.animate{animation:drawLine 2s ease forwards;filter:drop-shadow(0 0 8px rgba(201,168,76,.7))}
-
-/* ============================================================
    CTA
    ============================================================ */
 .cta-sect{background:var(--cream);padding:54px 40px}
@@ -462,14 +440,6 @@ input[type="text"].tool-textarea-field{height:46px;margin-bottom:12px}
    ============================================================ -->
 <div class="stats-sect"><div class="stats-grid"><div style="text-align:center"><div class="stat-num counter" data-target="150" data-suffix="+">0</div><div class="stat-lbl">Enterprise Clients</div></div><div style="text-align:center"><div class="stat-num counter" data-target="10" data-suffix="M+">0</div><div class="stat-lbl">Threats Neutralized</div></div><div style="text-align:center"><div class="stat-num counter" data-target="99.9" data-suffix="%">0</div><div class="stat-lbl">Uptime</div></div><div style="text-align:center"><div class="stat-num">24/7</div><div class="stat-lbl">Expert Support</div></div></div></div>
 
-<!-- ============================================================
-   TEAM
-   ============================================================ -->
-<section class="team-org" id="about"><h2 class="team-title">Meet Our Team<span class="team-subtext"><span class="team-line"></span>One team, one mission — innovation, trust & cybersecurity excellence.</span></h2>
-<div class="org-wrapper" style="max-width:1100px;margin:0 auto">
-<div class="top-node"><div class="avatar"><img src="shahg.jpeg" alt="Syed Ghous"></div><h3>SYED GHOUS</h3><p>Cyber Security Lead / CEO</p></div>
-<svg class="team-svg" viewBox="0 0 1200 220" width="100%" height="220"><circle cx="600" cy="20" r="8" fill="#C9A84C"/><path class="flow-line" d="M600 20 Q420 40 150 150" stroke="#C9A84C" stroke-width="4" fill="none"/><path class="flow-line" d="M600 20 Q500 50 350 150" stroke="#C9A84C" stroke-width="4" fill="none"/><path class="flow-line" d="M600 20 Q600 80 600 150" stroke="#C9A84C" stroke-width="4" fill="none"/><path class="flow-line" d="M600 20 Q700 50 850 150" stroke="#C9A84C" stroke-width="4" fill="none"/><path class="flow-line" d="M600 20 Q780 40 1050 150" stroke="#C9A84C" stroke-width="4" fill="none"/><circle cx="150" cy="150" r="6" fill="#C9A84C"/><circle cx="350" cy="150" r="6" fill="#C9A84C"/><circle cx="600" cy="150" r="6" fill="#C9A84C"/><circle cx="850" cy="150" r="6" fill="#C9A84C"/><circle cx="1050" cy="150" r="6" fill="#C9A84C"/></svg>
-<div class="team-grid-org"><div class="member"><div class="avatar"><img src="ag2.jpeg" alt="Developer"></div><h3>Anonymous</h3><p>Developer</p></div><div class="member"><div class="avatar"><img src="ag3.jpeg" alt="Co-Founder"></div><h3>Ali</h3><p>Co Founder</p></div><div class="member"><div class="avatar"><img src="ag4.jpeg" alt="Marketer"></div><h3>AHMAD</h3><p>MARKETER</p></div><div class="member"><div class="avatar"><img src="ag5.jpeg" alt="Researcher"></div><h3>Muhammad Ali</h3><p>Researcher / Adviser</p></div><div class="member"><div class="avatar"><img src="ag6.jpeg" alt="Designer"></div><h3>Moiz</h3><p>Designer</p></div></div></div></section>
 
 <!-- ============================================================
    CTA SECTIONS
@@ -678,24 +648,7 @@ window.addEventListener("load", () => {
     a();
 });
 
-// ============================================================
-// SVG LINE ANIMATION
-// ============================================================
-function animateSvgLines(cls) {
-    const s = document.querySelector("." + cls);
-    if (!s) return;
-    const l = s.querySelectorAll(".flow-line");
-    new IntersectionObserver((e) => {
-        e.forEach(entry => {
-            if (entry.isIntersecting) {
-                l.forEach((line, index) => { setTimeout(() => { line.classList.add("animate"); }, index * 180); });
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: .35 }).observe(s);
-}
-animateSvgLines("services-svg");
-animateSvgLines("team-svg");
+
 
 // ============================================================
 // TOOL SYSTEM ENGINE (32+ tools with LOADER + PROGRESS BAR)
