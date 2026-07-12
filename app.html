@@ -1237,6 +1237,48 @@
         background: var(--bg-frame);
     }
 }
+  /* =============================================
+   TOOL MODAL OVERLAY
+   ============================================ */
+.tool-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modalSlideUp 0.35s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Tool Modal Scrollbar */
+.tool-modal-overlay ::-webkit-scrollbar {
+    width: 4px;
+}
+.tool-modal-overlay ::-webkit-scrollbar-thumb {
+    background: var(--accent-gold);
+    border-radius: 10px;
+}
+.tool-modal-overlay ::-webkit-scrollbar-track {
+    background: var(--bg-soft);
+    border-radius: 10px;
+}
 
   </style>
 </head>
