@@ -4012,12 +4012,6 @@ function translateVisibleElements(lang) {
         resetBtn.innerHTML = `<i class="fa-solid fa-arrow-right-from-bracket"></i> ${t.resetLogout || 'Reset & Logout'}`;
     }
     
-    // === FEED ===
-    const feedHeading = document.querySelector('#page-feed h2');
-    if (feedHeading) feedHeading.textContent = t.feed || 'Community Feed';
-    
-    const postInput = document.getElementById('postContentInput');
-    if (postInput) postInput.placeholder = t.kyaNayaSeekha || 'kya sikhna hai aj? community kae sath share karo...';
     
     // === MODALS ===
     const darkTitle = document.querySelector('.darkweb-modal-box h3');
